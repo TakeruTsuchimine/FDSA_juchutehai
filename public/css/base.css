@@ -1,0 +1,281 @@
+@charset "UTF-8";
+
+/* base.css Ver.20201007-01
+--------------------------------------------------------------------------
+ 全ページ共通のレイアウト設定・汎用スタイルはこのCSSに記述します。
+--------------------------------------------------------------------------*/
+
+/*共通変数*/
+:root {
+    --window-size: 1280px;
+}
+
+/*フォーム関連*/
+/**/
+#frmKensaku {
+  width:100%;
+  margin:0; padding:5px 10px;
+}
+#frmKensaku label,
+#frmSentaku label {
+  margin-right:10px;
+}
+/**/
+#frmKensaku label,
+#frmSentaku label,
+#frmNyuryoku label:not(.form-check-label) {
+  height:2.5em;
+  margin-bottom:0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  text-align:left;
+}
+/**/
+#frmKensaku input,
+#frmNyuryoku input:not(.form-check-input) {
+  margin-left:5px;
+}
+/**/
+.form-column {
+  display: flex;
+  padding:5px 0px;
+  flex-direction: column;
+}
+
+/**/
+/**/
+.icon-field {
+  position:relative;
+}
+/**/
+.icon-field input {
+  padding-right:40px;
+}
+/**/
+.ctx-menu {
+  padding:5px;
+}
+/*ボタンアイコン*/
+.search-btn,
+.password-btn {
+  padding: 10px;
+  position: absolute;
+  top:0; right:0;
+  cursor: pointer;
+  border-left: solid #ccc 1px;
+  transition: 0.4s;
+}
+.search-btn:hover,
+.password-btn:hover {
+  opacity: 0.5;
+}
+
+.code-check-error {
+  border-color: red !important;
+}
+/**/
+.required::before {
+  content:"*";
+  color: red;
+}
+/*WijmoのFlexGrid関連*/
+/**/
+.wj-state-active {
+  background-color: #80adbf !important;
+  /*transition-delay: 0.05s;*/
+}
+/**/
+.wj-cell.row-even {
+  background-color:#e1fae1;
+}
+
+/**/
+.wj-glyph-plus, .wj-glyph-minus{
+  top: 0.5em !important;
+}
+
+/*基本アイテム*/
+/*ロゴ*/
+.logo {
+  width: auto;
+  margin-right:10px; padding:5px 15px;
+  background: #0264bf;
+  color:white;
+  text-decoration: none;
+}
+/*タイトル*/
+.main-title {
+  display:block;
+  font-size: 120%;
+  font-weight: bold;
+}
+header {
+  height: 50px;
+  padding: 5px 10px;
+}
+/*操作パネル*/
+.control-panel {
+  height: 50px;
+  padding: 0 20px;
+  font-size: 110%;
+}
+.control-panel button {
+  border: 1px white solid;
+}
+.control-panel button:not(#btnClose) {
+  margin-right: 20px;
+}
+/**/
+.btn {
+  width: 130px;
+}
+/**/
+.kaisoulevel {
+  cursor: pointer;
+}
+/*データ更新中　表示*/
+#dlgPopupMsg {
+  width: 15em; padding: 20px;
+  font-size: 150%;
+  text-align: center;
+}
+/**/
+#dlgAlertMsg {
+  width: 30em;
+}
+
+/*汎用ボックスレイアウト*/
+.flex-box     { display: flex; }
+.flex-wrap    { flex-wrap: wrap; }
+.flex-column  { flex-direction: column; }
+.flex-start   { align-items: center; justify-content: flex-start;    }
+.flex-center  { align-items: center; justify-content: center;        }
+.flex-end     { align-items: center; justify-content: flex-end;      }
+.flex-around  { align-items: center; justify-content: space-around;  }
+.flex-between { align-items: center; justify-content: space-between; }
+.flex-top     { margin-bottom: auto;  }
+.flex-bottom  { margin-top: auto; }
+.flex-right   { margin-left: auto;  }
+.flex-left    { margin-right: auto; }
+.item-start   { align-items: flex-start;  }
+.item-end     { align-items: flex-end; }
+
+/*汎用文字寄せCSS*/
+.align-center { text-align: center; }
+.align-right  { text-align: right; }
+.align-left   { text-align: left; }
+
+/* 背景色付き要素 */
+/* 文字色 */
+.base-color-foword {
+  color: lightblue;
+}
+
+/* ベースカラー */
+/* 文字色 */
+.base-color-front {
+  color: white;
+}
+/* 背景色 */
+.base-color-back {
+  background-color: white;
+}
+/* ボーダーカラー */
+.base-color-border {
+  border-color: white !important;
+}
+
+/* メインカラー */
+/* 文字色 */
+.main-color-front {
+  color: #0080FF;
+}
+/* 背景色 */
+.main-color-back {
+  background-color: #0080FF;
+}
+/* ボーダーカラー */
+.main-color-border {
+  border-color: #0080FF !important;
+}
+
+/*サブカラー*/
+/*背景色*/
+.sub-color-back {
+  background: paleturquoise;
+}
+
+/*要素背景色*/
+div.tomato{ background: tomato; transition: 0.4s; }
+div.tomato:hover{ color: tomato; }
+
+/*フォントカラー*/
+span.red{ color: red; }
+
+/*▽▽　YMST 追加　▽▽*/
+#frmWaritsuke label:not(.form-check-label) {
+  height:2.5em;
+  margin-bottom:0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  text-align:left;
+}
+/*タブのスタイル*/
+.tab_item {
+  width: calc(100%/4);
+  height: 20px;
+  border-bottom: 3px solid #0080FF;
+  background-color: #d9d9d9;
+  line-height: 50px;
+  font-size: 16px;
+  text-align: center;
+  color: #565656;
+  display: block;
+  float: left;
+  text-align: center;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+.tab_item:hover {
+  opacity: 0.75;
+}
+
+/*ラジオボタンを全て消す*/
+input[name="tab_item"] {
+  display: none;
+}
+
+/*タブ切り替えの中身のスタイル*/
+.tab_content {
+  display: none;
+  padding: 0 0 0;
+  clear: both;
+  overflow: hidden;
+}
+
+/*選択されているタブのコンテンツのみを表示*/
+#denpyou:checked ~ #denpyou_content,
+#seikyu:checked ~ #seikyu_content,
+#sonota:checked ~ #sonota_content {
+  display: block;
+}
+#tab0:checked ~ #tab0_content,
+#tab1:checked ~ #tab1_content,
+#tab2:checked ~ #tab2_content,
+#tab3:checked ~ #tab3_content,
+#tab4:checked ~ #tab4_content {
+  display: block;
+}
+
+/*選択されているタブのスタイルを変える*/
+.tabs input:checked + .tab_item {
+  background-color: #0080FF;
+  color: #fff;
+}
+
+.display{
+  display:none;
+}
+/*△△
