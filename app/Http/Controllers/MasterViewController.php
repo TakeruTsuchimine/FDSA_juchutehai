@@ -132,6 +132,11 @@ class MasterViewController extends Controller
                 $pageTitle = __('受注入力');
                 $targetPage = 'PVJUI_3800';
                 break;
+                // 「受注入力」
+            case '4100':
+                $pageTitle = __('受注手配');
+                $targetPage = 'PVJUI_4100';
+                break;
 
             // 真鍋対応分
                 // 「部署マスタ」
