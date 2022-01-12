@@ -1,10 +1,10 @@
 {{-- PHP処理 --}}
 <?php
     // 無人稼働区分
-    define("MUJINKADOU_KBN", array( '有人稼働',
+    define("MUJIN_KADOU_KBN", array( '有人稼働',
                                     '無人稼働'));
     // 外段取区分
-    define("SOTODANDORI_KBN", array( '機上段取',
+    define("SOTO_DANDORI_KBN", array( '機上段取',
                                      '外段取（段取工数は機械負荷集計しない）'));
     // 「loginId」が送信されていなければ0を設定
     if(!isset($loginId)) $loginId = 0;
@@ -126,38 +126,75 @@
     <div class="form-column">
         {{-- 「標準稼働時間（分）」 --}}
         <label>
+<<<<<<< HEAD
+            <span style="width:9.4em;">{{__('hyoujun_kadou_min')}}</span>
+            <input name="dataHyoujunKadouMin" class="form-control" type="text" maxlength="8" autocomplete="off"
+=======
+<<<<<<< HEAD
             <span style="width:9em;">{{__('std_kado_min')}}</span>
             <input name="dataStdKadoMin" class="form-control" type="text" maxlength="8" autocomplete="off"
+=======
+            <span style="width:9.4em;">{{__('hyoujun_kadou_min')}}</span>
+            <input name="dataHyoujunKadouMin" class="form-control" type="text" maxlength="8" autocomplete="off"
+>>>>>>> 9c961c3a4ddb73a00d5fa9f2c8298ed1f66bb2ea
+>>>>>>> 89162a27703a19cdc7d566615e40bd009deb98f3
                 style="width:8em;" pattern="^([0-9]{0,8})$" title="{{__('半角数字でで入力してください')}}">
         </label>
     </div>
     <div class="form-column">
         {{-- 「主工程CD」 --}}
         <label>
-            <span style="width:4.5em;">{{__('main_koutei_cd')}}</span>
-            {{-- コード検査を行う項目は、スタイルクラス「code-check」を宣言 --}}
-            <input name="dataMainKouteiCd" class="form-control code-check" type="text" maxlength="10" autocomplete="off"
+            <span style="width:6.5em;">{{__('main_koutei_cd')}}</span>
+            <input name="dataMainKouteiCd" class="form-control" type="text" maxlength="10" autocomplete="off"
                 style="width:8em;" pattern="^([a-zA-Z0-9]{0,10})$" title="{{ __('半角英数字10文字以内で入力してください') }}">
         </label>
     </div>
     <div class="form-column">
         {{-- 「無人稼働区分」 --}}
         <label>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
             <span style="width:4.5em;">{{__('mujinkadou_kbn')}}</span>
             {{-- 「無人稼働区分」コンボボックス本体 --}}
             <div id="cmbMujinkadouKbn" style="width:18em;"></div>
             {{-- 「無人稼働区分」フォーム送信データ --}}
             <input name="dataMujinkadouKbn" type="hidden">
+=======
+>>>>>>> 89162a27703a19cdc7d566615e40bd009deb98f3
+            <span style="width:6.9em;">{{__('mujin_kadou_kbn')}}</span>
+            <!-- 「無人稼働区分」コンボボックス本体 -->
+            <div id="cmbMujinKadouKbn" style="width:9em;" value="0"></div>
+            <!-- 「無人稼働区分」フォーム送信データ -->
+            <input name="dataMujinKadouKbn" type="hidden">
+<<<<<<< HEAD
+=======
+>>>>>>> 9c961c3a4ddb73a00d5fa9f2c8298ed1f66bb2ea
+>>>>>>> 89162a27703a19cdc7d566615e40bd009deb98f3
         </label>
     </div>
     <div class="form-column">
         {{-- 「外段取区分」 --}}
         <label>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
             <span style="width:4.5em;">{{__('sotodandori_kbn')}}</span>
             {{-- 「外段取区分」コンボボックス本体 --}}
             <div id="cmbSotodandoriKbn" style="width:18em;"></div>
             {{-- 「外段取区分」フォーム送信データ --}}
             <input name="dataSotodandoriKbn" type="hidden">
+=======
+>>>>>>> 89162a27703a19cdc7d566615e40bd009deb98f3
+            <span style="width:6.9em;">{{__('soto_dandori_kbn')}}</span>
+            <!-- 「外段取区分」コンボボックス本体 -->
+            <div id="cmbSotoDandoriKbn" style="width:22em;"></div>
+            <!-- 「外段取区分」フォーム送信データ -->
+            <input name="dataSotoDandoriKbn" type="hidden">
+<<<<<<< HEAD
+=======
+>>>>>>> 9c961c3a4ddb73a00d5fa9f2c8298ed1f66bb2ea
+>>>>>>> 89162a27703a19cdc7d566615e40bd009deb98f3
         </label>
     </div>
     <div class="form-column">
@@ -207,6 +244,9 @@
     {{-- wijmoコントロール宣言 --}}
     {{-- -------------------- --}}
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
     {{-- 無人稼働区分選択値 --}}
     var mujinkadouKbn = [];
     {{-- 権限区分データ登録値 --}}
@@ -234,6 +274,39 @@
     @endfor
     {{-- コンボボックス宣言 --}}
     var cmbSotodandoriKbn = new wijmo.input.ComboBox('#cmbSotodandoriKbn', { itemsSource: sotodandoriKbn });
+=======
+>>>>>>> 89162a27703a19cdc7d566615e40bd009deb98f3
+    /* 無人稼働区分選択値 */
+    var mujinKadouKbn = [];
+    /* 無人稼働区分データ登録値 */
+    var mujinKadouKbnValue = [];
+    /* 無人稼働区分の元データに入力がある場合は選択値として格納 */
+    @for($i = 0;$i < count(MUJIN_KADOU_KBN);$i++)
+        @if(MUJIN_KADOU_KBN[$i] !== '')
+            mujinKadouKbn.push('{{ $i }}:{{ MUJIN_KADOU_KBN[$i] }}');
+            mujinKadouKbnValue.push({{ $i }});
+        @endif
+    @endfor
+    /* コンボボックス宣言 */
+    var cmbMujinKadouKbn = new wijmo.input.ComboBox('#cmbMujinKadouKbn', { itemsSource: mujinKadouKbn , isRequired: false ,selectedIndex:1 });
+
+    /* 外段取区分選択値 */
+    var sotoDandoriKbn = [];
+    /* 外段取区分データ登録値 */
+    var sotoDandoriKbnValue = [];
+    /* 外段取区分の元データに入力がある場合は選択値として格納 */
+    @for($i = 0;$i < count(SOTO_DANDORI_KBN);$i++)
+        @if(SOTO_DANDORI_KBN[$i] !== '')
+            sotoDandoriKbn.push('{{ $i }}:{{ SOTO_DANDORI_KBN[$i] }}');
+            sotoDandoriKbnValue.push({{ $i }});
+        @endif
+    @endfor
+    /* コンボボックス宣言 */
+    var cmbSotoDandoriKbn = new wijmo.input.ComboBox('#cmbSotoDandoriKbn', { itemsSource: sotoDandoriKbn , isRequired: false ,selectedIndex:1 });
+<<<<<<< HEAD
+=======
+>>>>>>> 9c961c3a4ddb73a00d5fa9f2c8298ed1f66bb2ea
+>>>>>>> 89162a27703a19cdc7d566615e40bd009deb98f3
 
     {{-- カレンダー宣言 --}}
     {{-- 有効期間（自） --}}
@@ -255,13 +328,38 @@
         SetNyuryokuData(fncNyuryokuData);
         {{-- 「表示」ボタンイベント登録 ※common_function.js参照 --}}
         SetBtnHyouji(fncShowDataGrid);
+<<<<<<< HEAD
+        /* 「Excel出力」ボタンイベント登録 ※common_function.js参照 */
+        SetBtnExcel(fncExportExcel);
+=======
+<<<<<<< HEAD
         {{-- 「CSV出力」ボタンイベント登録 ※common_function.js参照 --}}
         SetBtnCSV(fncExportCSV);
+=======
+        /* 「Excel出力」ボタンイベント登録 ※common_function.js参照 */
+        SetBtnExcel(fncExportExcel);
+>>>>>>> 9c961c3a4ddb73a00d5fa9f2c8298ed1f66bb2ea
+>>>>>>> 89162a27703a19cdc7d566615e40bd009deb98f3
 
         {{-- グリッド初期処理--}}
         InitGrid();
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
         {{-- グリッドデータの表示 --}}
+=======
+>>>>>>> 89162a27703a19cdc7d566615e40bd009deb98f3
+        /* ボタン制御更新 */
+        SetEnableButton(0);
+        /* 件数更新 */
+        $("#zenkenCnt").html(0);
+
+        /* グリッドデータの表示 */
+<<<<<<< HEAD
+=======
+>>>>>>> 9c961c3a4ddb73a00d5fa9f2c8298ed1f66bb2ea
+>>>>>>> 89162a27703a19cdc7d566615e40bd009deb98f3
         $('#btnHyouji').click();
     }
     {{-- グリッド共有変数 --}}
@@ -281,7 +379,7 @@
                         {{-- 「機械CD」 --}}
                         binding: 'dataKikaiCd',
                         header: "{{ __('kikai_cd') }}",
-                        width: '1*'
+                        width: 130
                     }
                 ]
             },
@@ -305,7 +403,7 @@
                         {{-- 「事業部CD」 --}}
                         binding: 'dataJigyoubuCd',
                         header: "{{ __('jigyoubu_cd') }}",
-                        width: '1*'
+                        width: 200
                     },
                     {{-- 2行目 --}}
                     {
@@ -324,7 +422,7 @@
                         {{-- 「事業部名」 --}}
                         binding: 'dataJigyoubuName',
                         header: "{{ __('jigyoubu_name') }}",
-                        width: '1.5*'
+                        width: 200
                     },
                     {{-- 2行目 --}}
                     {
@@ -341,7 +439,7 @@
                         {{-- 「主工程CD」 --}}
                         binding: 'dataMainKouteiCd',
                         header: "{{ __('main_koutei_cd') }}",
-                        width: '1*'
+                        width: 130
                     }
                 ]
             },
@@ -349,10 +447,10 @@
                 {{-- 6列目 --}}
                 cells: [
                     {
-                        {{-- 「標準稼働時間（分）」 --}}
-                        binding: 'dataStdKadoMin',
-                        header: "{{ __('std_kado_min') }}",
-                        width: '1.5*'
+                        /* 「標準稼働時間（分）」 */
+                        binding: 'dataHyoujunKadouMin',
+                        header: "{{ __('hyoujun_kadou_min') }}",
+                        width: 200
                     }
                 ]
             },
@@ -360,7 +458,40 @@
                 {{-- 7列目 --}}
                 cells: [
                     {
-                        {{-- 「有効期間（自）」 --}}
+                        /* 「無人稼働区分」 */
+                        binding: 'dataMujinKadouKbn',
+                        header: "{{ __('mujin_kadou_kbn') }}",
+                        width: 250
+                    }
+                ]
+            },
+            {
+                /* 8列目 */
+                cells: [
+                    {
+                        /* 「外段取区分」 */
+                        binding: 'dataSotoDandoriKbn',
+                        header: "{{ __('soto_dandori_kbn') }}",
+                        width: 320
+                    }
+                ]
+            },
+            {
+                /* 9列目 */
+                cells: [
+                    {
+                        /* 「備考」 */
+                        binding: 'dataBikou',
+                        header: "{{ __('bikou') }}",
+                        width: 300
+                    }
+                ]
+            },
+            {
+                /* 10列目 */
+                cells: [
+                    {
+                        /* 「有効期間（自）」 */
                         binding: 'dataStartDate',
                         header: "{{ __('yukoukikan_start_date') }}",
                         width: '1*'
@@ -493,10 +624,10 @@
         {{-- 検索件数のデータ受信 --}}
         AjaxData("{{ url('/master/0800') }}", soushinData, fncJushinDataCnt);
     }
-    {{-- 「CSV出力」ボタンイベント --}}
-    var fncExportCSV = function()
+    /* 「Excel出力」ボタンイベント */
+    var fncExportExcel = function()
     {
-        {{-- CSV出力用グリッドのレイアウト設定 --}}
+        /* Excel出力用グリッドのレイアウト設定 */
         let columns = [{ binding: 'dataKikaiCd', header: "{{ __('kikai_cd') }}" },
                        { binding: 'dataKikaiName', header: "{{ __('kikai_name') }}" },
                        { binding: 'dataJigyoubuCd', header: "{{ __('jigyoubu_cd') }}" },
@@ -505,6 +636,9 @@
                        { binding: 'dataBushoName', header: "{{ __('busho_name') }}" },
                        { binding: 'dataStdKadoMin', header: "{{ __('std_kado_min') }}" },
                        { binding: 'dataMainKouteiCd', header: "{{ __('main_koutei_cd') }}" },
+                       { binding: 'dataHyoujunKadouMin', header: "{{ __('hyoujun_kadou_min') }}" },
+                       { binding: 'dataMujinKadouKbn', header: "{{ __('mujin_kadou_kbn') }}" },
+                       { binding: 'dataSotoDandoriKbn', header: "{{ __('soto_dandori_kbn') }}" },
                        { binding: 'dataBikou', header: "{{ __('bikou') }}" },
                        { binding: 'dataStartDate', header: "{{ __('yukoukikan_start_date') }}" },
                        { binding: 'dataEndDate', header: "{{ __('yukoukikan_end_date') }}" }];
@@ -516,12 +650,12 @@
                 return { property: sd.property, ascending: sd.ascending }
             }
         );
-        {{-- CSV出力時の並び替え条件を設定 --}}
+        /* Excel出力時の並び替え条件を設定 */
         let sortDesc = new wijmo.collections.SortDescription(sortState[0].property, sortState[0].ascending);
-        {{-- CSVファイル作成
+        /* Excelファイル作成
              ※ファイル名は「ページタイトル+yyyymmddhhMMss（年月日時分秒）+.csv」
-             ※common_function.js参照 --}}
-        ExportCSVFile(gridMaster.itemsSource, columns, sortDesc, '{{ $pageTitle }}'+ getNowDateTime() +'.csv');
+             ※common_function.js参照 */
+        ExportExcelFile(gridMaster.itemsSource, columns, sortDesc, '{{ $pageTitle }}'+ getNowDateTime() +'.csv');
     }
     {{-- 「新規・参照新規・修正・削除」ボタンイベント
          ※mode → 入力ダイアログの操作、新規・修正・削除のどの処理で開いたかを判別する処理種別
@@ -552,15 +686,15 @@
         nyuryokuData['dataJigyoubuName'].value = copy ? data['dataJigyoubuName'] : '';
         {{-- 「備考」 --}}
         nyuryokuData['dataBikou'].value = copy ? data['dataBikou'] : '';
-        {{-- 「標準稼働時間（分）」 --}}
-        nyuryokuData['dataStdKadoMin'].value = copy ? data['dataStdKadoMin'] : '';
-        {{-- 「主工程CD」 --}}
+        /* 「標準稼働時間（分）」 */
+        nyuryokuData['dataHyoujunKadouMin'].value = copy ? data['dataHyoujunKadouMin'] : '';
+        /* 「主工程CD」 */
         nyuryokuData['dataMainKouteiCd'].value = copy ? data['dataMainKouteiCd'] : '';
-        {{-- 「無人稼働区分」 --}}
-        cmbMujinkadouKbn.selectedIndex = (copy && !insertFlg) ? mujinkadouKbnValue.indexOf(data['dataMujinkadouKbn']) : 0;
-        {{-- 「外段取区分」 --}}
-        cmbSotodandoriKbn.selectedIndex = (copy && !insertFlg) ? sotodandoriKbnValue.indexOf(data['dataSotodandoriKbn']) : 0;
-        {{-- 「有効期間（自）」 --}}
+        /* 「無人稼働区分」 */
+        cmbMujinKadouKbn.selectedIndex = (copy && !insertFlg) ? mujinKadouKbnValue.indexOf(data['dataMujinKadouKbn']) : 0;
+        /* 「外段取区分」 */
+        cmbSotoDandoriKbn.selectedIndex = (copy && !insertFlg) ? sotoDandoriKbnValue.indexOf(data['dataSotoDandoriKbn']) : 0;
+        /* 「有効期間（自）」 */
         dateStart.value = !insertFlg ? data['dataStartDate'] : getNowDate();
         {{-- 「登録日時」 --}}
         nyuryokuData['dataTourokuDt'].value = !insertFlg ? data['dataTourokuDt'] : '';
@@ -578,17 +712,21 @@
         nyuryokuData['dataId'].value = deleteFlg ? data['dataId'] : '';
         {{-- 検索ボタン ※削除時のみ制限 --}}
         nyuryokuData['btnSanshou'].disabled = deleteFlg;
-        nyuryokuData['dataKikaiName'].disabled = deleteFlg; {{-- 「機械名」 --}}
-        nyuryokuData['dataBushoCd'].disabled = deleteFlg;  {{-- 「部署CD」 --}}
-        nyuryokuData['dataJigyoubuCd'].disabled = deleteFlg; {{-- 「事業部CD」 --}}
-        nyuryokuData['dataBikou'].disabled = deleteFlg; {{-- 「備考」 --}}
-        nyuryokuData['dataStdKadoMin'].disabled = deleteFlg; {{-- 「標準稼働時間（分） --}}
-        nyuryokuData['dataMainKouteiCd'].disabled = deleteFlg; {{-- 「主工程CD --}}
-        cmbMujinkadouKbn.isDisabled = deleteFlg; {{-- 「無人稼働区分」 --}}
-        cmbSotodandoriKbn.isDisabled = deleteFlg; {{-- 「外段取区分」 --}}
-        dateStart.isDisabled = deleteFlg;    {{-- 「有効期間（自）」 --}}
+        nyuryokuData['dataKikaiName'].disabled = deleteFlg; /* 「機械名」 */
+        nyuryokuData['dataBushoCd'].disabled = deleteFlg;  /* 「部署CD」 */
+        nyuryokuData['dataJigyoubuCd'].disabled = deleteFlg; /* 「事業部CD」 */
+        nyuryokuData['dataBikou'].disabled = deleteFlg; /* 「備考」 */
+        nyuryokuData['dataHyoujunKadouMin'].disabled = deleteFlg; /* 「標準稼働時間（分） */
+        nyuryokuData['dataMainKouteiCd'].disabled = deleteFlg; /* 「主工程CD */
+        cmbMujinKadouKbn.isDisabled = deleteFlg; /* 「無人稼働区分」 */
+        cmbSotoDandoriKbn.isDisabled = deleteFlg; /* 「外段取区分」 */
+        dateStart.isDisabled = deleteFlg;    /* 「有効期間（自）」 */
 
+<<<<<<< HEAD
+        /* 入力フォームのスタイル初期化 ※common_function.js参照　*/
+=======
         {{-- 入力フォームのスタイル初期化 ※common_function.js参照　--}}
+>>>>>>> 89162a27703a19cdc7d566615e40bd009deb98f3
         InitFormStyle();
     }
 
@@ -605,7 +743,11 @@
         ClosePopupDlg();
         {{-- データエラー判定 ※common_function.js参照 --}}
         if(IsAjaxDataError(data, errorFlg)) return;
-        {{-- グリッドデータ反映＆並び順と選択位置保持 ※common_function.js参照 --}}
+        /* ボタン制御更新 */
+        SetEnableButton(data[1].length);
+        /* 件数更新 */
+        $("#zenkenCnt").html(data[1].length);
+        /* グリッドデータ反映＆並び順と選択位置保持 ※common_function.js参照 */
         selectedRows = SortMultiRowData(gridMaster, data[1], 'dataKikaiCd');
     }
 
@@ -684,21 +826,23 @@
             if(nyuryokuData['dataBushoCd'].value != data['dataBushoCd']) return true;
             {{-- 「事業部CD」 --}}
             if(nyuryokuData['dataJigyoubuCd'].value != data['dataJigyoubuCd']) return true;
-            {{-- 「無人稼働区分」 --}}
-            if(mujinkadouKbnValue[cmbMujinkadouKbn.selectedIndex] != data['dataMujinkadouKbn']) return true;
-            {{-- 「外段取区分」 --}}
-            if(sotodandoriKbnValue[cmbSotodandoriKbn.selectedIndex] != data['dataSotodandoriKbn']) return true;
-            {{-- 「主工程CD」 --}}
+            /* 「無人稼働区分」 */
+            if(mujinKadouKbnValue[cmbMujinKadouKbn.selectedIndex] != data['dataMujinKadouKbn']) return true;
+            /* 「外段取区分」 */
+            if(sotoDandoriKbnValue[cmbSotoDandoriKbn.selectedIndex] != data['dataSotoDandoriKbn']) return true;
+            /* 「主工程CD」 */
             if((nyuryokuData['dataMainKouteiCd'].value != data['dataMainKouteiCd']) &&
               !(nyuryokuData['dataMainKouteiCd'].value == '' && data['dataMainKouteiCd'] == null)) return true;
             {{-- 「備考」 --}}
             if((nyuryokuData['dataBikou'].value != data['dataBikou']) &&
               !(nyuryokuData['dataBikou'].value == '' && data['dataBikou'] == null)) return true;
-            {{-- 「標準稼働時間（分）」 --}}
-            if((nyuryokuData['dataStdKadoMin'].value != data['dataStdKadoMin']) &&
-              !(nyuryokuData['dataStdKadoMin'].value == '' && data['dataStdKadoMin'] == null)) return true;
-              
-            {{-- 上記項目に変更が無い場合はfalse --}}
+            /* 「標準稼働時間（分）」 */
+            if((nyuryokuData['dataHyoujunKadouMin'].value != data['dataHyoujunKadouMin']) &&
+              !(nyuryokuData['dataHyoujunKadouMin'].value == '' && data['dataHyoujunKadouMin'] == null)) return true;
+            /* 「有効期間（自）」 */
+            if(nyuryokuData['dataStartDate'].value != data['dataStartDate']) return true;
+
+            /* 上記項目に変更が無い場合はfalse */
             return false;
         }
 
@@ -719,11 +863,11 @@
             ClosePopupDlg();
             return;
         }
-        {{-- 無人稼働区分のコンボボックスの値取得 --}}
-        nyuryokuData['dataMujinkadouKbn'].value = mujinkadouKbnValue[cmbMujinkadouKbn.selectedIndex];
-        {{-- 外段取区分のコンボボックスの値取得 --}}
-        nyuryokuData['dataSotodandoriKbn'].value = sotodandoriKbnValue[cmbSotodandoriKbn.selectedIndex];
-        {{-- POST送信用オブジェクト配列 --}}
+        /* 無人稼働区分のコンボボックスの値取得 */
+        nyuryokuData['dataMujinKadouKbn'].value = mujinKadouKbnValue[cmbMujinKadouKbn.selectedIndex];
+        /* 外段取区分のコンボボックスの値取得 */
+        nyuryokuData['dataSotoDandoriKbn'].value = sotoDandoriKbnValue[cmbSotoDandoriKbn.selectedIndex];
+        /* POST送信用オブジェクト配列 */
         let soushinData = {};
         {{-- フォーム要素から送信データを格納 --}}
         for(var i = 0; i< nyuryokuData.length; i++){

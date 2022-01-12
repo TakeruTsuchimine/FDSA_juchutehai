@@ -3,7 +3,7 @@
 if (!isset($kengenKbn)) $kengenKbn = 0;
 ?>
 <div class="flex-box flex-center main-color-back">
-    <div class="control-panel flex-box flex-between container">
+    <div id='mainFooter' class="control-panel flex-box flex-between container">
         @if($kengenKbn >= 3)
         <!--新規ボタン-->
         <button id="btnShinki" class="btn btn-primary" type="button">
@@ -19,6 +19,8 @@ if (!isset($kengenKbn)) $kengenKbn = 0;
         <button id="btnShusei" class="btn btn-primary" type="button">
             {{__('F3')}}{{__('修正')}}
         </button>
+        @endif
+        @if($kengenKbn >= 7)
         <!--削除ボタン-->
         <button id="btnSakujo" class="btn btn-primary" type="button">
             {{__('F4')}}{{__('削除')}}
@@ -28,9 +30,9 @@ if (!isset($kengenKbn)) $kengenKbn = 0;
         <button id="btnHyouji" class="btn btn-primary" type="button">
             {{__('F5')}}{{__('表示')}}
         </button>
-        <!--CSV出力ボタン-->
-        <button id="btnCSV" class="btn btn-primary" type="button">
-            {{__('F6')}}{{__('CSV出力')}}
+        <!--Excel出力ボタン-->
+        <button id="btnExcel" class="btn btn-primary" type="button">
+            {{__('F6')}}{{__('Excel出力')}}
         </button>
         <!--参照ボタン-->
         <button class="btn btn-primary btnSanshou" type="button">

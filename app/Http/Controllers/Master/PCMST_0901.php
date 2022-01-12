@@ -28,7 +28,7 @@ class PCMST_0901 extends Controller
         // データベース接続宣言
         $query = new class_Database();
         // マスタ共通処理クラス宣言
-        $master = new class_Master($tableName, 'waritsukekouho_cd');
+        $master = new class_Master($tableName, 'waritsuke_kouho_cd');
         try {
             ///////////////////
             // POSTデータ受信 //
@@ -44,10 +44,10 @@ class PCMST_0901 extends Controller
             }
 
             // 割付CD
-            $waritsukekouhoCd = $request -> dataWaritsukekouhoCd;
+            $waritsukeKouhoCd = $request -> dataWaritsukeKouhoCd;
             // POSTデータチェックエラー
-            if(is_null($waritsukekouhoCd) || $waritsukekouhoCd === ''){
-                $resultMsg .= '「'.__('waritsukekouho_cd').'」'.__('が正常に送信されていません。').'\n';
+            if(is_null($waritsukeKouhoCd) || $waritsukeKouhoCd === ''){
+                $resultMsg .= '「'.__('waritsuke_kouho_cd_kikai').'」'.__('が正常に送信されていません。').'\n';
                 $resultFlg = false;
             }
 
@@ -78,8 +78,11 @@ class PCMST_0901 extends Controller
                         $resultMsg .= '「' . __('ID') . '」' . __('が正常に送信されていません。') . '<br>';
                         $resultFlg = false;
                     }
+                    $dataHantei = $request -> dataHantei;
+
+                    $dataHantei3 = $request -> dataHantei3;
                     // データ処理開始
-                    $master->DeleteMasterData($waritsukekouhoCd, $yukoukikanStartDate, $loginId, $dataId);
+                    $master->DeleteMasterData($waritsukeKouhoCd, $yukoukikanStartDate, $loginId, $dataId);
                     break;
                     // DELETE処理終了 //
 
@@ -88,21 +91,23 @@ class PCMST_0901 extends Controller
                     ////////////////
                 default:
                     // 担当者CDは新規登録の際、既に存在する担当者コードの場合はエラー
-                    $result = $common->GetCdCount($tableName, 'waritsukekouho_cd', $waritsukekouhoCd);
+                    $result = $common->GetCdCount($tableName, 'waritsuke_kouho_cd', $waritsukeKouhoCd);
 
                     $dataHantei = $request -> dataHantei;
+
+                    $dataHantei3 = $request -> dataHantei3;
+                    
                     // 割付の場合、複数登録の回避用
-                    if($dataHantei=0){
+                    if($dataHantei == 0){
                         if($result > 0 && $SQLType === SQL_INSERT){ 
-                            $resultMsg .= __('既に登録されている').'「'.__('waritsukekouho_cd').'」'.__('です。').'<br>';
-                            $resultVal[] = 'dataWaritsukekouhoCd';
+                            $resultMsg .= __('既に登録されている').'「'.__('waritsuke_kouho_cd').'」'.__('です。').'<br>';
+                            $resultVal[] = 'dataWaritsukeKouhoCd';
                             $resultFlg = false;
                         }
                     }
 
-                        // 割付名
-                    $waritsukekouhoName = $request -> dataWaritsukekouhoName;
-                
+                    // 割付名
+                    $waritsukeKouhoName = $request -> dataWaritsukeKouhoName;
                     // 事業部CD
                     $jigyoubuCd = $request -> dataJigyoubuCd;
                     // POSTデータチェックエラー
@@ -145,7 +150,7 @@ class PCMST_0901 extends Controller
                     $kakouSkill = $request -> dataKakouSkill;
 
                     // 加工入力係数
-                    $kakounouryoku_keisu = $request -> dataKakounouryoku_keisu;
+                    $kakouNouryokuKeisu = $request -> dataKakouNouryokuKeisu;
 
                     if (!$resultFlg) throw new Exception($resultMsg);
 
@@ -154,15 +159,15 @@ class PCMST_0901 extends Controller
                     // バインドの設定
                     $SQLBind = array();
                     $SQLBind[] = array('jigyoubu_cd',       $jigyoubuCd,       TYPE_STR);
-                    $SQLBind[] = array('waritsukekouho_cd',   $waritsukekouhoCd,   TYPE_STR);
-                    $SQLBind[] = array('sub_seq', $subNo, TYPE_INT);
-                    $SQLBind[] = array('waritsukekouho_name',      $waritsukekouhoName,      TYPE_STR);
+                    $SQLBind[] = array('waritsuke_kouho_cd',   $waritsukeKouhoCd,   TYPE_STR);
+                    $SQLBind[] = array('sub_seqno', $subNo, TYPE_INT);
+                    $SQLBind[] = array('waritsuke_kouho_name',      $waritsukeKouhoName,      TYPE_STR);
                     $SQLBind[] = array('setsumeibun',      $setsumeibun,      TYPE_STR);
                     $SQLBind[] = array('kikai_cd',     $kikaiCd,     TYPE_STR);
-                    $SQLBind[] = array('kakou_skill',     $kakouSkill,     TYPE_STR);
-                    $SQLBind[] = array('kakou_nouryoku_keisu',     $kakounouryoku_keisu,     TYPE_STR);
+                    $SQLBind[] = array('kakou_nouryoku',     $kakouSkill,     TYPE_STR);
+                    $SQLBind[] = array('kakou_nouryoku_keisu',     $kakouNouryokuKeisu,     TYPE_STR);
                     // データ処理開始
-                    $master->InsertMasterData($SQLBind, $waritsukekouhoCd, $yukoukikanStartDate, $yukoukikanEndDate, $loginId, $SQLType);
+                    $master->InsertWaritsukeMasterData($SQLBind, $waritsukeKouhoCd, $yukoukikanStartDate, $yukoukikanEndDate, $loginId, $SQLType, '', '',$dataHantei);
                     $resultVal[] = $common->GetMaxId($tableName);
                     break;
                     // INSERT処理終了 //
@@ -178,6 +183,8 @@ class PCMST_0901 extends Controller
         $resultData[] = $resultFlg;
         $resultData[] = mb_convert_encoding($resultMsg, 'UTF-8', 'UTF-8');
         $resultData[] = mb_convert_encoding($resultVal, 'UTF-8', 'UTF-8');
+        $resultData[] = mb_convert_encoding($dataHantei, 'UTF-8', 'UTF-8');
+        $resultData[] = mb_convert_encoding($dataHantei3, 'UTF-8', 'UTF-8');
         return $resultData;
     }
 }

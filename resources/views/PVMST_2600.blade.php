@@ -657,6 +657,12 @@
                             <input name="dataZairyouKin" type="hidden">
                         </label>
                     </div>
+                    <div class="form-column">
+                        <!-- N -->
+                        <label>
+                            <span style="width:6em;"></span>
+                        </label>
+                    </div>
                 </div>
                 <!-- 二列目 -->
                 <div class="flex-box flex-start flex-column item-start" style="padding-left:10px; width:30em;">
@@ -817,11 +823,9 @@
                         </label>
                     </div>
                     <div class="form-column">
-                        <!-- 「図面番号」 -->
+                        <!-- N -->
                         <label>
-                            <span style="width:6em;">{{__('zumen_no')}}</span>
-                            <input name="dataZumenNo" class="form-control" type="text" maxlength="30" autocomplete="off"
-                                style="width:20em;">
+                            <span style="width:6em;"></span>
                         </label>
                     </div>
                     <div class="form-column">
@@ -1057,57 +1061,57 @@
                 width  : 100
             },
             {
-                binding: 'capZairyouKbn',
+                binding: 'dataZairyouKbn',
                 header : "{{__('zairyou_kbn')}}",
                 width  : 100
             },
             {
-                binding: 'capKyotenZairyouKbn',
+                binding: 'dataKyotenZairyouKbn',
                 header : "{{__('kyoten_zairyou_kbn')}}",
                 width  : 100
             },
             {
-                binding: 'capShanaiZairyouKbn',
+                binding: 'dataShanaiZairyouKbn',
                 header : "{{__('shanai_zairyou_kbn')}}",
                 width  : 100
             },
             {
-                binding: 'capJhuchuhinKbn',
+                binding: 'dataJhuchuhinKbn',
                 header : "{{__('jhuchuhin_kbn')}}",
                 width  : 100
             },
             {
-                binding: 'capShikakariKbn',
+                binding: 'dataShikakariKbn',
                 header : "{{__('shikakari_kbn')}}",
                 width  : 100
             },
             {
-                binding: 'capFukushizaiKbn',
+                binding: 'dataFukushizaiKbn',
                 header : "{{__('fukushizai_kbn')}}",
                 width  : 100
             },
             {
-                binding: 'capShokuchiKbn',
+                binding: 'dataShokuchiKbn',
                 header : "{{__('shokuchi_kbn')}}",
                 width  : 100
             },
             {
-                binding: 'capZaikokanriKbn',
+                binding: 'dataZaikokanriKbn',
                 header : "{{__('zaikokanri_kbn')}}",
                 width  : 100
             },
             {
-                binding: 'capTankaInputKbn',
+                binding: 'dataTankaInputKbn',
                 header : "{{__('tanka_input_kbn')}}",
                 width  : 100
             },
             {
-                binding: 'capShouhizeiKbn',
+                binding: 'dataShouhizeiKbn',
                 header : "{{__('shouhizei_kbn')}}",
                 width  : 100
             },
             {
-                binding: 'capKeigenzeiritsuKbn',
+                binding: 'dataKeigenzeiritsuKbn',
                 header : "{{__('keigenzeiritsu_kbn')}}",
                 width  : 100
             },
@@ -1257,17 +1261,17 @@
                 width  : 100
             },
             {
-                binding: 'capZumenKbn',
+                binding: 'dataZumenKbn',
                 header : "{{__('zumen_kbn')}}",
                 width  : 100
             },
             {
-                binding: 'capKensaKbn',
+                binding: 'dataKensaKbn',
                 header : "{{__('kensa_kbn')}}",
                 width  : 100
             },
             {
-                binding: 'capShinkiJuchuSheetKbn',
+                binding: 'dataShinkiJuchuSheetKbn',
                 header : "{{__('shinki_juchu_sheet_kbn')}}",
                 width  : 100
             },
@@ -1309,11 +1313,6 @@
             {
                 binding: 'dataSagyouUchiwake3',
                 header : "{{__('sagyou_uchiwake3')}}",
-                width  : 100
-            },
-            {
-                binding: 'dataZumenNo',
-                header : "{{__('zumen_no')}}",
                 width  : 100
             },
             {
@@ -1470,17 +1469,17 @@
             {  binding: 'dataHinmokuKbnName',  header : "{{__('hinmoku_kbn_name')}}"},
             {  binding: 'dataTanniCd',  header : "{{__('tanni_cd')}}"},
             {  binding: 'dataTanniName',  header : "{{__('tanni_name')}}"},
-            {  binding: 'capZairyouKbn',  header : "{{__('zairyou_kbn')}}"},
-            {  binding: 'capKyotenZairyouKbn',  header : "{{__('kyoten_zairyou_kbn')}}"},
-            {  binding: 'capShanaiZairyouKbn',  header : "{{__('shanai_zairyou_kbn')}}"},
-            {  binding: 'capJhuchuhinKbn',  header : "{{__('jhuchuhin_kbn')}}"},
-            {  binding: 'capShikakariKbn',  header : "{{__('shikakari_kbn')}}"},
-            {  binding: 'capFukushizaiKbn',  header : "{{__('fukushizai_kbn')}}"},
-            {  binding: 'capShokuchiKbn',  header : "{{__('shokuchi_kbn')}}"},
-            {  binding: 'capZaikokanriKbn',  header : "{{__('zaikokanri_kbn')}}"},
-            {  binding: 'capTankaInputKbn',  header : "{{__('tanka_input_kbn')}}"},
-            {  binding: 'capShouhizeiKbn',  header : "{{__('shouhizei_kbn')}}"},
-            {  binding: 'capKeigenzeiritsuKbn', header : "{{__('keigenzeiritsu_kbn')}}"},
+            {  binding: 'dateZairyouKbn',  header : "{{__('zairyou_kbn')}}"},
+            {  binding: 'dataKyotenZairyouKbn',  header : "{{__('kyoten_zairyou_kbn')}}"},
+            {  binding: 'dataShanaiZairyouKbn',  header : "{{__('shanai_zairyou_kbn')}}"},
+            {  binding: 'dataJhuchuhinKbn',  header : "{{__('jhuchuhin_kbn')}}"},
+            {  binding: 'dataShikakariKbn',  header : "{{__('shikakari_kbn')}}"},
+            {  binding: 'dataFukushizaiKbn',  header : "{{__('fukushizai_kbn')}}"},
+            {  binding: 'dataShokuchiKbn',  header : "{{__('shokuchi_kbn')}}"},
+            {  binding: 'dataZaikokanriKbn',  header : "{{__('zaikokanri_kbn')}}"},
+            {  binding: 'dataTankaInputKbn',  header : "{{__('tanka_input_kbn')}}"},
+            {  binding: 'dataShouhizeiKbn',  header : "{{__('shouhizei_kbn')}}"},
+            {  binding: 'dataKeigenzeiritsuKbn', header : "{{__('keigenzeiritsu_kbn')}}"},
             {  binding: 'dataZaishitsuCd',  header : "{{__('zaishitsu_cd')}}"},
             {  binding: 'dataZaishitsuName',  header : "{{__('zaishitsu_name')}}"},
             {  binding: 'dataMakerCd', header : "{{__('maker_cd')}}"},
@@ -1510,9 +1509,9 @@
             {  binding: 'dataFolderName',  header : "{{__('folder_name')}}"},
             {  binding: 'dataFileName',  header : "{{__('file_name')}}"},
             {  binding: 'dataZairyouKin',  header : "{{__('zairyou_kin')}}"},
-            {  binding: 'capZumenKbn',  header : "{{__('zumen_kbn')}}"},
-            {  binding: 'capKensaKbn',  header : "{{__('kensa_kbn')}}"},
-            {  binding: 'capShinkiJuchuSheetKbn',  header : "{{__('shinki_juchu_sheet_kbn')}}"},
+            {  binding: 'dataZumenKbn',  header : "{{__('zumen_kbn')}}"},
+            {  binding: 'dataKensaKbn',  header : "{{__('kensa_kbn')}}"},
+            {  binding: 'dataShinkiJuchuSheetKbn',  header : "{{__('shinki_juchu_sheet_kbn')}}"},
             {  binding: 'dataItemSize',  header : "{{__('ItemSize')}}"},
             {  binding: 'dataCuttingSize',  header : "{{__('CuttingSize')}}"},
             {  binding: 'dataTokuisakiCd',  header : "{{__('tokuisaki_cd')}}"},
@@ -1521,7 +1520,6 @@
             {  binding: 'dataSagyouUchiwake1',  header : "{{__('sagyou_uchiwake1')}}"},
             {  binding: 'dataSagyouUchiwake2',  header : "{{__('sagyou_uchiwake2')}}"},
             {  binding: 'dataSagyouUchiwake3',  header : "{{__('sagyou_uchiwake3')}}"},
-            {  binding: 'dataZumenNo',  header : "{{__('zumen_no')}}"},
             {  binding: 'dataBikouEigyou',  header : "{{__('bikou_eigyou')}}"},
             {  binding: 'dataBikou',  header : "{{__('bikou')}}"},
             {  binding: 'dataBuban',  header : "{{__('buban')}}"},
@@ -1700,8 +1698,6 @@
         nyuryokuData['dataSagyouUchiwake2'].value = copy ? data['dataSagyouUchiwake2'] : '';
         /* 「作業内訳3」 */
         nyuryokuData['dataSagyouUchiwake3'].value = copy ? data['dataSagyouUchiwake3'] : '';
-        /* 「図面番号」 */
-        nyuryokuData['dataZumenNo'].value = copy ? data['dataZumenNo'] : '';
         /* 「備考（営業）」 */
         nyuryokuData['dataBikouEigyou'].value = copy ? data['dataBikouEigyou'] : '';
         /* 「備考」 */
@@ -1785,7 +1781,6 @@
         nyuryokuData['dataSagyouUchiwake1'].disabled = deleteFlg; /* 「作業内訳1」 */
         nyuryokuData['dataSagyouUchiwake2'].disabled = deleteFlg; /* 「作業内訳2」 */
         nyuryokuData['dataSagyouUchiwake3'].disabled = deleteFlg; /* 「作業内訳3」 */
-        nyuryokuData['dataZumenNo'].disabled = deleteFlg; /* 「図面番号」 */
         nyuryokuData['dataBikouEigyou'].disabled = deleteFlg; /* 「備考（営業）」 */
         nyuryokuData['dataBikou'].disabled = deleteFlg; /* 「備考」 */
         nyuryokuData['dataBuban'].disabled = deleteFlg; /* 「部品番号」 */
@@ -1812,30 +1807,8 @@
         if(IsAjaxDataError(data, errorFlg)) return;
         /* ボタン制御更新 */
         SetEnableButton(data[1].length);
-        /** */
-        data[1].forEach(e => {
-            e['capZairyouKbn'] = SetCaption(e['dataZairyouKbn'], <?php echo json_encode(ZAIRYOU_KBN) ?>);
-            e['capKyotenZairyouKbn'] = SetCaption(e['dataKyotenZairyouKbn'], <?php echo json_encode(KYOTEN_ZAIRYOU_KBN) ?>);
-            e['capShanaiZairyouKbn'] = SetCaption(e['dataShanaiZairyouKbn'], <?php echo json_encode(SHANAI_ZAIRYOU_KBN) ?>);
-            e['capJhuchuhinKbn'] = SetCaption(e['dataJhuchuhinKbn'], <?php echo json_encode(JHUCHUHIN_KBN) ?>);
-            e['capShikakariKbn'] = SetCaption(e['dataShikakariKbn'], <?php echo json_encode(SHIKAKARI_KBN) ?>);
-            e['capFukushizaiKbn'] = SetCaption(e['dataFukushizaiKbn'], <?php echo json_encode(FUKUSHIZAI_KBN) ?>);
-            e['capShokuchiKbn'] = SetCaption(e['dataShokuchiKbn'], <?php echo json_encode(SHOKUCHI_KBN) ?>);
-            e['capZaikokanriKbn'] = SetCaption(e['dataZaikokanriKbn'], <?php echo json_encode(ZAIKOKANRI_TAISHOUGAI_KBN) ?>);
-            e['capTankaInputKbn'] = SetCaption(e['dataTankaInputKbn'], <?php echo json_encode(TANKA_INPUT_KBN) ?>);
-            e['capShouhizeiKbn'] = SetCaption(e['dataShouhizeiKbn'], <?php echo json_encode(SHOUHIZEI_KBN) ?>);
-            e['capKeigenzeiritsuKbn'] = SetCaption(e['dataKeigenzeiritsuKbn'], <?php echo json_encode(KEIGENZEIRITSU_KBN) ?>);
-            e['capZumenKbn'] = SetCaption(e['dataZumenKbn'], <?php echo json_encode(ZUMEN_KBN) ?>);
-            e['capKensaKbn'] = SetCaption(e['dataKensaKbn'], <?php echo json_encode(KENSA_KBN) ?>);
-            e['capShinkiJuchuSheetKbn'] = SetCaption(e['dataShinkiJuchuSheetKbn'], <?php echo json_encode(SHINKI_JUCHU_SHEET_KBN) ?>);
-            e['capYojouzaikoKbn'] = SetCaption(e['dataYojouzaikoKbn'], <?php echo json_encode(YOJOUZAIKO_KBN) ?>);
-        });
         /* グリッドデータ反映＆並び順と選択位置保持 ※common_function.js参照 */
         SortGridData(gridMaster, data[1], 'dataJuchuNo', 1);
-    }
-
-    function SetCaption(data, array) {
-        return array[data];
     }
 
     /* 検索件数更新 */
@@ -2252,8 +2225,6 @@
             if((nyuryokuData['dataSagyouUchiwake2'].value != data['dataSagyouUchiwake2'])) return true;
             /* 「作業内訳3」 */
             if((nyuryokuData['dataSagyouUchiwake3'].value != data['dataSagyouUchiwake3'])) return true;
-            /* 「図面番号」 */
-            if((nyuryokuData['dataZumenNo'].value != data['dataZumenNo'])) return true;
             /* 「備考（営業）」 */
             if((nyuryokuData['bikou_eigyou'].value != data['bikou_eigyou'])) return true;
             /* 「備考」 */

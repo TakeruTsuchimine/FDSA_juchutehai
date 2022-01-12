@@ -290,7 +290,7 @@
                         {{-- 「部署CD」 --}}
                         binding: 'dataBushoCd',
                         header: "{{ __('busho_cd') }}",
-                        width: 100
+                        width: '1*'
                     }
                 ]
             },
@@ -302,7 +302,7 @@
                         {{-- 「部署名」 --}}
                         binding: 'dataBushoName',
                         header: "{{ __('busho_name') }}",
-                        width: 85
+                        width: '1.5*'
                     },
                     {{-- 2行目 --}}
                     {
@@ -332,24 +332,103 @@
                 ]
             },
             {
-                {{-- 4列目 --}}
+                /* 4列目 */
                 cells: [
+                    /* 1行目 */
                     {
-                        {{-- 「有効期間（自）」 --}}
-                        binding: 'dataStartDate',
-                        header: "{{ __('yukoukikan_start_date') }}",
-                        width: 150
+                        /* 「請求CD」 */
+                        binding: 'dataSeikyuCd',
+                        header: "{{ __('seikyu_cd') }}",
+                        width: '1.5*'
+                    },
+                    /* 2行目 */
+                    {
+                        /* 「請求部署名」 */
+                        binding: 'dataSeikyuBushoName',
+                        header: "{{ __('seikyu_busho_name') }}"
                     }
                 ]
             },
             {
-                {{-- 5列目 --}}
+                /* 5列目 */
                 cells: [
+                    {
+                        /* 「経理CD」 */
+                        binding: 'dataKeiriCd',
+                        header: "{{ __('keiri_cd') }}",
+                        width: '1.5*'
+                    }
+                ]
+            },
+            {
+                /* 6列目 */
+                cells: [
+                    {
+                        /* 「順序」 */
+                        binding: 'dataHyoujiSeq',
+                        header: "{{ __('hyouji_seq') }}",
+                        width: '1*'
+                    }
+                ]
+            },
+            {
+                /* 7列目 */
+                cells: [
+                    {
+                        /* 「集計No」 */
+                        binding: 'dataShukeiNo',
+                        header: "{{ __('shukei_no') }}",
+                        width: '1*'
+                    }
+                ]
+            },
+            {
+                /* 8列目 */
+                cells: [
+                    /* 4列目 */
+                    {
+                        /* 「有効期間（自）」 */
+                        binding: 'dataStartDate',
+                        header: "{{ __('yukoukikan_start_date') }}",
+                        width: '1.5*'
+                    },
+                    /* 4列目 */
                     {
                         {{-- 「有効期間（至）」 --}}
                         binding: 'dataEndDate',
-                        header: "{{ __('yukoukikan_end_date') }}",
-                        width: 150
+                        header: "{{ __('yukoukikan_end_date') }}"
+                    }
+                ]
+            },
+            {
+                /* 9列目 */
+                cells: [
+                    {
+                        /* 「登録日」 */
+                        binding: 'dataTourokuDt',
+                        header: "{{ __('touroku_dt') }}",
+                        width: '2*'
+                    },
+                    {
+                        /* 「更新日」 */
+                        binding: 'dataKoushinDt',
+                        header: "{{ __('koushin_dt') }}"
+                    }
+                ]
+            },
+            {
+                /* 10列目 */
+                cells: [
+                    {
+                        /* 「登録者名」 */
+                        binding: 'dataTourokushaName',
+                        header: "{{ __('tourokusha_name') }}",
+                        width: '1.5*'
+                    },
+                    {
+                        /* 「更新者名」 */
+                        binding: 'dataKoushinshaName',
+                        header: "{{ __('koushinsha_name') }}"
                     }
                 ]
             }
@@ -808,7 +887,7 @@
             {{-- 事業部CD --}}
             case 'dataJigyoubuCd':
             ShowSentakuDlg("{{ __('jigyoubu_cd') }}", "{{ __('jigyoubu_name') }}",
-                           currentCdElement, currentNameElement, "{{ url('/inquiry/0100') }}");
+                           currentCdElement, currentNameElement, "{{ url('/inquiry/0100') }}", '','', 0);
             break;
             {{-- 拠点CD --}}
             case 'dataKyotenCd':

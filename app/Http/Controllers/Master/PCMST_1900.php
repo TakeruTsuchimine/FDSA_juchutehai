@@ -24,68 +24,69 @@ class PCMST_1900 extends Controller
             // SQL選択項目
             $SQLHeadText = "select
             g.id
-            ,j.jigyoubu_name 
-            ,g.jigyoubu_cd 
-            ,g.waritsukekouho_cd 
-            ,g.sub_seq 
-            ,g.waritsukekouho_name 
-            ,g.setsumeibun 
+            ,j.jigyoubu_name
+            ,g.jigyoubu_cd
+            ,g.waritsuke_kouho_cd
+            ,g.sub_seqno
+            ,g.waritsuke_kouho_name
+            ,g.setsumeibun
             ,s.shiiresaki_name1
             ,s.shiharaisaki_cd
-            ,g.shiiresaki_cd 
-            ,g.kakou_skill 
+            ,g.shiiresaki_cd
+            ,g.kakou_skill
             ,c.cnt
             ,to_char(g.touroku_dt, 'yyyy/mm/dd hh24:mi:ss') touroku_dt
+            ,tn.tantousha_name tourokusha_name
             ,to_char(g.koushin_dt, 'yyyy/mm/dd hh24:mi:ss') koushin_dt
+            ,kn.tantousha_name koushinsha_name
             ,to_char(g.yukoukikan_start_date, 'yyyy/mm/dd') yukoukikan_start_date
             ,to_char(g.yukoukikan_end_date, 'yyyy/mm/dd') yukoukikan_end_date
-            from  gaichu_kouho_master g 
+            from  gaichu_kouho_master g
             left join ( select jigyoubu_cd
                                 ,jigyoubu_name
                         from   jigyoubu_master
-                        where  sakujo_date is null
+                        where  sakujo_dt is null
                         and    :today >= yukoukikan_start_date
                         and    :today <= case when yukoukikan_end_date is null
                                                 then '2199-12-31'
-                                                else yukoukikan_end_date end )j 
+                                                else yukoukikan_end_date end )j
                 on g.jigyoubu_cd = j.jigyoubu_cd
             left join ( select shiiresaki_cd
                                 ,shiiresaki_name1
                                 ,shiharaisaki_cd
                         from   shiiresaki_master
-                        where  sakujo_date is null
+                        where  sakujo_dt is null
                         and    :today >= yukoukikan_start_date
                         and    :today <= case when yukoukikan_end_date is null
                                                 then '2199-12-31'
-                                                else yukoukikan_end_date end )s 
-                on g.shiiresaki_cd = s.shiiresaki_cd 
-                left join ( select  waritsukekouho_cd,count(*) cnt
-                            from   gaichu_kouho_master 
-                            where  sakujo_date is null
+                                                else yukoukikan_end_date end )s
+                on g.shiiresaki_cd = s.shiiresaki_cd
+                left join ( select  waritsuke_kouho_cd,count(*) cnt
+                            from   gaichu_kouho_master
+                            where  sakujo_dt is null
                             and    :today >= yukoukikan_start_date
                             and    :today <= case when yukoukikan_end_date is null
                                                 then '2199-12-31'
                                                 else yukoukikan_end_date end
-                                                    group by waritsukekouho_cd) c 
-                on g.waritsukekouho_cd = c.waritsukekouho_cd";
-            
+                                                    group by waritsuke_kouho_cd) c
+                on g.waritsuke_kouho_cd = c.waritsuke_kouho_cd
+            left join tantousha_master tn
+                on g.tourokusha_id = tn.id
+            left join tantousha_master kn
+                on g.koushinsha_id = kn.id ";
+
             // SQL条件項目
             $SQLBodyText = "
-            where  g.sakujo_date is null
-            and    g.sub_seq = 1
+            where  g.sakujo_dt is null
+            and    g.sub_seqno = 1
             and    :today <= case when g.yukoukikan_end_date is null
                                     then '2199-12-31' else g.yukoukikan_end_date end ";
-            
+
             // SQL並び順
             $SQLTailText = "
-            order by g.waritsukekouho_cd
-                    ,g.sub_seq asc";
-            
-            // SQL件数取得
-            $SQLCntText = "
-            select count(distinct waritsukekouho_cd)
-            from   gaichu_kouho_master g ";
-            
+            order by g.waritsuke_kouho_cd
+                    ,g.sub_seqno asc";
+
             // SQLバインド値
             $SQLBind = array();
             ///////////////////
@@ -93,52 +94,44 @@ class PCMST_1900 extends Controller
             ///////////////////
 
             // 仕入外注先CD
-            if(!is_null($request -> shiiresakiCd))
-            {
+            if (!is_null($request->shiiresakiCd)) {
                 // SQL条件文追加
                 $SQLBodyText .= " and g.shiiresaki_cd ilike :shiiresaki_cd ";
                 // バインドの設定
-                $SQLBind[] = array(':shiiresaki_cd', $query -> GetLikeValue($request -> dataShiiresakiCd), TYPE_STR);
+                $SQLBind[] = array(':shiiresaki_cd', $query->GetLikeValue($request->dataShiiresakiCd), TYPE_STR);
             }
-            
+
             //　割付CD
-            if(!is_null($request -> dataWaritsukekouhoCd))
-            {
+            if (!is_null($request->dataWaritsukeKouhoCd)) {
                 // SQL条件文追加
-                $SQLBodyText .= " and g.waritsukekouho_cd  ilike :waritsukekouho_cd ";
+                $SQLBodyText .= " and g.waritsuke_kouho_cd  ilike :waritsuke_kouho_cd ";
                 // バインドの設定
-                $SQLBind[] = array(':waritsukekouho_cd ', $query -> GetLikeValue($request -> dataWaritsukekouhoCd), TYPE_STR);
+                $SQLBind[] = array(':waritsuke_kouho_cd ', $query->GetLikeValue($request->dataWaritsukeKouhoCd), TYPE_STR);
             }
 
             // 割付名
-            if(!is_null($request -> dataWaritsukekouhoName))
-            {
+            if (!is_null($request->dataWaritsukeKouhoName)) {
                 // SQL条件文追加
-                $SQLBodyText .= " and g.waritsukekouho_name  ilike :waritsukekouho_name ";
+                $SQLBodyText .= " and g.waritsuke_kouho_name  ilike :waritsuke_kouho_name ";
                 // バインドの設定
-                $SQLBind[] = array(':waritsukekouhoname ', $query -> GetLikeValue($request -> dataWaritsukekouhoName), TYPE_STR);
-            } 
+                $SQLBind[] = array(':waritsukekouhoname ', $query->GetLikeValue($request->dataWaritsukeKouhoName), TYPE_STR);
+            }
 
             //事業部CD
-            if(!is_null($request -> dataJigyoubuCd))
-            {
+            if (!is_null($request->dataJigyoubuCd)) {
                 // SQL条件文追加
                 $SQLBodyText .= " and g.jigyoubu_cd ilike :jigyoubu_cd ";
                 // バインドの設定
-                $SQLBind[] = array(':jigyoubu_cd', $query -> GetLikeValue($request -> dataJigyoubuCd), TYPE_STR);
+                $SQLBind[] = array(':jigyoubu_cd', $query->GetLikeValue($request->dataJigyoubuCd), TYPE_STR);
             }
 
-            // 検索件数取得フラグ
-            $cntFlg = false;
-            if (!is_null($request->dataCntFlg)) $cntFlg = (bool)$request->dataCntFlg;
-
-            ///////////////////    
+            ///////////////////
             // 送信データ作成 //
             ///////////////////
             //現在年月日
             $nowDate = date("Y-m-d");
             // クエリの設定
-            $SQLText = ($cntFlg ? $SQLCntText . $SQLBodyText : $SQLHeadText . $SQLBodyText . $SQLTailText);
+            $SQLText = $SQLHeadText . $SQLBodyText . $SQLTailText;
             $query->StartConnect();
             $query->SetQuery($SQLText, SQL_SELECT);
             // バインド値のセット
@@ -146,45 +139,40 @@ class PCMST_1900 extends Controller
             $query->SetBindArray($SQLBind);
             // クエリの実行
             $result = $query->ExecuteSelect();
-            // データ取得条件別処理
-            if ($cntFlg) {
-                /////////////////
-                // 件数取得のみ //
-                /////////////////
-                $data = $result[0][0];
-            } else {
-                ///////////////////
-                // データ取得のみ //
-                ///////////////////
-                $data = array();
-                // 配列番号
-                $index = 0;
-                // 結果データの格納
-                foreach ($result as $value) {
-                    // JSONオブジェクト用に配列に名前を付けてデータ格納
-                    $dataArray = array();
-                    $dataArray = $dataArray + array( 'dataId' => $value['id'] );
-                    $dataArray = $dataArray + array( 'dataJigyoubuCd' => $value['jigyoubu_cd'] );
-                    $dataArray = $dataArray + array( 'dataJigyoubuName' => $value['jigyoubu_name'] );
-                    $dataArray = $dataArray + array( 'dataWaritsukekouhoCd' => $value['waritsukekouho_cd'] );
-                    $dataArray = $dataArray + array( 'dataSubNo' => $value['sub_seq'] );
-                    $dataArray = $dataArray + array( 'dataWaritsukekouhoName' => $value['waritsukekouho_name'] );
-                    $dataArray = $dataArray + array( 'dataSetsumeibun' => $value['setsumeibun'] );
-                    $dataArray = $dataArray + array( 'dataShiiresakiCd' => $value['shiiresaki_cd'] );
-                    $dataArray = $dataArray + array( 'dataShiiresakiName1' => $value['shiiresaki_name1'] );
-                    $dataArray = $dataArray + array( 'dataKakouSkill' => $value['kakou_skill'] );
-                    $dataArray = $dataArray + array( 'dataStartDate'     => $value['yukoukikan_start_date'] );
-                    $dataArray = $dataArray + array( 'dataEndDate'       => $value['yukoukikan_end_date'] );
-                    $dataArray = $dataArray + array( 'dataTourokuDt'     => $value['touroku_dt'] );
-                    $dataArray = $dataArray + array( 'dataKoushinDt'     => $value['koushin_dt'] );
-                    $dataArray = $dataArray + array( 'dataCntWaritsukeCd'  => $value['cnt'] );
-                    $dataArray = $dataArray + array( 'dataShiharaisakiCd'  => $value['shiharaisaki_cd'] );
-                    $dataArray = $dataArray + array( 'dataIndex'        => $index );
-                    // 1行ずつデータ配列をグリッドデータ用配列に格納
-                    $data[] = $dataArray;
-                    // 配列番号を進める
-                    $index = $index + 1;
-                }
+            ///////////////////
+            // データ取得のみ //
+            ///////////////////
+            $data = array();
+            // 配列番号
+            $index = 0;
+            // 結果データの格納
+            foreach ($result as $value) {
+                // JSONオブジェクト用に配列に名前を付けてデータ格納
+                $dataArray = array(
+                    'dataId' => $value['id'],
+                    'dataJigyoubuCd' => $value['jigyoubu_cd'],
+                    'dataJigyoubuName' => $value['jigyoubu_name'],
+                    'dataWaritsukeKouhoCd' => $value['waritsuke_kouho_cd'],
+                    'dataSubNo' => $value['sub_seqno'],
+                    'dataWaritsukeKouhoName' => $value['waritsuke_kouho_name'],
+                    'dataSetsumeibun' => $value['setsumeibun'],
+                    'dataShiiresakiCd' => $value['shiiresaki_cd'],
+                    'dataShiiresakiName1' => $value['shiiresaki_name1'],
+                    'dataShiharaisakiCd' => $value['shiharaisaki_cd'],
+                    'dataKakouSkill' => $value['kakou_skill'],
+                    'dataStartDate'     => $value['yukoukikan_start_date'],
+                    'dataEndDate'       => $value['yukoukikan_end_date'],
+                    'dataTourokuDt'     => $value['touroku_dt'],
+                    'dataTourokushaName'     => $value['tourokusha_name'],
+                    'dataKoushinDt'     => $value['koushin_dt'],
+                    'dataKoushinshaName'     => $value['koushinsha_name'],
+                    'dataCntWaritsukeCd'  => $value['cnt'],
+                    'dataIndex'        => $index
+                );
+                // 1行ずつデータ配列をグリッドデータ用配列に格納
+                $data[] = $dataArray;
+                // 配列番号を進める
+                $index = $index + 1;
             }
         } catch (\Throwable $e) {
             if ($resultFlg) {

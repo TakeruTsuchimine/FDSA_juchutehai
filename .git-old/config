@@ -1,0 +1,47 @@
+[core]
+	repositoryformatversion = 0
+	filemode = false
+	bare = false
+	logallrefupdates = true
+	symlinks = false
+	ignorecase = true
+[remote "origin"]
+	url = git@github.com:craftview2010/FDSA.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "main"]
+	remote = origin
+	merge = refs/heads/main
+[branch "manabe"]
+	remote = origin
+	merge = refs/heads/manabe
+[branch "develop"]
+	remote = origin
+	merge = refs/heads/develop
+[gitflow "branch"]
+	master = main
+	develop = develop
+[gitflow "prefix"]
+	feature = feature/
+	bugfix = bugfix/
+	release = release/
+	hotfix = hotfix/
+	support = support/
+	versiontag = 
+[gitflow "path"]
+	hooks = C:/nginx/html/FDSA/.git/hooks
+[gitflow "branch.feature/juchu"]
+	base = develop
+[branch "feature/juchu"]
+	remote = origin
+	merge = refs/heads/feature/juchu
+[branch "dev"]
+	remote = origin
+	merge = refs/heads/dev
+[gitflow "branch.feature/kiriyama"]
+	base = develop
+[branch "feature/kiriyama"]
+	remote = origin
+	merge = refs/heads/feature/kiriyama
+[branch "test_sumarry"]
+	remote = origin
+	merge = refs/heads/test_sumarry

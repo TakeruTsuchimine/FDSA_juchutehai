@@ -334,10 +334,8 @@ class PCMST_2601 extends Controller
                     $fileName = $request -> dataFileName;
                     // 材料費
                     $zairyouKin = $request -> dataZairyouKin;
-                    // 図面番号
-                    $zumen_no = $request -> dataZumenNo;
                     // 子図面1
-                    $kozumen1 = $request -> dataKozumen1;  
+                    $kozumen1 = $request -> dataKozumen1;
                     // // 子図面2
                     // $kozumen2 = $request -> dataKozumen2;
                     // // 子図面3
@@ -449,7 +447,6 @@ class PCMST_2601 extends Controller
                     $SQLBind[] = array('folder_name', $folderName, TYPE_STR);
                     $SQLBind[] = array('file_name', $fileName, TYPE_STR);
                     $SQLBind[] = array('zairyou_kin', $zairyouKin, TYPE_STR);
-                    $SQLBind[] = array('zumen_no', $zumen_no, TYPE_STR);
                     $SQLBind[] = array('kozumen1', $kozumen1, TYPE_STR);
                     // $SQLBind[] = array('kozumen2', $kozumen2, TYPE_STR);
                     // $SQLBind[] = array('kozumen3', $kozumen3, TYPE_STR);

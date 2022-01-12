@@ -89,9 +89,10 @@ class PCINQ_6100 extends Controller
             // 結果データの格納
             foreach ($result as $value) {
                 // JSONオブジェクト用に配列に名前を付けてデータ格納
-                $dataArray = array();
-                $dataArray = $dataArray + array('dataSentakuCd'   => $value[$targetRowCd]);
-                $dataArray = $dataArray + array('dataSentakuName' => $value[$targetRowName]);
+                $dataArray = array(
+                    'dataSentakuCd'   => $value[$targetRowCd],
+                    'dataSentakuName' => $value[$targetRowName]
+                );
                 // 1行ずつデータ配列をグリッドデータ用配列に格納
                 $data[] = $dataArray;
             }

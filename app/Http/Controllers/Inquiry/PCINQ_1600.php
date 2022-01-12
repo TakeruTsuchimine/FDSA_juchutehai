@@ -31,7 +31,7 @@ class PCINQ_1600 extends Controller
             $SQLHeadText = " select ".$targetRowCd." , ".$targetRowName." from ".$targetTable;
             // SQL条件項目
             $SQLBodyText = "
-            where  sakujo_date is null
+            where  sakujo_dt is null
             and    :today >= yukoukikan_start_date
             and    :today <= case when yukoukikan_end_date is null
                                   then '2199-12-31'
@@ -89,9 +89,10 @@ class PCINQ_1600 extends Controller
             // 結果データの格納
             foreach ($result as $value) {
                 // JSONオブジェクト用に配列に名前を付けてデータ格納
-                $dataArray = array();
-                $dataArray = $dataArray + array('dataSentakuCd'   => $value[$targetRowCd]);
-                $dataArray = $dataArray + array('dataSentakuName' => $value[$targetRowName]);
+                $dataArray = array(
+                    'dataSentakuCd'   => $value[$targetRowCd],
+                    'dataSentakuName' => $value[$targetRowName]
+                );
                 // 1行ずつデータ配列をグリッドデータ用配列に格納
                 $data[] = $dataArray;
             }

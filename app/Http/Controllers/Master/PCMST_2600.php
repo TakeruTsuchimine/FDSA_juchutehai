@@ -87,7 +87,6 @@ class PCMST_2600 extends Controller
                 ,h.folder_name 
                 ,h.file_name 
                 ,h.zairyou_kin 
-                ,h.zumen_no
                 ,h.kozumen1 
                 ,h.kozumen2 
                 ,h.kozumen3 
@@ -105,9 +104,9 @@ class PCMST_2600 extends Controller
                 ,h.zairyou_tehai_kbn 
 				,zt.bunrui_name as zairyou_tehai_name
                 ,h.keikaku_hinmoku_genka_kin 
-                ,to_char(h.sakujo_dt, 'yyyy/mm/dd hh24:mi:ss') sakujo_dt 
-                ,to_char(h.touroku_dt, 'yyyy/mm/dd hh24:mi:ss') touroku_dt
-                ,to_char(h.koushin_dt, 'yyyy/mm/dd hh24:mi:ss') koushin_dt
+                ,to_char(h.sakujo_dt, 'yyyy/mm/dd hh24:mm:ss') sakujo_dt 
+                ,to_char(h.touroku_dt, 'yyyy/mm/dd hh24:mm:ss') touroku_dt
+                ,to_char(h.koushin_dt, 'yyyy/mm/dd hh24:mm:ss') koushin_dt
                 ,to_char(h.yukoukikan_start_date, 'yyyy/mm/dd') yukoukikan_start_date
                 ,to_char(h.yukoukikan_start_date, 'yyyy/mm/dd') yukoukikan_end_date
             from  hinmoku_master h 
@@ -345,27 +344,16 @@ class PCMST_2600 extends Controller
                         'dataZairyouKbn' => (int)$value['zairyou_kbn'],
                         'dataKyotenZairyouKbn' => (int)$value['kyoten_zairyou_kbn'],
                         'dataShanaiZairyouKbn' => (int)$value['shanai_zairyou_kbn'],
-                        'capZairyouKbn' => null,
-                        'capKyotenZairyouKbn' => null,
-                        'capShanaiZairyouKbn' => null,
                         'dataJhuchuhinKbn' => (int)$value['jhuchuhin_kbn'],
-                        'capJhuchuhinKbn' => null,
                         'dataShikakariKbn' => (int)$value['shikakari_kbn'],
-                        'capShikakariKbn' => null,
                         'dataFukushizaiKbn' => (int)$value['fukushizai_kbn'],
-                        'capFukushizaiKbn' => null,
                         'dataTanniCd' => $value['tanni_cd'],
                         'dataTanniName' => $value['tanni_name'],
                         'dataShokuchiKbn' => (int)$value['shokuchi_kbn'],
-                        'capShokuchiKbn' => null,
                         'dataZaikokanriKbn' => (int)$value['zaikokanri_taishougai_kbn'],
-                        'capZaikokanriKbn' => null,
                         'dataTankaInputKbn' => (int)$value['tanka_input_kbn'],
-                        'capTankaInputKbn' => null,
                         'dataShouhizeiKbn' => (int)$value['shouhizei_kbn'],
-                        'capShouhizeiKbn' => null,
                         'dataKeigenzeiritsuKbn' => (int)$value['keigenzeiritsu_kbn'],
-                        'capKeigenzeiritsuKbn' => null,
                         'dataZaishitsuCd' => $value['zaishitsu_cd'],
                         'dataZaishitsuName' => $value['zaishitsu_name'],
                         'dataMakerCd' => $value['maker_cd'],
@@ -390,13 +378,9 @@ class PCMST_2600 extends Controller
                         'dataGyoushuCd' => $value['gyoushu_cd'],
                         'dataGyoushuName' => $value['gyoushu_name'],
                         'dataZumenKbn' => (int)$value['zumen_kbn'],
-                        'capZumenKbn' => null,
                         'dataKensaKbn' => (int)$value['kensa_kbn'],
-                        'capKensaKbn' => null,
                         'dataShinkiJuchuSheetKbn' => (int)$value['shinki_juchu_sheet_kbn'],
-                        'capShinkiJuchuSheetKbn' => null,
                         'dataYojouzaikoKbn' => (int)$value['yojouzaiko_kbn'],
-                        'capYojouzaikoKbn' => null,
                         'dataItemSize' => $value['item_size'],
                         'dataCuttingSize' => $value['cutting_size'],
                         'dataShuZairyouCd' => $value['shuzairyou_cd'],
@@ -405,7 +389,6 @@ class PCMST_2600 extends Controller
                         'dataFolderName' => $value['folder_name'],
                         'dataFileName' => $value['file_name'],
                         'dataZairyouKin' => (int)$value['zairyou_kin'],
-                        'dataZumenNo' => $value['zumen_no'],
                         'dataKozumen1' => $value['kozumen1'],
                         // 'dataKozumen2' => $value['kozumen2'],
                         // 'dataKozumen3' => $value['kozumen3'],

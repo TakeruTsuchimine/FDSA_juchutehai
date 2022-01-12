@@ -96,12 +96,13 @@ class PCJUI_3801 extends Controller
                     ////////////////
                 default:
                     // 受注Noは新規登録の際、既に存在する場合はエラー
-                    $result = $common->GetCdCount($tableName, 'juchu_no', $juchuNo);
+                    
+                    /*$result = $common->GetCdCount($tableName, 'juchu_no', $juchuNo);
                     if ($result > 0 && $SQLType === SQL_INSERT) {
                         $resultMsg .= __('既に登録されている') . '「' . __('juchu_no') . '」' . __('です。') . '<br>';
                         $resultVal[] = 'dataJuchuNo';
                         $resultFlg = false;
-                    }
+                    }*/
 
                     // 客先注番1
                     $chumonNo1 = $request->dataChumonNo1;
@@ -141,6 +142,32 @@ class PCJUI_3801 extends Controller
 
                     // 備考3
                     $note3 = $request->dataNote3;
+
+                    // 事業部CD
+                    $jigyoubuCd = $request->dataJigyoubuCd;
+                    // POSTデータチェックエラー
+                    /*if (!is_null($jigyoubuCd) && $jigyoubuCd !== '') {
+                        // コードが存在しない場合はエラー
+                        $result = $common->GetCdCount('jigyoubu_master', 'jigyoubu_cd', $jigyoubuCd, $juchuDate);
+                        if ($result < 1) {
+                            $resultMsg .= __('登録されていない') . '「' . __('jigyoubu_cd') . '」' . __('です。') . '<br>';
+                            $resultVal[] = 'dataJigyoubuCd';
+                            $resultFlg = false;
+                        }
+                    }*/
+
+                    // 業務分類CD
+                    $jobCd = $request->dataJobCd;
+                    // POSTデータチェックエラー
+                    /*if (!is_null($jobCd) && $jobCd !== '') {
+                        // コードが存在しない場合はエラー
+                        $result = $common->GetCdCount('job_master', 'job_cd', $jobCd, $juchuDate);
+                        if ($result < 1) {
+                            $resultMsg .= __('登録されていない') . '「' . __('job_cd') . '」' . __('です。') . '<br>';
+                            $resultVal[] = 'dataJobCd';
+                            $resultFlg = false;
+                        }
+                    }*/
 
                     // 得意先CD
                     $tokuisakiCd = $request->dataTokuisakiCd;
@@ -240,11 +267,8 @@ class PCJUI_3801 extends Controller
                     // バインドの設定
                     $SQLBind = array();
 
-                    // 事業部コード　※要改修
-                    $SQLBind[] = array('jigyoubu_cd', '1', TYPE_STR);
-                    // 業務取引区分ID　※要改修
-                    $SQLBind[] = array('job_id', 1, TYPE_INT);
-
+                    $SQLBind[] = array('jigyoubu_cd', $jigyoubuCd, TYPE_STR);
+                    $SQLBind[] = array('job_cd', $jobCd , TYPE_INT);
                     $SQLBind[] = array('juchu_date', $juchuDate, TYPE_DATE);
                     $SQLBind[] = array('juchu_no', $juchuNo, TYPE_STR);
                     $SQLBind[] = array('tokuisaki_cd', $tokuisakiCd, TYPE_STR);
@@ -264,9 +288,6 @@ class PCJUI_3801 extends Controller
                     $SQLBind[] = array('juchu_kin', $juchuKin, -1);
                     $SQLBind[] = array('karitanka_kbn', $karitankaKbn, TYPE_INT);
                     $SQLBind[] = array('juchu_kbn', $juchuKbn, TYPE_STR);
-                    $SQLBind[] = array('notes1', $note1, TYPE_STR);
-                    $SQLBind[] = array('notes2', $note2, TYPE_STR);
-                    $SQLBind[] = array('notes3', $note3, TYPE_STR);
                     // データ処理開始
                     $master->InsertMasterData($SQLBind, $juchuNo, $yukoukikanStartDate, $yukoukikanEndDate, $loginId, $SQLType);
                     $resultVal[] = $common->GetMaxId($tableName);

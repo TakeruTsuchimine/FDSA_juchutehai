@@ -210,10 +210,10 @@
     /* 権限区分データ登録値 */
     var kengenKbnValue = [];
     /* 権限区分の元データに入力がある場合は選択値として格納 */
-    @for($i = 0;$i < count(KENGEN_KBN);$i++)
+    @for($i = 0; $i < count(KENGEN_KBN); $i++)
         @if(KENGEN_KBN[$i] !== '')
-            kengenKbn.push('{{ KENGEN_KBN[$i] }}');
-            kengenKbnValue.push({{ $i }});
+            kengenKbn.push('{{ $i }}:{{ KENGEN_KBN[$i] }}');
+            kengenKbnValue.push({{$i}});
         @endif
     @endfor
     /* コンボボックス宣言 */
@@ -247,7 +247,7 @@
 
         /* グリッド初期処理*/
         InitGrid();
-        
+
         /* グリッドデータの表示 */
         $('#btnHyouji').click();
     }
@@ -282,7 +282,6 @@
                         width: 300
                     }
                 ]
-                
             },
             {
                 /* 3列目 */
@@ -292,7 +291,7 @@
                         /* 「部署CD」 */
                         binding: 'dataBushoCd',
                         header: "{{ __('busho_cd') }}",
-                        width: 85
+                        width: '1*'
                     },
                     /* 2行目 */
                     {
@@ -301,7 +300,6 @@
                         header: "{{ __('menu_group_cd') }}"
                     }
                 ]
-                
             },
             {
                 /* 4列目 */
@@ -519,7 +517,11 @@
                        { binding: 'dataBushoCd', header: "{{ __('busho_cd') }}" },
                        { binding: 'dataBushoName', header: "{{ __('busho_name') }}" },
                        { binding: 'dataStartDate', header: "{{ __('yukoukikan_start_date') }}" },
-                       { binding: 'dataEndDate', header: "{{ __('yukoukikan_end_date') }}" }];
+                       { binding: 'dataEndDate', header: "{{ __('yukoukikan_end_date') }}" },
+                       { binding: 'dataTourokuDt', header: "{{ __('touroku_dt') }}" },
+                       { binding: 'dataTourokushaName', header: "{{ __('tourokusha_name') }}" },
+                       { binding: 'dataKoushinDt', header: "{{ __('koushin_dt') }}" },
+                       { binding: 'dataKoushinshaName', header: "{{ __('koushinsha_name') }}" },];
         /* 現在のグリッドの並び替え条件取得 */
         let sortState = gridMaster.collectionView.sortDescriptions.map(
             function (sd)
@@ -781,6 +783,11 @@
         }
         /* 「データチェック中」非表示 */
         ClosePopupDlg();
+
+
+
+
+        
         /* 削除処理時、確認ダイアログを表示 */
         if(nyuryokuData['dataSQLType'].value == MODE_DELETE)
         {

@@ -14,52 +14,72 @@
 // 入力ダイアログ共有変数
 var dlgNyuryoku;
 // 入力初期値を処理する関数変数
-var fncNyuryokuData = function(){}
+var fncNyuryokuData = function () { }
 // 関数を設定
-function SetNyuryokuData(fnc)
-{
+function SetNyuryokuData(fnc) {
     fncNyuryokuData = fnc;
 }
 // ダイアログの宣言
 // ※宣言は「base_master.blede.php」で宣言
-function SetNyuryokuDlg(dlg)
-{
-    dlg.isDraggable =  true;  // ヘッダー移動操作許可
+function SetNyuryokuDlg(dlg) {
+    dlg.isDraggable = true;  // ヘッダー移動操作許可
     dlg.hideTrigger = 'None'; // ダイアログを閉じる条件
     // ダイアログの「キーボード」イベント
-    dlg.addEventListener(dlg.hostElement, 'keydown', function (e)
-    {
+    dlg.addEventListener(dlg.hostElement, 'keydown', function (e) {
+        if (e.keyCode == KEY_ENTER) {
+            // EnterキーをTABキーに置換する
+            enter2tab(e, 'frmNyuryoku');
+            e.preventDefault();
+            e.stopPropagation();
+            return;
+        }
+        if (e.keyCode >= KEY_LEFT || e.keyCode <= KEY_DOWN) {
+            // フッターボタンにフォーカスがあるか確認する
+            let parent = document.activeElement;
+            while (parent !== null) {
+                if (parent.id === 'frmNyuryokuFooter') {
+                    // フッターボタンはカーソルキーでフォーカスを遷移する
+                    if (e.keyCode === KEY_RIGHT || e.keyCode === KEY_DOWN) {
+                        nextFocus(e, parent.id);
+                    } else {
+                        prevFocus(e, parent.id);
+                    }
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return;
+                }
+                parent = parent.parentElement;
+            }
+        }
         let idText = '';
         // F8キー
-        if(e.keyCode == KEY_F8)  idText = '.btnSanshou';
+        if (e.keyCode == KEY_F8) idText = '.btnSanshou';
         // F9キー
-        if(e.keyCode == KEY_F9)  idText = '#btnKettei';
+        if (e.keyCode == KEY_F9) idText = '#btnKettei';
         // F12キー
-        if(e.keyCode == KEY_F12) idText = '#btnKetteiCancel';
+        if (e.keyCode == KEY_F12) idText = '#btnKetteiCancel';
         // クリック処理実行
-        if(idText != '') $(idText).click();
+        if (idText != '') $(idText).click();
         // キーボードイベント重複防止フラグ
         windowKeybordFlg = false;
     });
     dlgNyuryoku = dlg;
 }
 // ダイアログの表示
-function ShowNyuryokuDlg(index, mode)
-{
+function ShowNyuryokuDlg(index, mode) {
     // 表示
     dlgNyuryoku.show(true);
     // 入力初期値処理
     fncNyuryokuData(index, mode);
 }
 // ダイアログを閉じる
-function CloseNyuryokuDlg()
-{
+function CloseNyuryokuDlg() {
     // 処理種別を初期化
     $('#dataSQLType').val(-1);
     dlgNyuryoku.hide(0);
 }
 //
-function IsVisibleNyuryoku(){
+function IsVisibleNyuryoku() {
     return dlgNyuryoku.isVisible;
 }
 ///////////////////
@@ -72,22 +92,45 @@ function IsVisibleNyuryoku(){
 var dlgSentaku;
 // ダイアログの宣言
 // ※宣言は「base_master.blede.php」で宣言
-function SetSentakuDlg(dlg)
-{
-    dlg.isDraggable =  true;  // ヘッダー移動操作許可
+function SetSentakuDlg(dlg) {
+    dlg.isDraggable = true;  // ヘッダー移動操作許可
     dlg.hideTrigger = 'None'; // ダイアログを閉じる条件
     // ダイアログの「キーボード」イベント
-    dlg.addEventListener(dlg.hostElement, 'keydown', function (e)
-    {
+    dlg.addEventListener(dlg.hostElement, 'keydown', function (e) {
+        if (e.keyCode == KEY_ENTER) {
+            // EnterキーをTABキーに置換する
+            enter2tab(e, 'frmSentaku');
+            e.preventDefault();
+            e.stopPropagation();
+            return;
+        }
+        if (e.keyCode >= KEY_LEFT || e.keyCode <= KEY_DOWN) {
+            // フッターボタンにフォーカスがあるか確認する
+            let parent = document.activeElement;
+            while (parent !== null) {
+                if (parent.id === 'frmSentakuFooter') {
+                    // フッターボタンはカーソルキーでフォーカスを遷移する
+                    if (e.keyCode === KEY_RIGHT || e.keyCode === KEY_DOWN) {
+                        nextFocus(e, parent.id);
+                    } else {
+                        prevFocus(e, parent.id);
+                    }
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return;
+                }
+                parent = parent.parentElement;
+            }
+        }
         let idText = '';
         // F5キー
-        if(e.keyCode == KEY_F5)  idText = '#btnSentakuKensaku';
+        if (e.keyCode == KEY_F5) idText = '#btnSentakuKensaku';
         // F9キー
-        if(e.keyCode == KEY_F9)  idText = '#btnSentaku';
+        if (e.keyCode == KEY_F9) idText = '#btnSentaku';
         // F12キー
-        if(e.keyCode == KEY_F12) idText = '#btnSentakuCancel';
+        if (e.keyCode == KEY_F12) idText = '#btnSentakuCancel';
         // クリック処理実行
-        if(idText != '') $(idText).click();
+        if (idText != '') $(idText).click();
         // キーボードイベント重複防止フラグ
         windowKeybordFlg = false;
     });
@@ -107,9 +150,8 @@ var sentakuValues = {
     "kensakuFlg": 1
 }
 // ダイアログの表示
-function ShowSentakuDlg(cdText, nameText, cdElement, nameElement, sendURL, targetDate, targetCode, kensakuFlg)
-{
-    if(dlgSentakuFlg) return;
+function ShowSentakuDlg(cdText, nameText, cdElement, nameElement, sendURL, targetDate, targetCode, kensakuFlg) {
+    if (dlgSentakuFlg) return;
     dlgSentakuFlg = true;
     // 選択ダイアログの必要変数を格納
     sentakuValues.cdElement = cdElement;
@@ -120,12 +162,10 @@ function ShowSentakuDlg(cdText, nameText, cdElement, nameElement, sendURL, targe
     // 対象コード
     sentakuValues.targetCode = targetCode;
     // 事業部コード検索フラグ
-    if( kensakuFlg == null )
-    {
+    if (kensakuFlg == null) {
         sentakuValues.kensakuFlg = null;
     }
-    else
-    {
+    else {
         sentakuValues.kensakuFlg = kensakuFlg ? 1 : 0;
     }
     let textWidth = cdText.length + 0.5;
@@ -133,11 +173,11 @@ function ShowSentakuDlg(cdText, nameText, cdElement, nameElement, sendURL, targe
     dlgSentaku.show(true);
     // コード項目のキャプションを変更
     $('#captionKensakuCd').text(cdText);
-    $('#captionKensakuCd').css({'cssText': 'width: '+ textWidth +'em;'});
+    $('#captionKensakuCd').css({ 'cssText': 'width: ' + textWidth + 'em;' });
     $('#dataKensakuCd').val('');
     // 名前項目のキャプションを変更
     $('#captionKensakuName').text(nameText);
-    $('#captionKensakuName').css({'cssText': 'width: '+ textWidth +'em;'});
+    $('#captionKensakuName').css({ 'cssText': 'width: ' + textWidth + 'em;' });
     $('#dataKensakuName').val('');
     // グリッドの初期設定
     gridSentaku = InitSentakuGrid();
@@ -147,17 +187,16 @@ function ShowSentakuDlg(cdText, nameText, cdElement, nameElement, sendURL, targe
     ShowSentakuGrid();
 }
 // グリッドの初期設定
-function InitSentakuGrid()
-{
+function InitSentakuGrid() {
     // グリッドのレイアウト設定
     let columns = [
         {
             binding: 'dataSentakuCd',
-            width  : '*'
+            width: '*'
         },
         {
             binding: 'dataSentakuName',
-            width  : '2*'
+            width: '2*'
         }
     ];
     // グリッドの宣言
@@ -175,8 +214,7 @@ function InitSentakuGrid()
         // グリッド上でのEnterキーイベント（無効）
         keyActionEnter: wijmo.grid.KeyAction.None,
         // セル読み込み時のイベント
-        loadedRows: function (s, e)
-        {
+        loadedRows: function (s, e) {
             // 任意の色でセルを色付け
             // ※rowPerItemでMultiRowの1レコード当たりの行数を取得（今回はrowPerItem = 2）
             // ※common_function.js参照 --}}
@@ -185,17 +223,14 @@ function InitSentakuGrid()
     });
     let host = grid.hostElement; 
     // グリッドセルのダブルクリックイベント
-    grid.addEventListener(host, 'dblclick', function (e)
-    {
+    grid.addEventListener(host, 'dblclick', function (e) {
         // 選択したセルがヘッダー要素でない場合は「修正」ボタンと同じ処理
-        if(grid.hitTest(e).cellType == wijmo.grid.CellType.Cell) SetSentakuValue();
+        if (grid.hitTest(e).cellType == wijmo.grid.CellType.Cell) SetSentakuValue();
     });
     // グリッドの「キーボード」イベント
-    grid.addEventListener(host, 'keydown', function (e)
-    {
+    grid.addEventListener(host, 'keydown', function (e) {
         // 「Enterキー」は「修正」ボタンと同じ処理
-        if(e.keyCode == KEY_ENTER)
-        {
+        if (e.keyCode == KEY_ENTER) {
             SetSentakuValue();
             // キーボードイベント二重起動防止
             windowKeybordFlg = false;
@@ -204,50 +239,46 @@ function InitSentakuGrid()
     return grid;
 }
 // 選択グリッドの表示
-function ShowSentakuGrid()
-{
+function ShowSentakuGrid() {
     // 検索フォーム要素
     let sentakuData = document.forms['frmSentaku'].elements;
     // POST送信用オブジェクト配列
     let soushinData = {};
     // フォーム要素から送信データを設定
-    for(var i = 0; i< sentakuData.length; i++){
+    for (var i = 0; i < sentakuData.length; i++) {
         // フォーム要素データのnameが宣言されている要素のみ処理
-        if(sentakuData[i].name != ''){
+        if (sentakuData[i].name != '') {
             // フォーム要素のnameを配列のキーしてPOSTデータの値を設定する
             soushinData[sentakuData[i].name] = (sentakuData[i].value != '') ? (sentakuData[i].value + LIKE_VALUE_BOTH) : '';
         }
-    
-    // 検索条件日（各選択画面での表示抽出を行う）
-    soushinData["dataTargetDate"] = sentakuValues.targetDate;}
+
+        // 検索条件日（各選択画面での表示抽出を行う）
+        soushinData["dataTargetDate"] = sentakuValues.targetDate;
+    }
     // 検索条件コード（各選択画面での表示抽出を行う）
     soushinData["dataTargetCd"] = sentakuValues.targetCode;
     // 検索フラグ（事業部区分フラグで表示抽出を行う）
     soushinData["dataKensakuFlg"] = sentakuValues.kensakuFlg;
     // 非同期データ更新開始
-    AjaxData(sentakuValues.sendURL, soushinData, function(data, errorFlg)
-    {
+    AjaxData(sentakuValues.sendURL, soushinData, function (data, errorFlg) {
         // データエラー判定
-        if(IsAjaxDataError(data, errorFlg)) return;
+        if (IsAjaxDataError(data, errorFlg)) return;
         gridSentaku.itemsSource = data[1];
         // グリッドにフォーカス
         gridSentaku.focus(true);
     });
 }
 // グリッドから選択した値を対象要素に表示する
-function SetSentakuValue()
-{
+function SetSentakuValue() {
     let gridItem = gridSentaku.collectionView.currentItem;
-    if(gridItem != null)
-    {
+    if (gridItem != null) {
         sentakuValues.cdElement.value = gridItem['dataSentakuCd'];
-        if(sentakuValues.nameElement != null) sentakuValues.nameElement.value = gridItem['dataSentakuName'];
+        if (sentakuValues.nameElement != null) sentakuValues.nameElement.value = gridItem['dataSentakuName'];
     }
     CloseSentakuDlg();
 }
 // ダイアログを閉じる
-function CloseSentakuDlg()
-{
+function CloseSentakuDlg() {
     gridSentaku.dispose();
     dlgSentakuFlg = false;
     dlgSentaku.hide(0);
@@ -263,20 +294,17 @@ function CloseSentakuDlg()
 var dlgPopup;
 // ダイアログの宣言
 // ※宣言は「base_master.blede.php」で宣言
-function SetPopupDlg(dlg)
-{
+function SetPopupDlg(dlg) {
     dlg.hideTrigger = 'None'; // ダイアログを閉じる条件
     dlgPopup = dlg;
 }
 // ダイアログの表示
-function ShowPopupDlg(msg)
-{     
+function ShowPopupDlg(msg) {
     dlgPopup.show(true);
     $('#' + $('#' + dlgPopup.hostElement.id).children('span')[0].id).text(msg);
 }
 // ダイアログを閉じる
-function ClosePopupDlg()
-{
+function ClosePopupDlg() {
     dlgPopup.hide(0);
 }
 //////////////////////////
@@ -290,30 +318,26 @@ function ClosePopupDlg()
 var dlgAlert;
 // ダイアログの宣言
 // ※宣言は「base_master.blede.php」で宣言
-function SetAlertDlg(dlg)
-{
+function SetAlertDlg(dlg) {
     dlg.hideTrigger = 'None'; // ダイアログを閉じる条件
     // ダイアログの「キーボード」イベント
-    dlg.addEventListener(dlg.hostElement, 'keydown', function (e)
-    {
+    dlg.addEventListener(dlg.hostElement, 'keydown', function (e) {
         let idText = '';
         // F9キー
-        if(e.keyCode == KEY_F9)  idText = '#btnKakunin';
+        if (e.keyCode == KEY_F9) idText = '#btnKakunin';
         // クリック処理実行
-        if(idText != '') $(idText).click();
+        if (idText != '') $(idText).click();
         windowKeybordFlg = false;
     });
     dlgAlert = dlg;
 }
 // ダイアログの表示
-function ShowAlertDlg(msg)
-{
+function ShowAlertDlg(msg) {
     dlgAlert.show(true);
     $('#' + $('#' + dlgAlert.hostElement.id).children('p')[0].id).html(msg);
 }
 // ダイアログを閉じる
-function CloseAlertDlg()
-{
+function CloseAlertDlg() {
     dlgAlert.hide(0);
 }
 //////////////////////
@@ -326,48 +350,43 @@ function CloseAlertDlg()
 // 確認ダイアログ共有変数
 var dlgConfirm;
 // 「はい」ボタンイベント関数変数
-var fncConfirmOk = function(){};
+var fncConfirmOk = function () { };
 // 「いいえ」ボタンイベント関数変数
-var fncConfirmNo = function(){};
+var fncConfirmNo = function () { };
 // ダイアログの宣言
 // ※宣言は「base_master.blede.php」で宣言
-function SetConfirmDlg(dlg)
-{
+function SetConfirmDlg(dlg) {
     dlg.hideTrigger = 'None'; // ダイアログを閉じる条件
     // ダイアログの「キーボード」イベント
-    dlg.addEventListener(dlg.hostElement, 'keydown', function (e)
-    {
+    dlg.addEventListener(dlg.hostElement, 'keydown', function (e) {
         let idText = '';
         // F9キー
-        if(e.keyCode == KEY_F9)  idText = '#btnConfOk';
+        if (e.keyCode == KEY_F9) idText = '#btnConfOk';
         // F12キー
-        if(e.keyCode == KEY_F12)  idText = '#btnConfNo';
+        if (e.keyCode == KEY_F12) idText = '#btnConfNo';
         // クリック処理実行
-        if(idText != '') $(idText).click();
+        if (idText != '') $(idText).click();
         // キーボードイベント重複防止フラグ
         windowKeybordFlg = false;
     });
     dlgConfirm = dlg;
 }
 // ダイアログの表示
-function ShowConfirmDlg(msg, fncOk, fncNo)
-{
+function ShowConfirmDlg(msg, fncOk, fncNo) {
     fncConfirmOk = fncOk;
     fncConfirmNo = fncNo;
     dlgConfirm.show(true);
     $('#' + $('#' + dlgConfirm.hostElement.id).children('p')[0].id).html(msg);
 }
 // ダイアログを閉じる（「はい」ボタン）
-function CloseConfirmDlgOk()
-{
+function CloseConfirmDlgOk() {
     dlgConfirm.hide(1);
     fncConfirmOk();
 }
 // ダイアログを閉じる（「いいえ」ボタン）
-function CloseConfirmDlgNo()
-{
+function CloseConfirmDlgNo() {
     dlgConfirm.hide(0);
-    if(fncConfirmNo != null) fncConfirmNo();
+    if (fncConfirmNo != null) fncConfirmNo();
 }
 ///////////////////
 
@@ -385,77 +404,103 @@ function CloseConfirmDlgNo()
 $(document).off('click');
 
 // 「新規」ボタン　クリック処理
-$(document).on('click', '#btnShinki', function()
-{
+$(document).on('click', '#btnShinki', function () {
     // 全て初期値の状態で表示
     ShowNyuryokuDlg(MODE_INSERT, false);
 });
 // 「参照新規」ボタン　クリック処理
-$(document).on('click', '#btnSanshouShinki', function()
-{
+$(document).on('click', '#btnSanshouShinki', function () {
     // 選択行の項目をコピーして表示
     ShowNyuryokuDlg(MODE_INSERT, true);
 });
 // 「修正」ボタン　クリック処理
-$(document).on('click', '#btnShusei', function()
-{
+$(document).on('click', '#btnShusei', function () {
     // 選択行の項目をコピーして表示
     ShowNyuryokuDlg(MODE_UPDATE, true);
 });
 // 「削除」ボタン　クリック処理
-$(document).on('click', '#btnSakujo', function()
-{
+$(document).on('click', '#btnSakujo', function () {
     // 選択行の項目をコピーして表示
     ShowNyuryokuDlg(MODE_DELETE, true);
 });
 // 「表示」ボタンの実行関数変数
-var fncBtnHyouji = function(){}
+var fncBtnHyouji = function () { }
 // 「表示」ボタンのイベント登録
-function SetBtnHyouji(fnc)
-{
+function SetBtnHyouji(fnc) {
     fncBtnHyouji = fnc;
 }
 // 「表示」ボタン　クリック処理
-$(document).on('click', '#btnHyouji', function()
-{
+$(document).on('click', '#btnHyouji', function () {
     // グリッドデータ表示
     fncBtnHyouji();
 });
 // 「CSV出力」ボタンの実行関数変数
-var fncBtnCSV = function(){}
+var fncBtnCSV = function () { }
 // 「CSV出力」ボタンのイベント登録
-function SetBtnCSV(fnc)
-{
+function SetBtnCSV(fnc) {
     fncBtnCSV = fnc;
 }
 //　「CSV出力」ボタン　確認メッセージ
-var msgCSV = "";
+var msgCSV = "";                                                                                    
 // ※宣言は「base_master.blede.php」で宣言
-function SetBtnCSVMsg(msg)
-{
+function SetBtnCSVMsg(msg) {
     msgCSV = msg;
 }
 // 「CSV出力」ボタン　クリック処理
-$(document).on('click', '#btnCSV', function()
-{
+$(document).on('click', '#btnCSV', function () {
+    // 確認してから実行
+    ShowConfirmDlg(msgCSV, fncBtnCSV, null);
+});
+
+// 「Excel出力」ボタンの実行関数変数
+var fncBtnExcel = function () { }
+// 「ExcelV出力」ボタンのイベント登録
+function SetBtnExcel(fnc) {
+    fncBtnExcel = fnc;
+}
+//　「Excel出力」ボタン　確認メッセージ
+var msgExcel = "";
+// ※宣言は「base_master.blede.php」で宣言
+function SetBtnExcelMsg(msg) {
+    msgExcel = msg;
+}
+// 「Excel出力」ボタン　クリック処理
+$(document).on('click', '#btnExcel', function () {
     // 確認してから実行
     ShowConfirmDlg(msgCSV, fncBtnCSV, null);   
 });
+
+// 「Excel出力」ボタンの実行関数変数
+var fncBtnExcel = function () { }
+// 「ExcelV出力」ボタンのイベント登録
+function SetBtnExcel(fnc) {
+    fncBtnExcel = fnc;
+}
+//　「Excel出力」ボタン　確認メッセージ
+var msgExcel = "";
+// ※宣言は「base_master.blede.php」で宣言
+function SetBtnExcelMsg(msg) {
+    msgExcel = msg;
+}
+// 「Excel出力」ボタン　クリック処理
+$(document).on('click', '#btnExcel', function () {
+    // 確認してから実行
+    ShowConfirmDlg(msgExcel, fncBtnExcel, null);
+});
+
 //　「閉じる」ボタン　確認メッセージ
 var msgClose = "";
 // ※宣言は「base_master.blede.php」で宣言
-function SetBtnCloseMsg(msg)
-{
+function SetBtnCloseMsg(msg) {
     msgClose = msg;
 }
 // 「閉じる」ボタン　クリック処理
-$(document).on('click', '#btnClose', function()
-{
+$(document).on('click', '#btnClose', function () {
     // 確認してから実行
-    ShowConfirmDlg(msgClose, function() {window.close(); }, null);
+    ShowConfirmDlg(msgClose, function () { window.close(); }, null);
 });
 // ボタン制御
-function SetEnableButton(count){
+function SetEnableButton(count) {
     $("#btnSanshouShinki").prop("disabled", (count < 1));
     $("#btnShusei").prop("disabled", (count < 1));
     $("#btnSakujo").prop("disabled", (count < 1));
@@ -472,39 +517,60 @@ function SetEnableButton(count){
 // キーボードイベント重複防止フラグ
 var windowKeybordFlg = true;
 // 画面のファンクションキー操作禁止と任意割り当て
-function SetFncKey(fncKeybord)
-{
-    window.document.onkeydown = function(event)
-    {
+function SetFncKey(fncKeybord) {
+    window.document.onkeydown = function (event) {
         // ファンクションキーを無効
-        if(event.keyCode >= KEY_F1 && event.keyCode <= KEY_F12){
+        if (event.keyCode >= KEY_F1 && event.keyCode <= KEY_F12) {
             event.keyCode = null;
             event.returnValue = false;
         }
         // キーボードイベント重複防止フラグ
-        if(windowKeybordFlg)
-        {
+        if (windowKeybordFlg) {
+            if (fncKeybord != null) fncKeybord(event);
             if(fncKeybord != null) fncKeybord(event);
+            if (event.keyCode == KEY_ENTER) {
+                // EnterキーをTABキーに置換する
+                enter2tab (event, 'frmKensaku');
+                event.returnValue = false;
+                return;
+            }
+            if (event.keyCode >= KEY_LEFT || event.keyCode <= KEY_DOWN) {
+                // フッターボタンにフォーカスがあるか確認する
+                let parent = document.activeElement;
+                while (parent !== null) {
+                    if (parent.id === 'mainFooter') {
+                        // フッターボタンはカーソルキーでフォーカスを遷移する
+                        if (event.keyCode === KEY_RIGHT || event.keyCode === KEY_DOWN) {
+                            nextFocus(event, parent.id);
+                        } else {
+                            prevFocus(event, parent.id);
+                        }
+                        event.returnValue = false;
+                        return;
+                    }
+                    parent = parent.parentElement;
+                }
+            }
             // 操作ボタンのid名
             let idText = '';
             // F1キー
-            if(event.keyCode == KEY_F1)  idText = '#btnShinki';
+            if (event.keyCode == KEY_F1) idText = '#btnShinki';
             // F2キー
-            if(event.keyCode == KEY_F2)  idText = '#btnSanshouShinki';
+            if (event.keyCode == KEY_F2) idText = '#btnSanshouShinki';
             // F3キー
-            if(event.keyCode == KEY_F3)  idText = '#btnShusei';
+            if (event.keyCode == KEY_F3) idText = '#btnShusei';
             // F4キー
-            if(event.keyCode == KEY_F4)  idText = '#btnSakujo';
+            if (event.keyCode == KEY_F4) idText = '#btnSakujo';
             // F5キー
-            if(event.keyCode == KEY_F5)  idText = '#btnHyouji';
+            if (event.keyCode == KEY_F5) idText = '#btnHyouji';
             // F6キー
-            if(event.keyCode == KEY_F6)  idText = '#btnCSV';
+            if (event.keyCode == KEY_F6) idText = '#btnCSV';
             // F8キー
-            if(event.keyCode == KEY_F8)  idText = '.btnSanshou';
+            if (event.keyCode == KEY_F8) idText = '.btnSanshou';
             // F12キー
-            if(event.keyCode == KEY_F12) idText = '#btnClose';
+            if (event.keyCode == KEY_F12) idText = '#btnClose';
             // クリック処理実行
-            if(idText != '') $(idText).click();
+            if (idText != '') $(idText).click();
         }
         windowKeybordFlg = true;
     };
@@ -517,10 +583,9 @@ function SetFncKey(fncKeybord)
 ////////////////////////
 
 // 右クリックメニューの制限
-function SetContextMenu()
-{
+function SetContextMenu() {
     // 従来の右クリックメニュー非表示
-    document.oncontextmenu = function (){ return false; }
+    document.oncontextmenu = function () { return false; }
     // クリック対象の要素の取得
     let inputText = document.querySelectorAll('input[type="text"]');
     for (let i = 0; i < inputText.length; i++) {
@@ -539,12 +604,12 @@ function SetContextMenu()
                 // メニュー表示アイテム
                 itemsSource: [
                     { header: '切り取り', cmd: 'ctrlX' },
-                    { header: 'コピー',   cmd: 'ctrlC' },
+                    { header: 'コピー', cmd: 'ctrlC' },
                     { header: '貼り付け', cmd: 'ctrlV' },
                     { header: '全て選択', cmd: 'ctrlA' },
                 ],
                 // メニューイベント
-                command:{
+                command: {
                     // メニューをクリックした時の処理内容
                     executeCommand: (menu) => {
                         let originText = e.target.value;
@@ -556,32 +621,32 @@ function SetContextMenu()
                         switch (menu.cmd) {
                             // 切り取り
                             case 'ctrlX':
-                            originText = originText.substring(startIndex, endIndex);
-                            navigator.clipboard.writeText(originText);
-                            originText = e.target.value;
-                            e.target.value = originText.substring(0, startIndex) + originText.substring(endIndex, originText.length);
-                            break;
+                                originText = originText.substring(startIndex, endIndex);
+                                navigator.clipboard.writeText(originText);
+                                originText = e.target.value;
+                                e.target.value = originText.substring(0, startIndex) + originText.substring(endIndex, originText.length);
+                                break;
                             // コピー
                             case 'ctrlC':
-                            originText = originText.substring(startIndex, endIndex);
-                            navigator.clipboard.writeText(originText);
-                            break;
+                                originText = originText.substring(startIndex, endIndex);
+                                navigator.clipboard.writeText(originText);
+                                break;
                             // 貼り付け
                             case 'ctrlV':
-                            navigator.clipboard.readText().then(function(text){
-                                originText = e.target.value;
-                                originText = originText.substring(0, startIndex) + originText.substring(endIndex, originText.length);
-                                originText = originText.substring(0, startIndex) + text + originText.substring(startIndex, originText.length);
-                                e.target.value = originText.slice(0, e.target.maxLength);
-                            });
-                            break;
+                                navigator.clipboard.readText().then(function (text) {
+                                    originText = e.target.value;
+                                    originText = originText.substring(0, startIndex) + originText.substring(endIndex, originText.length);
+                                    originText = originText.substring(0, startIndex) + text + originText.substring(startIndex, originText.length);
+                                    e.target.value = originText.slice(0, e.target.maxLength);
+                                });
+                                break;
                             // 全て選択
                             case 'ctrlA':
-                            e.target.select();
-                            break;
+                                e.target.select();
+                                break;
                             //
                             default:
-                            return;
+                                return;
                         }
                     },
                     // メニューの選択可否の判定
@@ -593,20 +658,18 @@ function SetContextMenu()
                         switch (menu.cmd) {
                             // 切り取り
                             case 'ctrlX':
-                            return startIndex != endIndex;
+                                return startIndex != endIndex;
                             // コピー
-                            case 'ctrlC':    
-                            return startIndex != endIndex;
+                            case 'ctrlC':
+                                return startIndex != endIndex;
                         }
                         return true;
                     }
                 }
             });
             // 右クリックした要素が対象要素だった時の処理
-            if (contextMenu.owner)
-            {
-                if(!e.target.readOnly)
-                {
+            if (contextMenu.owner) {
+                if (!e.target.readOnly) {
                     e.preventDefault();
                     pasteMenu.show(e); // 右クリックメニューの表示
                 }
@@ -622,10 +685,9 @@ function SetContextMenu()
 //////////////////////
 
 // グリッド上での右クリックメニューの制限
-function SetGridContextMenu(grid, e)
-{
+function SetGridContextMenu(grid, e) {
     // グリッドデータが無い場合は実行しない
-    if(grid.itemsSource.length < 1) return; 
+    if (grid.itemsSource.length < 1) return;
     // セル要素取得
     let cellValue = grid.cells.getCellData(grid.hitTest(e).row, grid.hitTest(e).col, true);
     // オリジナル右クリックメニューを表示する対象要素に表示クリックイベントを登録
@@ -639,15 +701,14 @@ function SetGridContextMenu(grid, e)
         // スタイルクラス名
         dropDownCssClass: 'ctx-menu',
         // メニュー表示アイテム
-        itemsSource: [ { header: 'コピー', cmd: 'コピー' } ],
+        itemsSource: [{ header: 'コピー', cmd: 'コピー' }],
         // メニューをクリックした時の処理内容
         itemClicked: () => {
             navigator.clipboard.writeText(cellValue);
         }
     });
     // セルにデータがあればメニューを表示する
-    if(cellValue != '')
-    {
+    if (cellValue != '') {
         copyMenu.itemsSource[0].header = '「' + cellValue + '」をコピーする';
         copyMenu.show(e); // 右クリックメニューの表示
     }
@@ -657,8 +718,7 @@ function LoadGridRows(g, rowsPerItem) {
     for (var i = 0; i < g.rows.length; i++) {
         var row = g.rows[i];
         // 偶数行は色付け
-        if (Math.floor(i / rowsPerItem) % 2 != 0)
-        {
+        if (Math.floor(i / rowsPerItem) % 2 != 0) {
             row.cssClass = 'row-even';
         }
     }
@@ -666,20 +726,16 @@ function LoadGridRows(g, rowsPerItem) {
 // 選択行のデータID
 var selectedRowId;
 // 選択行のデータID取得
-function SetSelectedRowId(rowId)
-{
+function SetSelectedRowId(rowId) {
     selectedRowId = rowId;
 }
 // グリッドデータ反映＆並び順と選択位置保持
-function SortGridData(grid, dataSource, initSortItem, rowsPerItem)
-{
+function SortGridData(grid, dataSource, initSortItem, rowsPerItem) {
     let sortState = null;
-    if(grid.itemsSource != null)
-    {
+    if (grid.itemsSource != null) {
         // 現在のソート条件を取得
         sortState = grid.collectionView.sortDescriptions.map(
-            function (sd)
-            {
+            function (sd) {
                 // オブジェクト配列形式で返す
                 return { property: sd.property, ascending: sd.ascending }
             }
@@ -709,26 +765,24 @@ function SortGridData(grid, dataSource, initSortItem, rowsPerItem)
 }
 
 // グリッドデータ反映＆並び順と選択位置保持（MultiRow用）
-function SortMultiRowData(grid, dataSource, initSortItem)
-{
+function SortMultiRowData(grid, dataSource, initSortItem) {
     SortGridData(grid, dataSource, initSortItem, grid.rowsPerItem);
     return SetSelectedMultiRow(grid, 0);
 }
 
 // MultiRow用選択行処理
-function SetSelectedMultiRow(grid, selectedRows)
-{
+function SetSelectedMultiRow(grid, selectedRows) {
     // グリッドデータが無い場合は実行しない
-    if(grid.rows.length < 1) return 0;
+    if (grid.rows.length < 1) return 0;
     // 選択されていた行の選択状態を解除する
-    for(let i = 0; i < grid.rowsPerItem; i++) // MultiRowの1レコード当たりの行数分実行
+    for (let i = 0; i < grid.rowsPerItem; i++) // MultiRowの1レコード当たりの行数分実行
     {
         grid.rows[selectedRows * grid.rowsPerItem + i].isSelected = false;
     }
     // 現在選択行を取得
     let targetRows = Math.floor(grid.selection.row / grid.rowsPerItem);
     // 現在選択行の選択状態を設定する
-    for(let i = 0; i < grid.rowsPerItem; i++) // MultiRowの1レコード当たりの行数分実行
+    for (let i = 0; i < grid.rowsPerItem; i++) // MultiRowの1レコード当たりの行数分実行
     {
         grid.rows[targetRows * grid.rowsPerItem + i].isSelected = true;
     }
@@ -745,27 +799,23 @@ function SetSelectedMultiRow(grid, selectedRows)
 //////////////////////
 
 // フォームデザインをリセット
-function InitFormStyle()
-{
+function InitFormStyle() {
     // コードチェックエラー
-    for(let i=0; i<$('.code-check').length; i++)
-    {
+    for (let i = 0; i < $('.code-check').length; i++) {
         $('.code-check')[i].className = $('.code-check')[i].className.replace('code-check-error', '');
     }
     // パスワードボタンの設定
-    for(let i=0; i<$('.password-btn').length; i++)
-    {
+    for (let i = 0; i < $('.password-btn').length; i++) {
         $('.password-btn')[i].className = $('.password-btn')[i].className.replace('-slash', '');
         $('.password-btn')[i].className = $('.password-btn')[i].className.replace('fa-eye', 'fa-eye-slash');
     }
     // パスワード要素の設定
-    for(let i=0; i<$('.password-btn').prev("input").length; i++)
-    {
+    for (let i = 0; i < $('.password-btn').prev("input").length; i++) {
         $('.password-btn').prev("input")[i].type = 'password';
     }
     // 必須入力要素にマークを付ける
     var parent = $('#frmNyuryoku input:required').closest('label');
-    for(let i = 0; i < parent.length; i++){
+    for (let i = 0; i < parent.length; i++) {
         parent[i].className = 'required';
     }
 }
@@ -777,11 +827,9 @@ function InitFormStyle()
 //////////////////////
 
 // 非同期通信の成功判定
-function IsAjaxDataError(data, errorFlg)
-{
+function IsAjaxDataError(data, errorFlg) {
     // 通信失敗時の処理
-    if(errorFlg)
-    {
+    if (errorFlg) {
         // エラーメッセージ表示
         let msg = 'error : ' + data['responseJSON']['message'] + '<br>';
         msg += 'file : ' + data['responseJSON']['file'] + '<br>';
@@ -790,15 +838,13 @@ function IsAjaxDataError(data, errorFlg)
         return true;
     }
     // データ処理失敗時の処理
-    if(!Array.isArray(data))
-    {
+    if (!Array.isArray(data)) {
         // エラーメッセージ表示
         ShowAlertDlg(data);
         return true;
     }
     // データ処理失敗時の処理
-    if(!data[0])
-    {
+    if (!data[0]) {
         // エラーメッセージ表示
         ShowAlertDlg(data[1]);
         return true;
@@ -806,29 +852,28 @@ function IsAjaxDataError(data, errorFlg)
     return false;
 }
 
-//////////////////
-//              //
-//　CSV出力関数　//
-//              //
-//////////////////
+////////////////////
+//                //
+//　データ出力関数　//
+//                //
+////////////////////
 
 // CSV文字列をダウンロード可能なファイルに変換する関数
-function ExportCSVFile(data, columns, sortDesc, fileName)
-{
+function ExportCSVFile(data, columns, sortDesc, fileName) {
     // CSV出力用グリッドの初期化（非表示）
-    let grid= new wijmo.grid.FlexGrid('#gridCSV', {
+    let grid= new wijmo.grid.FlexGrid('#gridExport', {
         autoGenerateColumns: false,
         columns: columns,
         itemsSource: data
     });
     //
-    if(sortDesc != null) grid.collectionView.sortDescriptions.push(sortDesc);
+    if (sortDesc != null) grid.collectionView.sortDescriptions.push(sortDesc);
     // グリッドをCSVにエクスポートします
     var range = new wijmo.grid.CellRange(0, 0, grid.rows.length - 1, grid.columns.length - 1);
     var csv = grid.getClipString(range, true, true);
     //
-    let bom  = new Uint8Array([0xEF, 0xBB, 0xBF]);
-    let blob = new Blob([bom, csv], {type: 'text/csv'});
+    let bom = new Uint8Array([0xEF, 0xBB, 0xBF]);
+    let blob = new Blob([bom, csv], { type: 'text/csv' });
     let url = (window.URL || window.webkitURL).createObjectURL(blob);
     //
     var e = document.createElement('a');
@@ -842,6 +887,26 @@ function ExportCSVFile(data, columns, sortDesc, fileName)
     grid.dispose();
 }
 
+// グリッドをExcelファイルに変換する関数
+function ExportExcelFile(data, columns, sortDesc, fileName) {
+    // CSV出力用グリッドの初期化（非表示）
+    let grid = new wijmo.grid.FlexGrid('#gridExport', {
+        autoGenerateColumns: false,
+        columns: columns,
+        itemsSource: data
+    });
+    //
+    if (sortDesc != null) grid.collectionView.sortDescriptions.push(sortDesc);
+    // 現在のビューを含むブックを作成します
+    wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(grid, {
+        includeColumnHeaders: true,
+        includeRowHeaders: true,
+        includeCellStyles: false
+    }, fileName);
+    // CSV用グリッドリリース
+    grid.dispose();
+}
+
 ///////////////////
 //               //
 //　その他の関数  //
@@ -849,24 +914,54 @@ function ExportCSVFile(data, columns, sortDesc, fileName)
 ///////////////////
 
 // 今日の日付を取得（yyyy/mm/dd形式）
-function getNowDate()
-{
+function getNowDate() {
     return new Date().getFullYear() + '/' + (new Date().getMonth() + 1) + '/' + new Date().getDate();
 }
 
 // 今日の日付を取得（yyyymmddhhMMss形式）
-function getNowDateTime()
-{
+function getNowDateTime() {
     let d = new Date();
     let MM = '' + (d.getMonth() + 1);
-    if(MM < 10) MM = '0' + MM; 
+    if (MM < 10) MM = '0' + MM;
     let dd = '' + d.getDate();
-    if(dd < 10) dd = '0' + dd;
+    if (dd < 10) dd = '0' + dd;
     let hh = '' + d.getHours();
-    if(hh < 10) hh = '0' + hh;
+    if (hh < 10) hh = '0' + hh;
     let mm = '' + d.getMinutes();
-    if(mm < 10) mm = '0' + mm;
+    if (mm < 10) mm = '0' + mm;
     let ss = '' + d.getSeconds();
-    if(ss < 10) ss = '0' + ss;
+    if (ss < 10) ss = '0' + ss;
     return d.getFullYear() + MM + dd + hh + mm + ss;
+}
+
+// EnterキーをTABキーに動作置換
+function enter2tab(e, parentId) {
+    // フォーカス位置を確認する
+    let type = document.activeElement.getAttribute('type');
+    if (type === "button" || type === "submit") {
+        // フォーカスがボタンにある場合、ボタンを押下する
+        document.activeElement.click();
+    } else {
+        nextFocus(e, parentId);
+    }
+}
+
+// 次のコントロールにフォーカス遷移
+function nextFocus(e, parentId) {
+    // 指定IDの子コントール内で次のコントロールにフォーカスする
+    let work = $('#' + parentId).find('input, select, button').filter(':visible');
+    let focusable = work.filter(i => !(work[i].tabIndex === -1 || work[i].readOnly === true));
+    let next = focusable.index(document.activeElement);
+    next = focusable[next + 1] === undefined ? 0 : next + 1;
+    focusable[next].focus();
+}
+
+// 前のコントロールにフォーカス遷移
+function prevFocus(e, parentId) {
+    // 指定IDの子コントール内で前のコントロールにフォーカスする
+    let work = $('#' + parentId).find('input, select, button').filter(':visible');
+    let focusable = work.filter(i => !(work[i].tabIndex === -1 || work[i].readOnly === true));
+    let next = focusable.index(document.activeElement);
+    next = focusable[next - 1] === undefined ? focusable.length - 1 : next - 1;
+    focusable[next].focus();
 }

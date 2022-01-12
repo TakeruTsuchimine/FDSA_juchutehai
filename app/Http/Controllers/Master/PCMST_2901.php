@@ -52,7 +52,12 @@ class PCMST_2901 extends Controller
             }
 
             // 有効期間（自）
-            $yukoukikanStartDate = date('Y/m/d', strtotime('1111-01-01'));
+            $yukoukikanStartDate = $request->dataStartDate;
+            // POSTデータチェックエラー
+            if (empty($yukoukikanStartDate)) {
+                $resultMsg .= '「' . __('yukoukikan_start_date') . '」' . __('が正常に送信されていません。') . '\n';
+                $resultFlg = false;
+            }
 
             // 登録者ID
             $loginId = empty($request->dataLoginId) ? 0 : (int)$request->dataLoginId;
@@ -147,33 +152,25 @@ class PCMST_2901 extends Controller
                     {
                         $keikaJikanTsujou = $endJikokuTsujouWk - $startJikokuWk;
                     }
-                    elseif($endJikokuTsujouWk == $startJikokuWk)
+                    elseif($endJikokuTsujouWk < $startJikokuWk)
                     {
-                        $keikaJikanTsujou = 1440;
+                        $keikaJikanTsujou = 1440 + ($endJikokuTsujouWk - $startJikokuWk);    // 指定範囲経過時間（通常勤務）
                     }
-                    else
-                    {
-                        $keikaJikanTsujou = $endJikokuTsujouWk - $startJikokuWk + 1440;    // 指定範囲経過時間（通常勤務）
+                    else{
+                        $keikaJikanTsujou = 0;
                     }
                     */
 
-                    if($endJikokuTsujouWk > $startJikokuWk)
-                    {
+                    if ($endJikokuTsujouWk > $startJikokuWk) {
                         $keikaJikanTsujou = $endJikokuTsujouWk - $startJikokuWk;
-                    }
-                    elseif($endJikokuTsujouWk < $startJikokuWk)
-                    {
-                        $keikaJikanTsujou = $endJikokuTsujouWk - $startJikokuWk + 1440;
-                    
+                    } elseif ($endJikokuZangyouWk < $startJikokuWk) {
+                        $keikaJikanZangyou = 1440 + ($endJikokuZangyouWk - $startJikokuWk);    // 指定範囲経過時間（通常勤務）
                     }
 
-                    if($endJikokuZangyouWk > $startJikokuWk)
-                    {
+                    if ($endJikokuZangyouWk > $startJikokuWk) {
                         $keikaJikanZangyou = $endJikokuZangyouWk - $startJikokuWk;
-                    }
-                    elseif($endJikokuZangyouWk < $startJikokuWk)
-                    {
-                        $keikaJikanZangyou = $endJikokuZangyouWk - $startJikokuWk + 1440;    // 指定範囲経過時間（通常勤務）
+                    } elseif ($endJikokuZangyouWk < $startJikokuWk) {
+                        $keikaJikanZangyou = 0;
                     }
                     $SQLBind[] = array('keika_jikan_tsujou', $keikaJikanTsujou, TYPE_STR);      // 指定範囲経過時間（通常勤務）
                     $SQLBind[] = array('keika_jikan_zangyou', $keikaJikanZangyou, TYPE_STR);    // 指定範囲経過時間（残業分）

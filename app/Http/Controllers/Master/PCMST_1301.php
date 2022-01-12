@@ -9,25 +9,33 @@ use App\Http\Controllers\Classes\class_Database;
 use App\Http\Controllers\Classes\class_Master;
 use Exception;
 
+/**
+ * マスターテーブルレコード更新クラス　「階層分類マスター」
+ */
 class PCMST_1301 extends Controller
 {
+    /**
+     * テーブルレコード更新
+     *
+     * @param Request $request POST受信データ
+     * 
+     * @return array $resultData 更新結果データ
+     */
     public function index(Request $request)
     {
-        // 処理成功フラグ
+        /** boolean $resultFlg 処理成功フラグ */
         $resultFlg = true;
-        //
+        /** string  $resultMsg 処理結果メッセージ */
         $resultMsg = '';
-        //
+        /** array   $resultMsg 処理結果データ */
         $resultVal = [];
-        //
+        /** string  $tableName 対象テーブル名 */
         $tableName = 'kaisou_bunrui_master';
-        // グリッドデータ用データ格納用変数宣言
-        $data;
-        // 共通関数宣言
+        /** App\Http\Controllers\Classes\class_Common 共通関数宣言 */
         $common = new class_Common();
-        // データベース接続宣言
+        /** App\Http\Controllers\Classes\class_Database データベース接続クラス宣言 */
         $query = new class_Database();
-        // マスタ共通処理クラス宣言
+        /** App\Http\Controllers\Classes\class_Master マスタ共通処理クラス宣言 */
         $master = new class_Master($tableName, 'bunrui_cd');
         try {
             ///////////////////
@@ -36,123 +44,139 @@ class PCMST_1301 extends Controller
             //
             // 入力値のエラーチェック
             //
-            // トランザクション種別
+            /** int $SQLType トランザクション種別 */
             $SQLType = empty($request->dataSQLType) ? 0 : (int)$request->dataSQLType;
-            if ($SQLType < 1) {
+            if ($SQLType < 1)
+            {
                 $resultMsg .= '「' . __('データ') . '」' . __('が正常に送信されていません。') . '\n';
                 $resultFlg = false;
             }
 
-            // 階層レベル
+            /** int $kaisouLevel 階層レベル */
             $kaisouLevel = (int)$request->dataKaisouLevel;
             // POSTデータチェックエラー
-            if (is_null($kaisouLevel) || $kaisouLevel === '' || $kaisouLevel > 3 || $kaisouLevel < 1) {
+            if (is_null($kaisouLevel) || $kaisouLevel === '' || $kaisouLevel > 3 || $kaisouLevel < 1)
+            {
                 $resultMsg .= '「' . __('jikaisou_level') . '」' . __('が正常に送信されていません。') . '\n';
                 $resultFlg = false;
             }
 
-            // 分類CD
+            /** string $bunruiCd 分類CD */
             $bunruiCd = $request->dataBunruiCd;
             // POSTデータチェックエラー
-            if (is_null($bunruiCd) || $bunruiCd === '') {
+            if (is_null($bunruiCd) || $bunruiCd === '')
+            {
                 $resultMsg .= '「' . __('コード') . '」' . __('が正常に送信されていません。') . '\n';
                 $resultFlg = false;
             }
 
-            // 分類カテゴリーCD
+            /** string $bunruiCategoryCd 分類カテゴリーCD */
             $bunruiCategoryCd = $request->dataCategoryCd;
             // POSTデータチェックエラー
-            if (is_null($bunruiCategoryCd) || $bunruiCategoryCd === '') {
+            if (is_null($bunruiCategoryCd) || $bunruiCategoryCd === '')
+            {
                 $resultMsg .= '「' . __('カテゴリー') . '」' . __('が正常に送信されていません。') . '\n';
                 $resultFlg = false;
             }
 
-            // 有効期間（自）
+            /** string $yukoukikanStartDate 有効期間（自） */
             $yukoukikanStartDate = $request->dataStartDate;
             // POSTデータチェックエラー
-            if (empty($yukoukikanStartDate)) {
+            if (empty($yukoukikanStartDate))
+            {
                 $resultMsg .= '「' . __('yukoukikan_start_date') . '」' . __('が正常に送信されていません。') . '\n';
                 $resultFlg = false;
             }
 
-            // 登録者ID
+            /** int $loginId 登録者ID */
             $loginId = empty($request->dataLoginId) ? 0 : (int)$request->dataLoginId;
 
             ///////////////////////////
             // Insert 及び Delete処理 //
             ///////////////////////////
             // トランザクション別処理
-            switch ($SQLType) {
-
-                    ////////////////
-                    // DELETE処理 //
-                    ////////////////
+            switch ($SQLType)
+            {
+                ////////////////
+                // DELETE処理 //
+                ////////////////
                 case SQL_DELETE:
-                    // レコードID
+                    /** int $dataId レコードID */
                     $dataId = $request->dataId;
-                    if (empty($dataId)) {
+                    if (empty($dataId))
+                    {
                         $resultMsg .= '「' . __('ID') . '」' . __('が正常に送信されていません。') . '<br>';
                         $resultFlg = false;
                     }
                     // データ処理開始
-                    $master->DeleteMasterData($bunruiCd, $yukoukikanStartDate, $loginId, $dataId, 'bunrui_category_cd', $bunruiCategoryCd);
+                    $master->DeleteMasterData($bunruiCd, $yukoukikanStartDate, $loginId, $dataId);
                     break;
-                    // DELETE処理終了 //
+                // DELETE処理終了 //
 
-                    ////////////////
-                    // INSERT処理 //
-                    ////////////////
+                ////////////////
+                // INSERT処理 //
+                ////////////////
                 default:
                     // 分類CDは新規登録の際、既に存在する担当者コードの場合はエラー
-                    $result = $common -> GetBunruiCdCount($bunruiCategoryCd, $bunruiCd);
-                    if ($result > 0 && $SQLType === SQL_INSERT) {
+                    /** int $cdCount 管理CDの登録数 */
+                    $cdCount = $common->GetBunruiCdCount($bunruiCategoryCd, $bunruiCd);
+                    if ($cdCount > 0 && $SQLType === SQL_INSERT)
+                    {
                         $resultMsg .= __('既に登録されている') . '「' . __('コード') . '」' . __('です。') . '<br>';
                         $resultVal[] = 'dataBunruiCd';
                         $resultFlg = false;
                     }
 
-                    // 分類名
+                    /** string $bunruiName 分類名 */
                     $bunruiName = $request->dataBunruiName;
 
-                    // 親分類CD
+                    /** string $oyaBunruiCd 親分類CD */
                     $oyaBunruiCd = is_null($request->dataOyaBunruiCd) ? '' : $request->dataOyaBunruiCd;
                     //
                     // 親分類コードが有効かどうかの判定
-                    // 
+                    //
                     if ($kaisouLevel > 1) // 階層レベルが2以上の場合
                     {
-                        // SQLテキストの設定
-                        $SQLText  = ' select count(*) ';
-                        $SQLText .= ' from ' . $tableName;
-                        $SQLText .= " where  sakujo_dt is null
-                                      and    :today <= case when yukoukikan_end_date is null
-                                                       then '2199-12-31'
-                                                       else yukoukikan_end_date end ";
-                        $SQLText .= ' and    bunrui_cd      = :oyabunrui_cd 
-                                      and    jikaisou_level = :jikaisou_level ';
-                        // クエリの設定
+                        /** string $SQLHeadText SQL選択項目 */
+                        $SQLHeadText  = " select count(*) from " . $tableName;
+                        /** string $SQLBodyText SQL条件項目 */
+                        $SQLBodyText .= " where  sakujo_dt is null
+                                          and    :today <= case when yukoukikan_end_date is null
+                                                                then '2199-12-31'
+                                                                else yukoukikan_end_date end
+                                          and    bunrui_cd      = :oyabunrui_cd
+                                          and    jikaisou_level = :jikaisou_level ";
+                        /** string $SQLText 実行SQL文 */
+                        $SQLText = $SQLHeadText . $SQLBodyText . $SQLTailText;
+                        // DB接続
                         $query->StartConnect();
+                        // SQL文セット
                         $query->SetQuery($SQLText, SQL_SELECT);
                         // バインド値のセット
                         $query->SetBindValue(":oyabunrui_cd", $oyaBunruiCd, TYPE_STR);
                         $query->SetBindValue(":jikaisou_level", ($kaisouLevel - 1), TYPE_INT);
                         $query->SetBindValue(":today", date("Y/m/d"), TYPE_DATE);
-                        // クエリの実行
+                        // SQLの実行
+                        /** array $result 実行結果データ */
                         $result = $query->ExecuteSelect();
-                        if ($result < 1) {
+                        if ($result < 1)
+                        {
                             $resultMsg .= __('指定できない') . '「' . __('親') . __('コード') . '」' . __('です。') . '<br>';
                             $resultVal[] = 'dataOyaBunruiCd';
                             $resultFlg = false;
                         }
                     }
-                    // 追加情報
+                    /** string $tsuikajouhou 追加情報 */
                     $tsuikajouhou = is_null($request->dataTsuikajouhou) ? '' : $request->dataTsuikajouhou;
 
+                    // エラーがあった際は処理せずエラーメッセージを表示して終了
                     if (!$resultFlg) throw new Exception($resultMsg);
 
-                    // 有効期間終了の設定
+                    /** string $yukoukikanEndDate 有効期間（至） */
                     $yukoukikanEndDate = date('Y/m/d', strtotime('2199-12-31'));
+
                     // バインドの設定
+                    /** array $SQLBind SQLバインド値 */
                     $SQLBind = array();
                     $SQLBind[] = array('bunrui_category_cd', $bunruiCategoryCd, TYPE_STR);
                     $SQLBind[] = array('jikaisou_level', $kaisouLevel, TYPE_INT);
@@ -172,11 +196,12 @@ class PCMST_1301 extends Controller
                 $resultMsg = $e->getMessage() . ' File：' . $e->getFile() . ' Line：' . $e->getLine();
             }
         }
-        // 処理結果送信
+        /** array $resultData 出力データ */
         $resultData = array();
         $resultData[] = $resultFlg;
         $resultData[] = mb_convert_encoding($resultMsg, 'UTF-8', 'UTF-8');
         $resultData[] = mb_convert_encoding($resultVal, 'UTF-8', 'UTF-8');
+        // 処理結果送信
         return $resultData;
     }
 }

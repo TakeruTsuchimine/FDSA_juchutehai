@@ -33,7 +33,7 @@
     <!--ダイアログフッター-->
     <div class="flex-box flex-end" style="padding:5px 10px">
         <!--選択ボタン-->
-        <button id="btnSentaku" name="btnSentaku" class="btn btn-primary" type="button" style="margin-right:10px;" onclick="SetSentakuValue();">
+        <button id="frmSentakuFooter" id="btnSentaku" name="btnSentaku" class="btn btn-primary" type="button" style="margin-right:10px;" onclick="SetSentakuValue();">
             <?php echo __('F9').__('選択'); ?>
         </button>
         <!--戻るボタン-->
