@@ -1,6 +1,5 @@
 // Ver.2021082701
 // JavaScriptの共通定数
-
 const MODE_INSERT = 1;
 
 const MODE_UPDATE = 2;
@@ -19,6 +18,8 @@ const RESULT_OK = 1;
 
 const RESULT_NO = 0;
 
+//入力キーボードのキーコード
+const KEY_TAB   = 9;
 const KEY_ENTER = 13;
 const KEY_LEFT  = 37;
 const KEY_UP    = 38;

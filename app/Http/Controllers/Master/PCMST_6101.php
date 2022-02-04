@@ -51,6 +51,14 @@ class PCMST_6101 extends Controller
                 $resultFlg = false;
             }
 
+            // メニュータブ名（業務名）
+            $menuGroupName = $request->dataMenuGroupName;
+            // POSTデータチェックエラー
+            if (is_null($menuGroupName) || $menuGroupName === '') {
+                $resultMsg .= '「' . __('menu_group_name') . '」' . __('が正常に送信されていません。') . '\n';
+                $resultFlg = false;
+            }
+
             // 有効期間（自）
             $yukoukikanStartDate = $request->dataStartDate;
             // POSTデータチェックエラー
@@ -95,14 +103,31 @@ class PCMST_6101 extends Controller
                         $resultFlg = false;
                     }
 
+                    // メニュータブ名（業務名）は新規登録の際、既に存在するメニュータブ名（業務名）の場合はエラー
+                    $result = $common->GetCdCount($tableName, 'menu_group_name', $menuGroupName);
+                    if ($result > 0 && $SQLType === SQL_INSERT) {
+                        $resultMsg .= __('既に登録されている') . '「' . __('menu_group_name') . '」' . __('です。') . '<br>';
+                        $resultVal[] = 'dataMenuGroupName';
+                        $resultFlg = false;
+                    }
+
                     // メニューGRSEQNO
                     $menuGroupSeq = $request->dataMenuGroupSeq;
 
-                    // メニュータブ名（業務名）
-                    $menuGroupName = $request->dataMenuGroupName;
-
                     // 事業部CD
                     $jigyoubuCd = $request->dataJigyoubuCd;
+                    // POSTデータチェックエラー
+                    if (is_null($jigyoubuCd) || $jigyoubuCd === '') {
+                        $resultMsg .= '「' . __('jigyoubu_cd') . '」' . __('が正常に送信されていません。') . '<br>';
+                        $resultFlg = false;
+                    }
+                    // コードが存在しない場合はエラー
+                    $result = $common->GetCdCount('jigyoubu_master', 'jigyoubu_cd', $jigyoubuCd);
+                    if ($result < 1) {
+                        $resultMsg .= __('登録されていない') . '「' . __('jigyoubu_cd') . '」' . __('です。') . '<br>';
+                        $resultVal[] = 'dataJigyoubuCd';
+                        $resultFlg = false;
+                    }
 
                     if (!$resultFlg) throw new Exception($resultMsg);
 
@@ -110,9 +135,9 @@ class PCMST_6101 extends Controller
                     $yukoukikanEndDate = date('Y/m/d', strtotime('2199-12-31'));
                     // バインドの設定
                     $SQLBind = array();
-                    $SQLBind[] = array('jigyoubu_cd', $jigyoubuCd, TYPE_INT);
+                    $SQLBind[] = array('jigyoubu_cd', $jigyoubuCd, TYPE_STR);
                     $SQLBind[] = array('menu_group_cd', $menuGroupCd, TYPE_STR);
-                    $SQLBind[] = array('menu_group_seq', $menuGroupSeq, TYPE_INT);
+                    $SQLBind[] = array('menu_group_seqno', $menuGroupSeqno, TYPE_INT);
                     $SQLBind[] = array('menu_group_name', $menuGroupName, TYPE_STR);
                     // データ処理開始
                     $master->InsertMasterData($SQLBind, $menuGroupCd, $yukoukikanStartDate, $yukoukikanEndDate, $loginId, $SQLType);

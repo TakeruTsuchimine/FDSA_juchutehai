@@ -6,38 +6,49 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Classes\class_Database;
 
+/**
+ * 登録CD選択入力クラス　「部署マスター」
+ */
 class PCINQ_0300 extends Controller
 {
+    /**
+     * 一覧データ出力
+     *
+     * @param Request $request POST受信データ
+     *
+     * @return array $resultData 一覧グリッドデータ
+     */
     public function index(Request $request)
     {
-        // 処理成功フラグ
+        /** boolean $resultFlg      処理成功フラグ */
         $resultFlg = true;
-        // 検索対象テーブル
+        /** string  $targetTable    検索対象テーブル*/
         $targetTable = 'busho_master';
-        // 対象CD列
+        /** string  $targetRowCd    対象CD列 */
         $targetRowCd = 'busho_cd';
-        // 対象名称列
+        /** string  $targetRowName  対象名称列 */
         $targetRowName = 'busho_name';
 
-        // グリッドデータ用データ格納用変数宣言
+        /** array   $data           グリッドデータ用データ格納配列変数 */
         $data;
-        // データベース接続宣言
+        /** App\Http\Controllers\Classes\class_Database データベース接続クラス宣言 */
         $query = new class_Database();
         try {
             ///////////////////
             //   SQL文作成   //
             ///////////////////
-            // SQL選択項目
+            /** string $SQLHeadText SQL選択項目 */
             $SQLHeadText = " select ".$targetRowCd." , ".$targetRowName." from ".$targetTable;
-            // SQL条件項目
+            /** string $SQLBodyText SQL条件項目 */
             $SQLBodyText = "
             where  sakujo_dt is null
             and    :today >= yukoukikan_start_date
             and    :today <= case when yukoukikan_end_date is null
                                   then '2199-12-31'
                                   else yukoukikan_end_date end ";
+            /** string $SQLTailText SQL並び順 */
             $SQLTailText = " order by ".$targetRowCd;
-            // SQLバインド値
+            /** array $SQLBind SQLバインド値 */
             $SQLBind = array();
 
             ///////////////////
@@ -60,20 +71,23 @@ class PCINQ_0300 extends Controller
             ///////////////////
             // 送信データ作成 //
             ///////////////////
-            //現在年月日
+            /** string $nowDate 現在年月日 */
             $nowDate = date("Y-m-d");
             // 対象日
             if (!is_null($request->dataTargetDate)) {
                 $nowDate = $request->dataTargetDate;
             }
-            // クエリの設定
+            /** string $SQLText 実行SQL文 */
             $SQLText = $SQLHeadText . $SQLBodyText . $SQLTailText;
+            // DB接続
             $query->StartConnect();
+            // SQL文セット
             $query->SetQuery($SQLText, SQL_SELECT);
             // バインド値のセット
             $SQLBind[] = array('today', $nowDate, TYPE_DATE);
             $query->SetBindArray($SQLBind);
-            // クエリの実行
+            // SQLの実行
+            /** array $result 実行結果データ */
             $result = $query->ExecuteSelect();
             ///////////////////
             // データ取得のみ //
@@ -82,9 +96,11 @@ class PCINQ_0300 extends Controller
             // 結果データの格納
             foreach ($result as $value) {
                 // JSONオブジェクト用に配列に名前を付けてデータ格納
-                $dataArray = array();
-                $dataArray = $dataArray + array('dataSentakuCd'   => $value[$targetRowCd]);
-                $dataArray = $dataArray + array('dataSentakuName' => $value[$targetRowName]);
+                /** array $dataArray 取得レコードデータ */
+                $dataArray = array(
+                    'dataSentakuCd'   => $value[$targetRowCd],
+                    'dataSentakuName' => $value[$targetRowName]
+                );
                 // 1行ずつデータ配列をグリッドデータ用配列に格納
                 $data[] = $dataArray;
             }
@@ -94,10 +110,11 @@ class PCINQ_0300 extends Controller
         } finally {
             $query->CloseQuery();
         }
-        // 処理結果送信
+        /** array $resultData 出力データ */
         $resultData = array();
         $resultData[] = $resultFlg;
         $resultData[] = mb_convert_encoding($data, 'UTF-8', 'UTF-8');
+        // 処理結果送信
         return $resultData;
     }
 }

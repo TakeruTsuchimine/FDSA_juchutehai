@@ -5,23 +5,32 @@ namespace App\Http\Controllers\Master;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Classes\class_Database;
-use Exception;
 
+/**
+ * グリッドデータ取得クラス　「階層分類マスター」
+ */
 class PCMST_1300 extends Controller
 {
+    /**
+     * 一覧データ出力
+     *
+     * @param Request $request POST受信データ
+     * 
+     * @return array $resultData 一覧グリッドデータ
+     */
     public function index(Request $request)
     {
-        // 処理成功フラグ
+        /** boolean $resultFlg      処理成功フラグ */
         $resultFlg = true;
-        // グリッドデータ用データ格納用変数宣言
-        $data;
-        // データベース接続宣言
+        /** array   $data           グリッドデータ用データ格納配列変数 */
+        $data = array();
+        /** App\Http\Controllers\Classes\class_Database データベース接続クラス宣言 */
         $query = new class_Database();
         try {
             ///////////////////
             //   SQL文作成   //
             ///////////////////
-            // SQL選択項目
+            /** string $SQLHeadText SQL選択項目 */
             $SQLHeadText = "
             select a.id
                   ,a.jikaisou_level
@@ -47,18 +56,15 @@ class PCMST_1300 extends Controller
                      and    :today <= case when c.yukoukikan_end_date is null
                                         then '2199-12-31' else c.yukoukikan_end_date end ) ko_kaisou_count
             from   kaisou_bunrui_master a ";
-
-            // SQL条件項目
+            /** string $SQLBodyText SQL条件項目 */
             $SQLBodyText = "
             where  a.sakujo_dt is null
             and    :today <= case when a.yukoukikan_end_date is null
                                   then '2199-12-31' else a.yukoukikan_end_date end ";
-
-            // SQL並び順
+            /** string $SQLTailText SQL並び順 */
             $SQLTailText = "
             order by id ";
-
-            // SQLバインド値
+            /** array $SQLBind SQLバインド値 */
             $SQLBind = array();
 
             ///////////////////
@@ -86,44 +92,43 @@ class PCMST_1300 extends Controller
                 $SQLBind[] = array('bunrui_name', $query->GetLikeValue($request->dataBunruiName), TYPE_STR);
             }
 
-            ///////////////////    
+            ///////////////////
             // 送信データ作成 //
             ///////////////////
-            //現在年月日
+            /** string $noeDate 現在年月日 */
             $nowDate = date("Y-m-d");
-            // クエリの設定
+            /** string $SQLText 実行SQL文 */
             $SQLText = $SQLHeadText . $SQLBodyText . $SQLTailText;
+            // DB接続
             $query->StartConnect();
+             // SQL文セット
             $query->SetQuery($SQLText, SQL_SELECT);
             // バインド値のセット
             $SQLBind[] = array('today', $nowDate, TYPE_DATE);
             $query->SetBindArray($SQLBind);
-            // クエリの実行
+            // SQLの実行
+            /** array $result 実行結果データ */
             $result = $query->ExecuteSelect();
-            // データ取得条件別処理
-            $data = array();
-            // 配列番号
-            $index = 0;
             // 結果データの格納
             foreach ($result as $value) {
                 // JSONオブジェクト用に配列に名前を付けてデータ格納
-                $dataArray = array();
-                $dataArray = $dataArray + array('dataId'              => $value['id']);
-                $dataArray = $dataArray + array('dataJikaisouLevel'   => sprintf('%02d', $value['jikaisou_level']));
-                $dataArray = $dataArray + array('dataBunruiCd'        => $value['bunrui_cd']);
-                $dataArray = $dataArray + array('dataBunruiName'      => $value['bunrui_name']);
-                $dataArray = $dataArray + array('dataTsuikajouhou'    => $value['tsuikajouhou']);
-                $dataArray = $dataArray + array('dataOyaBunruiCd'     => $value['bunrui_oya_cd']);
-                $dataArray = $dataArray + array('dataOyaBunruiName'   => $value['bunrui_oya_name']);
-                $dataArray = $dataArray + array('dataStartDate'       => $value['yukoukikan_start_date']);
-                $dataArray = $dataArray + array('dataEndDate'         => $value['yukoukikan_end_date']);
-                $dataArray = $dataArray + array('dataTourokuDt'       => $value['touroku_dt']);
-                $dataArray = $dataArray + array('dataKoushinDt'       => $value['koushin_dt']);
-                $dataArray = $dataArray + array('dataKoKaisouCount'   => $value['ko_kaisou_count']);
+                /** array $dataArray 取得レコードデータ */
+                $dataArray = array(
+                    'dataId'              => $value['id'],
+                    'dataJikaisouLevel'   => sprintf('%02d', $value['jikaisou_level']),
+                    'dataBunruiCd'        => $value['bunrui_cd'],
+                    'dataBunruiName'      => $value['bunrui_name'],
+                    'dataTsuikajouhou'    => $value['tsuikajouhou'],
+                    'dataOyaBunruiCd'     => $value['bunrui_oya_cd'],
+                    'dataOyaBunruiName'   => $value['bunrui_oya_name'],
+                    'dataStartDate'       => $value['yukoukikan_start_date'],
+                    'dataEndDate'         => $value['yukoukikan_end_date'],
+                    'dataTourokuDt'       => $value['touroku_dt'],
+                    'dataKoushinDt'       => $value['koushin_dt'],
+                    'dataKoKaisouCount'   => $value['ko_kaisou_count']
+                );
                 // 1行ずつデータ配列をグリッドデータ用配列に格納
                 $data[] = $dataArray;
-                // 配列番号を進める
-                $index = $index + 1;
             }
         } catch (\Throwable $e) {
             if ($resultFlg) {
@@ -133,10 +138,11 @@ class PCMST_1300 extends Controller
         } finally {
             $query->CloseQuery();
         }
-        // 処理結果送信
+        /** array $resultData 出力データ */
         $resultData = array();
         $resultData[] = $resultFlg;
         $resultData[] = mb_convert_encoding($data, 'UTF-8', 'UTF-8');
+        // 処理結果送信
         return $resultData;
     }
 }

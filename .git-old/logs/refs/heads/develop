@@ -1,0 +1,11 @@
+0000000000000000000000000000000000000000 b70f231f6741a0376aa4881d9c751a291b0aacbd takumifunayama <mt.koala01n@gmail.com> 1637544887 +0900	branch: Created from main
+b70f231f6741a0376aa4881d9c751a291b0aacbd 1c2ca14589f33cf4ed6315b7143cdf1b17e1b6b2 takumifunayama <mt.koala01n@gmail.com> 1637544921 +0900	pull origin manabe: Merge made by the 'recursive' strategy.
+1c2ca14589f33cf4ed6315b7143cdf1b17e1b6b2 51e94e2aa8b1550fb5e3b7fe388fda3bd201142a takumifunayama <mt.koala01n@gmail.com> 1637544956 +0900	pull origin develop: Merge made by the 'recursive' strategy.
+51e94e2aa8b1550fb5e3b7fe388fda3bd201142a ee7fdef458c6dfb344c67b75f9caaf998ffa0a0b takumifunayama <mt.koala01n@gmail.com> 1637576416 +0900	commit: [modify]時間表示変更 mm→mi
+ee7fdef458c6dfb344c67b75f9caaf998ffa0a0b 118f81b1bd26480f9568715ec60846d8e0e0f38a takumifunayama <mt.koala01n@gmail.com> 1637892652 +0900	pull origin itio: Fast-forward
+118f81b1bd26480f9568715ec60846d8e0e0f38a f84dd0a82607cd2878d6b0220e8fb4addccfcb37 takumifunayama <mt.koala01n@gmail.com> 1638149489 +0900	pull origin develop: Fast-forward
+f84dd0a82607cd2878d6b0220e8fb4addccfcb37 09083bd3ba0b9b6dbb05b866e594219c0c779426 takumifunayama <mt.koala01n@gmail.com> 1638152425 +0900	commit (merge): [Add]真鍋対応分追加
+09083bd3ba0b9b6dbb05b866e594219c0c779426 266bcb86e346a2b3b08e899ac6dd749265fbdb92 takumifunayama <mt.koala01n@gmail.com> 1638154446 +0900	commit: [Add]yamashita対応追加分
+266bcb86e346a2b3b08e899ac6dd749265fbdb92 90c77e48f87cdecaede1241b36badf9fc87da220 takumifunayama <mt.koala01n@gmail.com> 1638155743 +0900	commit (merge): [Add]工藤変更分追加
+90c77e48f87cdecaede1241b36badf9fc87da220 63ff2c63df9dd2aab31fff606514a34535051e07 takumifunayama <mt.koala01n@gmail.com> 1638174552 +0900	commit: [Fix]修正
+63ff2c63df9dd2aab31fff606514a34535051e07 8bd4051988be878e828c09f4c57ec08eef6fa26f takumifunayama <mt.koala01n@gmail.com> 1638759520 +0900	merge origin/develop: Fast-forward

@@ -28,26 +28,36 @@ class PCMST_2100 extends Controller
                   ,j.jigyoubu_name
                   ,l.location_cd
                   ,l.location_name
-                  ,l.oya_location_cd
-                  ,cast(cast(l.structure_level as character varying) as integer) structure_level
+                  ,l.location_oya_cd
+                  ,case l.structure_level
+                  when 0 then '0:未設定'
+                  when 1 then '1:置場'
+                  when 2 then '2:棚番'
+                  end structure_level
                   ,to_char(l.touroku_dt, 'yyyy/mm/dd hh24:mi:ss') touroku_dt
+                  ,tn.tantousha_name tourokusha_name
                   ,to_char(l.koushin_dt, 'yyyy/mm/dd hh24:mi:ss') koushin_dt
+                  ,kn.tantousha_name koushinsha_name
                   ,to_char(l.yukoukikan_start_date, 'yyyy/mm/dd') yukoukikan_start_date
                   ,to_char(l.yukoukikan_end_date, 'yyyy/mm/dd') yukoukikan_end_date
             from   location_master l
             left join ( select jigyoubu_cd
                               ,jigyoubu_name
                         from   jigyoubu_master
-                        where  sakujo_date is null
+                        where  sakujo_dt is null
                         and    :today >= yukoukikan_start_date
                         and    :today <= case when yukoukikan_end_date is null
                                               then '2199-12-31'
                                               else yukoukikan_end_date end ) j
-              on l.jigyoubu_cd = j.jigyoubu_cd ";
+              on l.jigyoubu_cd = j.jigyoubu_cd
+            left join tantousha_master tn
+              on l.tourokusha_id = tn.id
+            left join tantousha_master kn
+              on l.koushinsha_id = kn.id ";
 
             // SQL条件項目
             $SQLBodyText = "
-            where  l.sakujo_date is null
+            where  l.sakujo_dt is null
             and    :today <= case when l.yukoukikan_end_date is null
                                   then '2199-12-31'
                                   else l.yukoukikan_end_date end ";
@@ -55,11 +65,6 @@ class PCMST_2100 extends Controller
             // SQL並び順
             $SQLTailText = "
             order by l.id ";
-
-            // SQL件数取得
-            $SQLCntText = "
-            select count(*)
-            from   location_master l ";
 
             // SQLバインド値
             $SQLBind = array();
@@ -109,7 +114,7 @@ class PCMST_2100 extends Controller
             //現在年月日
             $nowDate = date("Y-m-d");
             // クエリの設定
-            $SQLText = ($cntFlg ? $SQLCntText . $SQLBodyText : $SQLHeadText . $SQLBodyText . $SQLTailText);
+            $SQLText = $SQLHeadText . $SQLBodyText . $SQLTailText;
             $query->StartConnect();
             $query->SetQuery($SQLText, SQL_SELECT);
             // バインド値のセット
@@ -117,39 +122,30 @@ class PCMST_2100 extends Controller
             $query->SetBindArray($SQLBind);
             // クエリの実行
             $result = $query->ExecuteSelect();
-            // データ取得条件別処理
-            if ($cntFlg) {
-                /////////////////
-                // 件数取得のみ //
-                /////////////////
-                $data = $result[0][0];
-            } else {
-                ///////////////////
-                // データ取得のみ //
-                ///////////////////
-                $data = array();
-                // 配列番号
-                $index = 0;
-                // 結果データの格納
-                foreach ($result as $value) {
-                    // JSONオブジェクト用に配列に名前を付けてデータ格納
-                    $dataArray = array();
-                    $dataArray = $dataArray + array('dataId' => $value['id']);
-                    $dataArray = $dataArray + array('dataJigyoubuCd' => $value['jigyoubu_cd']);
-                    $dataArray = $dataArray + array('dataJigyoubuName' => $value['jigyoubu_name']);
-                    $dataArray = $dataArray + array('dataLocationCd' => $value['location_cd']);
-                    $dataArray = $dataArray + array('dataLocationName' => $value['location_name']);
-                    $dataArray = $dataArray + array('dataOyaLocationCd' => $value['oya_location_cd']);
-                    $dataArray = $dataArray + array('dataStructureLevel' => $value['structure_level']);
-                    $dataArray = $dataArray + array('dataStartDate' => $value['yukoukikan_start_date']);
-                    $dataArray = $dataArray + array('dataEndDate' => $value['yukoukikan_end_date']);
-                    $dataArray = $dataArray + array('dataTourokuDt' => $value['touroku_dt']);
-                    $dataArray = $dataArray + array('dataKoushinDt' => $value['koushin_dt']);
-                    // 1行ずつデータ配列をグリッドデータ用配列に格納
-                    $data[] = $dataArray;
-                    // 配列番号を進める
-                    $index = $index + 1;
-                }
+            ///////////////////
+            // データ取得のみ //
+            ///////////////////
+            $data = array();
+            // 結果データの格納
+            foreach ($result as $value) {
+                // JSONオブジェクト用に配列に名前を付けてデータ格納
+                $dataArray = array(
+                    'dataId' => $value['id'],
+                    'dataJigyoubuCd' => $value['jigyoubu_cd'],
+                    'dataJigyoubuName' => $value['jigyoubu_name'],
+                    'dataLocationCd' => $value['location_cd'],
+                    'dataLocationName' => $value['location_name'],
+                    'dataLocationOyaCd' => $value['location_oya_cd'],
+                    'dataStructureLevel' => $value['structure_level'],
+                    'dataStartDate' => $value['yukoukikan_start_date'],
+                    'dataEndDate' => $value['yukoukikan_end_date'],
+                    'dataTourokuDt' => $value['touroku_dt'],
+                    'dataTourokushaName' => $value['tourokusha_name'],
+                    'dataKoushinDt' => $value['koushin_dt'],
+                    'dataKoushinshaName' => $value['koushinsha_name']
+                );
+                // 1行ずつデータ配列をグリッドデータ用配列に格納
+                $data[] = $dataArray;
             }
         } catch (\Throwable $e) {
             if ($resultFlg) {

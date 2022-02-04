@@ -9,25 +9,35 @@ use App\Http\Controllers\Classes\class_Database;
 use App\Http\Controllers\Classes\class_Master;
 use Exception;
 
+/**
+ * マスターテーブルレコード更新クラス　「仕入外注先マスター」
+ */
 class PCMST_1801 extends Controller
 {
+    /**
+     * テーブルレコード更新
+     *
+     * @param Request $request POST受信データ
+     *
+     * @return array $resultData 更新結果データ
+     */
     public function index(Request $request)
     {
-        // 処理成功フラグ
+        /** boolean $resultFlg 処理成功フラグ */
         $resultFlg = true;
-        //
+        /** string  $resultMsg 処理結果メッセージ */
         $resultMsg = '';
-        //
+        /** array   $resultMsg 処理結果データ */
         $resultVal = [];
-        //
+        /** App\Http\Controllers\Classes\class_Master マスタ共通処理クラス宣言 */
         $tableName = 'shiiresaki_master';
         // グリッドデータ用データ格納用変数宣言
         $data;
-        // 共通関数宣言
+        /** App\Http\Controllers\Classes\class_Common 共通関数宣言 */
         $common = new class_Common();
-        // データベース接続宣言
+        /** App\Http\Controllers\Classes\class_Database データベース接続クラス宣言 */
         $query = new class_Database();
-        // マスタ共通処理クラス宣言
+        /** App\Http\Controllers\Classes\class_Master マスタ共通処理クラス宣言 */
         $master = new class_Master($tableName, 'shiiresaki_cd');
         try {
             ///////////////////
@@ -36,35 +46,30 @@ class PCMST_1801 extends Controller
             //
             // 入力値のエラーチェック
             //
-            // トランザクション種別
+            /** int $SQLType トランザクション種別 */
             $SQLType = empty($request->dataSQLType) ? 0 : (int)$request->dataSQLType;
             if ($SQLType < 1) {
                 $resultMsg .= '「' . __('データ') . '」' . __('が正常に送信されていません。') . '\n';
                 $resultFlg = false;
             }
 
-            // 事業部CD
+            /** string $jigyoubuCd 事業部CD */
             $jigyoubuCd = $request -> dataJigyoubuCd;
+            // POSTデータチェックエラー
             if(is_null($jigyoubuCd) || $jigyoubuCd === ''){
-                $resultMsg .= '「'.__('shiiresaki_cd').'」'.__('が正常に送信されていません。').'\n';
+                $resultMsg .= '「'.__('jigyoubu_cd').'」'.__('が正常に送信されていません。').'\n';
                 $resultFlg = false;
             }
 
-            // 仕入・外注先CD
+            /** string $shiiresakiCd 仕入・外注先CD */
             $shiiresakiCd = $request -> dataShiiresakiCd;
+            // POSTデータチェックエラー
             if(is_null($shiiresakiCd) || $shiiresakiCd === ''){
                 $resultMsg .= '「'.__('shiiresaki_cd').'」'.__('が正常に送信されていません。').'\n';
                 $resultFlg = false;
             }
 
-            // 支払先CD
-            $shiharaisakiCd = $request -> dataShiharaisakiCd;
-            if(is_null($shiharaisakiCd) || $shiharaisakiCd === ''){
-                $resultMsg .= '「'.__('shiiresaki_cd').'」'.__('が正常に送信されていません。').'\n';
-                $resultFlg = false;
-            }
-
-            // 有効期間（自）
+            /** string $yukoukikanStartDate 有効期間（自） */
             $yukoukikanStartDate = $request->dataStartDate;
             // POSTデータチェックエラー
             if (empty($yukoukikanStartDate)) {
@@ -72,7 +77,7 @@ class PCMST_1801 extends Controller
                 $resultFlg = false;
             }
 
-            // 登録者ID
+            /** int $loginId 登録者ID */
             $loginId = empty($request->dataLoginId) ? 0 : (int)$request->dataLoginId;
 
             ///////////////////////////
@@ -85,7 +90,7 @@ class PCMST_1801 extends Controller
                     // DELETE処理 //
                     ////////////////
                 case SQL_DELETE:
-                    // レコードID
+                    /** int $dataId レコードID */
                     $dataId = $request->dataId;
                     if (empty($dataId)) {
                         $resultMsg .= '「' . __('ID') . '」' . __('が正常に送信されていません。') . '<br>';
@@ -100,139 +105,135 @@ class PCMST_1801 extends Controller
                     // INSERT処理 //
                     ////////////////
                 default:
-                    // 事業部CDは新規登録の際、既に存在する事業部CDの場合はエラー
-                    $result = $common -> GetCdCount($tableName, 'jigyoubu_cd', $jigyoubuCd, $query);
-                    if($result > 0 && $SQLType === SQL_INSERT){
-                        $resultMsg .= __('既に登録されている').'「'.__('jigyoubu_cd').'」'.__('です。').'<br>';
+                    // 事業部CD
+                    $jigyoubuCd = $request->dataJigyoubuCd;
+                    // POSTデータチェックエラー
+                    if (is_null($jigyoubuCd) || $jigyoubuCd === '') {
+                        $resultMsg .= '「' . __('jigyoubu_cd') . '」' . __('が正常に送信されていません。') . '<br>';
+                        $resultFlg = false;
+                    }
+                    // コードが存在しない場合はエラー
+                    /** int $cdCount 管理CDの登録数 */
+                    $cdCount = $common->GetCdCount('jigyoubu_master', 'jigyoubu_cd', $jigyoubuCd);
+                    if ($cdCount < 1) {
+                        $resultMsg .= __('登録されていない') . '「' . __('jigyoubu_cd') . '」' . __('です。') . '<br>';
                         $resultVal[] = 'dataJigyoubuCd';
                         $resultFlg = false;
                     }
-                    //事業部名
-                    $dataJigyoubuName = $request -> dataJigyoubuName;
 
                     // 仕入・外注先CDは新規登録の際、既に存在する仕入・外注先CDの場合はエラー
-                    $result = $common -> GetCdCount($tableName, 'shiiresaki_cd', $shiiresakiCd);
-                    if($result > 0 && $SQLType === SQL_INSERT){
+                    $cdCount = $common -> GetCdCount($tableName, 'shiiresaki_cd', $shiiresakiCd);
+                    if($cdCount > 0 && $SQLType === SQL_INSERT){
                         $resultMsg .= __('既に登録されている').'「'.__('shiiresaki_cd').'」'.__('です。').'<br>';
                         $resultVal[] = 'dataShiiresakiCd';
                         $resultFlg = false;
                     }
 
-                    // 支払先CDは新規登録の際、既に存在する支払先CDの場合はエラー
-                    $result = $common -> GetCdCount($tableName, 'shiharaisaki_cd', $shiharaisakiCd);
-                    if($result > 0 && $SQLType === SQL_INSERT){
-                        $resultMsg .= __('既に登録されている').'「'.__('shiharaisaki_cd').'」'.__('です。').'<br>';
-                        $resultVal[] = 'dataShiharaisakiCd';
-                        $resultFlg = false;
-                    }
-                    // 支払先名
-                    $shiharaisakiCd = $request -> dataShiharaisakiName;
-                    // 略称
+                    /** string $shiharaisakiCd 支払先CD */
+                    $shiharaisakiCd = $request -> dataShiharaisakiCd;
+                    /** string $shiharaisakiOyaCd 支払親コード */
+                    $shiharaisakiOyaCd = $request -> dataShiharaisakiOyaCd;
+                    /** string $shiiresakiRyaku 略称 */
                     $shiiresakiRyaku = $request -> dataShiiresakiRyaku;
-                    // 仕入・外注先名1
+                    /** string $shiiresakiName1 仕入・外注先名1 */
                     $shiiresakiName1 = $request -> dataShiiresakiName1;
-                    // 仕入・外注先名2
+                    /** string $shiiresakiName2 仕入・外注先名2 */
                     $shiiresakiName2 = $request -> dataShiiresakiName2;
-                    // 仕入・外注先名カナ
+                    /** string $shiiresakiKana 仕入・外注先名カナ */
                     $shiiresakiKana = $request -> dataShiiresakiKana;
-                    // ZIP
+                    /** string $shiiresakiZip ZIP */
                     $shiiresakiZip = $request -> dataShiiresakiZip;
-                    // 住所1
+                    /** string $shiiresakiJusho1 住所1 */
                     $shiiresakiJusho1 = $request -> dataShiiresakiJusho1;
-                    // 住所2
+                    /** string $shiiresakiJusho2 住所2 */
                     $shiiresakiJusho2 = $request -> dataShiiresakiJusho2;
-                    // 電話番号
+                    /** string $telNo 電話番号 */
                     $telNo = $request -> dataTelNo;
-                    // FAX番号
+                    /** string $faxNo FAX番号 */
                     $faxNo = $request -> dataFaxNo;
-                    // 先方連絡先
-                    $senpoRenrakusaki = $request -> dataSenpoRenrakusaki;
-                    // 資本金
+                    /** string $senpouRenrakusaki 先方連絡先 */
+                    $senpouRenrakusaki = $request -> dataSenpouRenrakusaki;
+                    /** int $shihonkin 資本金 */
                     $shihonkin = $request -> dataShihonkin;
-                    // 備考1
+                    /** string $bikou1 備考1 */
                     $bikou1 = $request -> dataBikou1;
-                    // 備考2
+                    /** string $bikou2 備考2 */
                     $bikou2 = $request -> dataBikou2;
-                    // 備考3
+                    /** string $bikou3 備考3 */
                     $bikou3 = $request -> dataBikou3;
-                    // 銀行名
+                    /** string $bikou4 備考4 */
+                    $bikou4 = $request -> dataBikou4;
+                    /** string $ginkouName 銀行名 */
                     $ginkouName = $request -> dataGinkouName;
-                    // 支店名
+                    /** string $shitenName 支店名 */
                     $shitenName = $request -> dataShitenName;
-                    // 支払口座番号
-                    $shiharaikouzaNo = $request -> dataShiharaikouzaNo;
-                    // 取引停止理由
-                    $torihikiTeishiRiyuu = $request -> dataTorihikiTeishiRiyuu;
-                    // 支払親コード
-                    $shiiresakiOyaCode = $request -> dataShiiresakiOyaCode;
-                    // 支払先名
-                    $shiiresakiOyaCode = $request -> dataShiharaisakiName;
-                    // 業種分類CD
+                    /** int $shiharaiKouzaNo 支払口座番号 */
+                    $shiharaiKouzaNo = $request -> dataShiharaiKouzaNo;
+                    /** string $torihikiTeishiRiyu 取引停止理由 */
+                    $torihikiTeishiRiyu = $request -> dataTorihikiTeishiRiyu;
+                    /** string $gyoushuCd 業種分類CD */
                     $gyoushuCd = $request -> dataGyoushuCd;
-                    // 業種分類名
-                    $gyoushuCd = $request -> dataGyoushuName;
-                    // 確認日
+                    /** string $kakuninDate 確認日 */
                     $kakuninDate = $request -> dataKakuninDate;
-                    // 取引停止日
+                    /** string $torihikiTeishiDate 取引停止日 */
                     $torihikiTeishiDate = $request -> dataTorihikiTeishiDate;
-                    
+                    /** string $keishouKbn 敬称区分 */
+                    $keishouKbn = $request -> dataKeishouKbn;
+
                     // コンポボックス
-                    // 敬称区分
-                    $keishoKbn = empty($request -> dataKeishoKbn) ? 1 : $request -> dataKeishoKbn;
-                    // 仕入区分
-                    $shiireKbn = empty($request -> dataShiireKbn) ? 1 : $request -> dataShiireKbn;
-                    // 外注区分
-                    $gaichuKbn = empty($request -> dataGaichuKbn) ? 1 : $request -> dataGaichuKbn;
-                    // 支払区分
-                    $shiharaiKbn = empty($request -> dataShiharaiKbn) ? 1 : $request -> dataShiharaiKbn;
-                    // 諸口区分
-                    $shokuchiKbn = empty($request -> dataShokuchiKbn) ? 1 : $request -> dataShokuchiKbn;
-                    // 品目別仕入区分
-                    $hinmokuShiireKbn = empty($request -> dataHinmokuShiireKbn) ? 1 : $request -> dataHinmokuShiireKbn;
-                    // 消費税計算単位
-                    $shohizeiKeisanTani = empty($request -> dataShohizeiKeisanTani) ? 1 : $request -> dataShohizeiKeisanTani;
-                    // 消費税計算方式
-                    $shohizeiKeisanHoushiki = empty($request -> dataShohizeiKeisanHoushiki) ? 1 : $request -> dataShohizeiKeisanHoushiki;
-                    // 消費税計算丸目
-                    $shohizeiKeisanMarume = empty($request -> dataShohizeiKeisanMarume) ? 1 : $request -> dataShohizeiKeisanMarume;
-                    // 金額計算丸目
-                    $kingakuKeisanMarume = empty($request -> dataKingakuKeisanMarume) ? 1 : $request -> dataKingakuKeisanMarume;
-                    // 締日1
+                    /** int $shiireKbn 仕入区分 */
+                    $shiireKbn = empty($request -> dataShiireKbn) ? 0 : $request -> dataShiireKbn;
+                    /** int $gaichuKbn 外注区分 */
+                    $gaichuKbn = empty($request -> dataGaichuKbn) ? 0 : $request -> dataGaichuKbn;
+                    /** int $shiharaiKbn 支払区分 */
+                    $shiharaiKbn = empty($request -> dataShiharaiKbn) ? 0 : $request -> dataShiharaiKbn;
+                    /** int $shokuchiKbn 諸口区分 */
+                    $shokuchiKbn = empty($request -> dataShokuchiKbn) ? 0 : $request -> dataShokuchiKbn;
+                    /** int $shouhizeiKeisanTani 消費税計算単位 */
+                    $shouhizeiKeisanTani = empty($request -> dataShouhizeiKeisanTani) ? 0 : $request -> dataShohizeiKeisanTani;
+                    /** int $shouhizeiKeisanHoushiki 消費税計算方式 */
+                    $shouhizeiKeisanHoushiki = empty($request -> dataShouhizeiKeisanHoushiki) ? 0 : $request -> dataShohizeiKeisanHoushiki;
+                    /** int $shouhizeiKeisanMarume 消費税計算丸目 */
+                    $shouhizeiKeisanMarume = empty($request -> dataShouhizeiKeisanMarume) ? 0 : $request -> dataShohizeiKeisanMarume;
+                    /** int $kingakuKeisanMarume 金額計算丸目 */
+                    $kingakuKeisanMarume = empty($request -> dataKingakuKeisanMarume) ? 0 : $request -> dataKingakuKeisanMarume;
+                    /** int $shimeDay1 締日1 */
                     $shimeDay1 = empty($request -> dataShimeDay1) ? 1 : $request -> dataShimeDay1;
-                    // 締日2
+                    /** int $shimeDay2 締日2 */
                     $shimeDay2 = empty($request -> dataShimeDay2) ? 1 : $request -> dataShimeDay2;
-                    // 適用月（締日２）
+                    /** int $tekiyouTsuki 適用月（締日2） */
                     $tekiyouTsuki = empty($request -> dataTekiyouTsuki) ? 1 : $request -> dataTekiyouTsuki;
-                    // 支払予定月1
-                    $shiharaiTsuki1 = empty($request -> dataShiharaiTsuki1) ? 1 : $request -> dataShiharaiTsuki1;
-                    // 支払日1
+                    /** int $shiharaiTsuki1 支払予定月1 */
+                    $shiharaiTsuki1 = empty($request -> dataShiharaiTsuki1) ? 0 : $request -> dataShiharaiTsuki1;
+                    /** int $shiharaiDay1 支払日1 */
                     $shiharaiDay1 = empty($request -> dataShiharaiDay1) ? 1 : $request -> dataShiharaiDay1;
-                    // 支払方法1
-                    $shiharaihouhou1 = empty($request -> dataShiharaihouhou1) ? 1 : $request -> dataShiharaihouhou1;
-                    // 手形サイト1
-                    $tegataSate1 = empty($request -> dataTegataSate1) ? 1 : $request -> dataTegataSate1;
-                    // 支払・回収額上限
-                    $shiharaiKaishuJougenKin = empty($request -> dataShiharaiKaishuJougenKin) ? 1 : $request -> dataShiharaiKaishuJougenKin;
-                    // 支払予定月2
-                    $shiharaiTsuki2 = empty($request -> dataShiharaiTsuki2) ? 1 : $request -> dataShiharaiTsuki2;
-                    // 支払日2
+                    /** int $shiharaiHouhou1 支払方法1 */
+                    $shiharaiHouhou1 = empty($request -> dataShiharaiHouhou1) ? 0 : $request -> dataShiharaiHouhou1;
+                    /** int $tegataSate1 手形サイト1 */
+                    $tegataSate1 = empty($request -> dataTegataSate1) ? 0 : $request -> dataTegataSate1;
+                    /** int $shiharaiKaishuJougenKin 支払・回収額上限 */
+                    $shiharaiKaishuJougenKin = empty($request -> dataShiharaiKaishuJougenKin) ? 0 : $request -> dataShiharaiKaishuJougenKin;
+                    /** int $shiharaiTsuki2 支払予定月2 */
+                    $shiharaiTsuki2 = empty($request -> dataShiharaiTsuki2) ? 0 : $request -> dataShiharaiTsuki2;
+                    /** int $shiharaiDay2 支払日2 */
                     $shiharaiDay2 = empty($request -> dataShiharaiDay2) ? 1 : $request -> dataShiharaiDay2;
-                    // 支払方法2
-                    $shiharaihouhou2 = empty($request -> dataShiharaihouhou2) ? 1 : $request -> dataShiharaihouhou2;
-                    // 手形サイト2
-                    $tegataSate2 = empty($request -> dataTegataSate2) ? 1 : $request -> dataTegataSate2;
-                    // 振込手数料区分
-                    $furikomiTesuryouKbn = empty($request -> dataFurikomiTesuryouKbn) ? 1 : $request -> dataFurikomiTesuryouKbn;
-                    // 支払口座区分
-                    $shiharaikouzaKbn = empty($request -> dataShiharaikouzaKbn) ? 1 : $request -> dataShiharaikouzaKbn;
+                    /** int $shiharaiHouhou2 支払方法2 */
+                    $shiharaiHouhou2 = empty($request -> dataShiharaiHouhou2) ? 0 : $request -> dataShiharaiHouhou2;
+                    /** int $tegataSate2 手形サイト2 */
+                    $tegataSate2 = empty($request -> dataTegataSate2) ? 0 : $request -> dataTegataSate2;
+                    /** int $furikomiTesuryouKbn 振込手数料区分 */
+                    $furikomiTesuryouKbn = empty($request -> dataFurikomiTesuryouKbn) ? 0 : $request -> dataFurikomiTesuryouKbn;
+                    /** int $shiharaiKouzaKbn 支払口座区分 */
+                    $shiharaiKouzaKbn = empty($request -> dataShiharaiKouzaKbn) ? 0 : $request -> dataShiharaiKouzaKbn;
 
 
-
+                    // エラーがあった際は処理せずエラーメッセージを表示して終了
                     if (!$resultFlg) throw new Exception($resultMsg);
 
-                    // 有効期間終了の設定
+                    /** string $yukoukikanEndDate 有効期間（至） */
                     $yukoukikanEndDate = date('Y/m/d', strtotime('2199-12-31'));
                     // バインドの設定
+                    /** array $SQLBind SQLバインド値 */
                     $SQLBind = array();
                     $SQLBind[] = array('jigyoubu_cd',       $jigyoubuCd, TYPE_STR);
                     $SQLBind[] = array('shiiresaki_cd',       $shiiresakiCd, TYPE_STR);
@@ -240,7 +241,7 @@ class PCMST_1801 extends Controller
                     $SQLBind[] = array('shiiresaki_name1',       $shiiresakiName1, TYPE_STR);
                     $SQLBind[] = array('shiiresaki_name2',       $shiiresakiName2, TYPE_STR);
                     $SQLBind[] = array('shiiresaki_kana',       $shiiresakiKana, TYPE_STR);
-                    $SQLBind[] = array('keisho_kbn',       $keishoKbn, TYPE_INT);
+                    $SQLBind[] = array('keishou_kbn',       $keishouKbn, TYPE_STR);
                     $SQLBind[] = array('shiire_kbn',       $shiireKbn, TYPE_INT);
                     $SQLBind[] = array('gaichu_kbn',       $gaichuKbn, TYPE_INT);
                     $SQLBind[] = array('shiharai_kbn',       $shiharaiKbn, TYPE_INT);
@@ -259,10 +260,10 @@ class PCMST_1801 extends Controller
                     $SQLBind[] = array('bikou1',       $bikou1, TYPE_STR);
                     $SQLBind[] = array('bikou2',       $bikou2, TYPE_STR);
                     $SQLBind[] = array('bikou3',       $bikou3, TYPE_STR);
-                    $SQLBind[] = array('hinmoku_shiire_kbn',       $hinmokuShiireKbn, TYPE_INT);
-                    $SQLBind[] = array('shohizei_keisan_tani',       $shohizeiKeisanTani, TYPE_INT);
-                    $SQLBind[] = array('shohizei_keisan_houshiki',       $shohizeiKeisanHoushiki, TYPE_INT);
-                    $SQLBind[] = array('shohizei_keisan_marume',       $shohizeiKeisanMarume, TYPE_INT);
+                    $SQLBind[] = array('bikou4',       $bikou4, TYPE_STR);
+                    $SQLBind[] = array('shouhizei_keisan_tani',       $shouhizeiKeisanTani, TYPE_INT);
+                    $SQLBind[] = array('shouhizei_keisan_houshiki',       $shouhizeiKeisanHoushiki, TYPE_INT);
+                    $SQLBind[] = array('shouhizei_keisan_marume',       $shouhizeiKeisanMarume, TYPE_INT);
                     $SQLBind[] = array('kingaku_keisan_marume',       $kingakuKeisanMarume, TYPE_INT);
                     $SQLBind[] = array('shime_day1',       $shimeDay1, TYPE_INT);
                     $SQLBind[] = array('shime_day2',       $shimeDay2, TYPE_INT);
@@ -295,11 +296,12 @@ class PCMST_1801 extends Controller
                 $resultMsg = $e->getMessage() . ' File：' . $e->getFile() . ' Line：' . $e->getLine();
             }
         }
-        // 処理結果送信
+        /** array $resultData 出力データ */
         $resultData = array();
         $resultData[] = $resultFlg;
         $resultData[] = mb_convert_encoding($resultMsg, 'UTF-8', 'UTF-8');
         $resultData[] = mb_convert_encoding($resultVal, 'UTF-8', 'UTF-8');
+        // 処理結果送信
         return $resultData;
     }
 }

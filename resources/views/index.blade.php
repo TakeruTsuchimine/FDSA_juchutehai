@@ -3,7 +3,15 @@
     FDSA 業務メニュー
 @endsection
 @section('contents')
-    <form id="frmMenu" action="{{ url('/master') }}" method="POST" target="_blank">
+<div class="row">
+    <div class="menu_group col-3">
+        <button class="text-white col-8 menugr_btn active">マスター類1</button>
+        <button class="text-white col-8 menugr_btn">マスター類2</button>
+        <button class="text-white col-8 menugr_btn">マスター類3</button>
+    </div>
+    <div class="menu_list_area col-8">
+        <div class="menu_list show">
+        <form id="frmMenu" action="{{ url('/master') }}" method="POST" target="_blank">
         @csrf
         <input id="targetPage" name="targetPage" type="hidden" value="0000">
         <button name="0400" class="btn-primary" type="button" style="margin:10px;">担当者マスター</button>
@@ -27,24 +35,31 @@
         <button name="1316" class="btn-primary" type="button" style="margin:10px;">単位マスター</button>
         <br>
         {{-- 真鍋対応分 --}}
+        <button name="0300" class="btn-primary" type="button" style="margin:10px;">部署マスター</button>
         <button name="0600" class="btn-primary" type="button" style="margin:10px;">工程マスター</button>
+        <button name="0800" class="btn-primary" type="button" style="margin:10px;">機械マスター</button>
         <button name="1310" class="btn-primary" type="button" style="margin:10px;">業務マスター</button>
         <button name="2100" class="btn-primary" type="button" style="margin:10px;">置場・棚番マスター</button>
         <button name="2900" class="btn-primary" type="button" style="margin:10px;">シフトマスター</button>
         <button name="3100" class="btn-primary" type="button" style="margin:10px;">カレンダーマスター</button>
-        <button name="6100" class="btn-primary" type="button" style="margin:10px;">メニュータブマスター</button>
+        <button name="6100" class="btn-primary" type="button" style="margin:10px;">メニューグループマスター</button>
         <button name="6200" class="btn-primary" type="button" style="margin:10px;">メニューマスター</button>
         <br>
         {{-- 山下対応分 --}}
         <button name="0500" class="btn-primary" type="button" style="margin:10px;">担当割付候補マスター</button>
         <button name="0900" class="btn-primary" type="button" style="margin:10px;">機械割付候補マスター</button>
         <button name="1400" class="btn-primary" type="button" style="margin:10px;">得意先マスター</button>
+        <button name="1600" class="btn-primary" type="button" style="margin:10px;">得意先別納入先マスター</button><!--真鍋追加-->
         <button name="1800" class="btn-primary" type="button" style="margin:10px;">仕入外注先マスター</button>
         <button name="1900" class="btn-primary" type="button" style="margin:10px;">外注先手配候補マスター</button>
         <button name="2000" class="btn-primary" type="button" style="margin:10px;">メーカーマスター</button>
         <br>
         {{-- 工藤対応分 --}}
         <button name="0100" class="btn-primary" type="button" style="margin:10px;">事業部マスター</button>
+        <button name="3200" class="btn-primary" type="button" style="margin:10px;">構成ヘッダマスター</button>
+        <button name="6300" class="btn-primary" type="button" style="margin:10px;">請求マスター</button>
+        
+        <button name="6300" class="btn-primary" type="button" style="margin:10px;">請求マスタ</button>
         <button name="0300" class="btn-primary" type="button" style="margin:10px;">部署マスター</button>
         <button name="0800" class="btn-primary" type="button" style="margin:10px;">機械マスター</button>
         <br>
@@ -53,12 +68,18 @@
     </form>
         <br>
         <button name="3800" class="btn-primary" type="button" style="margin:10px;">受注入力</button>
+        {{-- 山下対応分 --}}
+        <button name="4000" class="btn-primary" type="button" style="margin:10px;">受注まとめ入力</button>
     </form>
-    <script>
+
+</div>
+<script>
+    $(function() {
         $('.btn-primary').click(function(event)
         {
             $('#targetPage')[0].value = $(this)[0].name;
             $('#frmMenu').submit();
         });
-    </script>
+    });
+</script>
 @endsection

@@ -1,7 +1,7 @@
 {{-- PHP処理 --}}
 <?php
     // 事業部親区分
-    define("JIGYOUBUOYA_KBN", array( '0:子',
+    define("JIGYOUBU_OYA_KBN", array( '0:子',
                                      '1:事業部コードのルート（親）'));
     // 「loginId」が送信されていなければ0を設定
     if(!isset($loginId)) $loginId = 0;
@@ -55,7 +55,7 @@
     <div class="form-column">
         {{-- 「事業部CD」 --}}
         <label>
-            <span style="width:4.5em;">{{__('jigyoubu_cd')}}</span>
+            <span style="width:6.1em;">{{__('jigyoubu_cd')}}</span>
             {{-- コード検査を行う項目は、スタイルクラス「code-check」を宣言 --}}
             <input name="dataJigyoubuCd" class="form-control code-check" type="text"
             maxlength="6" autocomplete="off" style="width:8em;" pattern="^([a-zA-Z0-9]{0,6})$" 
@@ -65,7 +65,7 @@
     <div class="form-column">
         {{-- 「事業部名」 --}}
         <label>
-            <span style="width:4.5em;">{{__('jigyoubu_name')}}</span>
+            <span style="width:6.1em;">{{__('jigyoubu_name')}}</span>
             <input name="dataJigyoubuName" class="form-control" type="text" maxlength="20" autocomplete="off"
                 style="width:22em;" required>
         </label>
@@ -75,9 +75,9 @@
         <label>
             <span style="width:4.5em;">{{__('jigyoubu_oya_kbn')}}</span>
             {{-- 「事業部親区分」コンボボックス本体 --}}
-            <div id="cmbJigyoubuoyaKbn" style="width:18em;"></div>
+            <div id="cmbJigyoubuOyaKbn" style="width:8em;"></div>
             {{-- 「事業部親区分」フォーム送信データ --}}
-            <input name="dataJigyoubuoyaKbn" type="hidden">
+            <input name="dataJigyoubuOyaKbn" type="hidden">
         </label>
     </div>
     <div class="form-column">
@@ -129,21 +129,21 @@
     {{-- -------------------- --}}
 
     {{-- 事業部親区分選択値 --}}
-    var jigyoubuoyaKbn = [];
+    var jigyoubuOyaKbn = [];
     {{-- 事業部親区分データ登録値 --}}
-    var jigyoubuoyaKbnValue = [];
+    var jigyoubuOyaKbnValue = [];
     {{-- 事業部親区分の元データに入力がある場合は選択値として格納 --}}
-    @for($i = 0;$i < count(JIGYOUBUOYA_KBN);$i++)
-        @if(JIGYOUBUOYA_KBN[$i] !== '')
-            jigyoubuoyaKbn.push('{{ JIGYOUBUOYA_KBN[$i] }}');
-            jigyoubuoyaKbnValue.push({{ $i }});
+    @for($i = 0;$i < count(JIGYOUBU_OYA_KBN);$i++)
+        @if(JIGYOUBU_OYA_KBN[$i] !== '')
+            jigyoubuOyaKbn.push('{{ JIGYOUBU_OYA_KBN[$i] }}');
+            jigyoubuOyaKbnValue.push({{ $i }});
         @endif
     @endfor
     {{-- コンボボックス宣言 --}}
-    var cmbJigyoubuoyaKbn = new wijmo.input.ComboBox('#cmbJigyoubuoyaKbn', { itemsSource: jigyoubuoyaKbn });
+    var cmbJigyoubuOyaKbn = new wijmo.input.ComboBox('#cmbJigyoubuOyaKbn', { itemsSource: jigyoubuOyaKbn });
 
     {{-- 有効期間（自） --}}
-    var dateStart = new wijmo.input.InputDate('#dataStartDate');
+    var dateStart = new wijmo.input.InputDate('#dataStartDate', {isRequired: false});
 
     {{-- ------- --}}
     {{-- 初期処理 --}}
@@ -161,13 +161,18 @@
         SetNyuryokuData(fncNyuryokuData);
         {{-- 「表示」ボタンイベント登録 ※common_function.js参照 --}}
         SetBtnHyouji(fncShowDataGrid);
-        {{-- 「CSV出力」ボタンイベント登録 ※common_function.js参照 --}}
-        SetBtnCSV(fncExportCSV);
+        /* 「Excel出力」ボタンイベント登録 ※common_function.js参照 */
+        SetBtnExcel(fncExportExcel);
 
         {{-- グリッド初期処理--}}
         InitGrid();
 
-        {{-- グリッドデータの表示 --}}
+        /* ボタン制御更新 */
+        SetEnableButton(0);
+        /* 件数更新 */
+        $("#zenkenCnt").html(0);
+
+        /* グリッドデータの表示 */
         $('#btnHyouji').click();
     }
     {{-- グリッド共有変数 --}}
@@ -208,9 +213,9 @@
                 cells: [
                     {
                         {{-- 「事業部親区分」 --}}
-                        binding: 'dataJigyoubuoyaKbn',
+                        binding: 'dataJigyoubuOyaKbn',
                         header : "{{ __('jigyoubu_oya_kbn') }}",
-                        width  : '1*'
+                        width  : '2*'
                     }
                 ]
                 
@@ -245,7 +250,39 @@
                         {{-- 「有効期間（至）」 --}}
                         binding: 'dataEndDate',
                         header: "{{ __('yukoukikan_end_date') }}",
-                        width: 150
+                        width: '1.5*'
+                    }
+                ]
+            },
+            {
+                /* 7列目 */
+                cells: [
+                    {
+                        /* 「登録日時」 */
+                        binding: 'dataTourokuDt',
+                        header: "{{ __('touroku_dt') }}",
+                        width: '1.8*'
+                    },
+                    {
+                        /* 「更新日時」 */
+                        binding: 'dataKoushinDt',
+                        header: "{{ __('koushin_dt') }}"
+                    }
+                ]
+            },
+            {
+                /* 8列目 */
+                cells: [
+                    {
+                        /* 「登録者名」 */
+                        binding: 'dataTourokushaName',
+                        header: "{{ __('tourokusha_name') }}",
+                        width: '1.2*'
+                    },
+                    {
+                        /* 「更新者名」 */
+                        binding: 'dataKoushinshaName',
+                        header: "{{ __('koushinsha_name') }}"
                     }
                 ]
             }
@@ -364,17 +401,21 @@
         {{-- 検索件数のデータ受信 --}}
         AjaxData("{{ url('/master/0100') }}", soushinData, fncJushinDataCnt);
     }
-    {{-- 「CSV出力」ボタンイベント --}}
-    var fncExportCSV = function()
+    /* 「Excel出力」ボタンイベント */
+    var fncExportExcel = function()
     {
-        {{-- CSV出力用グリッドのレイアウト設定 --}}
+        /* Excel出力用グリッドのレイアウト設定 */
         let columns = [{ binding: 'dataJigyoubuCd', header: "{{ __('jigyoubu_cd') }}" },
                        { binding: 'dataJigyoubuName', header: "{{ __('jigyoubu_name') }}" },
-                       { binding: 'dataJigyoubuoyaKbn', header : "{{ __('jigyoubu_oya_kbn') }}" },
+                       { binding: 'dataJigyoubuOyaKbn', header : "{{ __('jigyoubu_oya_kbn') }}" },
                        { binding: 'dataJigyoubuoyaCd', header: "{{ __('jigyoubu_oya_cd') }}" },
                        { binding: 'dataStartDate', header: "{{ __('yukoukikan_start_date') }}" },
-                       { binding: 'dataEndDate', header: "{{ __('yukoukikan_end_date') }}" }];
-        {{-- 現在のグリッドの並び替え条件取得 --}}
+                       { binding: 'dataEndDate', header: "{{ __('yukoukikan_end_date') }}" },
+                       { binding: 'dataTourokuDt', header: "{{ __('touroku_dt') }}" },
+                       { binding: 'dataTourokushaName', header: "{{ __('tourokusha_name') }}" },
+                       { binding: 'dataKoushinDt', header: "{{ __('koushin_dt') }}" },
+                       { binding: 'dataKoushinshaName', header: "{{ __('koushinsha_name') }}" }];
+        /* 現在のグリッドの並び替え条件取得 */
         let sortState = gridMaster.collectionView.sortDescriptions.map(
             function (sd)
             {
@@ -382,12 +423,12 @@
                 return { property: sd.property, ascending: sd.ascending }
             }
         );
-        {{-- CSV出力時の並び替え条件を設定 --}}
+        /* Excel出力時の並び替え条件を設定 */
         let sortDesc = new wijmo.collections.SortDescription(sortState[0].property, sortState[0].ascending);
-        {{-- CSVファイル作成
+        /* Excelファイル作成
              ※ファイル名は「ページタイトル+yyyymmddhhMMss（年月日時分秒）+.csv」
-             ※common_function.js参照 --}}
-        ExportCSVFile(gridMaster.itemsSource, columns, sortDesc, '{{ $pageTitle }}'+ getNowDateTime() +'.csv');
+             ※common_function.js参照 */
+        ExportExcelFile(gridMaster.itemsSource, columns, sortDesc, '{{ $pageTitle }}'+ getNowDateTime() +'.csv');
     }
     {{-- 「新規・参照新規・修正・削除」ボタンイベント
          ※mode → 入力ダイアログの操作、新規・修正・削除のどの処理で開いたかを判別する処理種別
@@ -409,7 +450,7 @@
         {{-- 「事業部名」 --}}
         nyuryokuData['dataJigyoubuName'].value = copy ? data['dataJigyoubuName'] : '';
         {{-- 「事業部親区分」 --}}
-        cmbJigyoubuoyaKbn.selectedIndex = (copy && !insertFlg) ? jigyoubuoyaKbnValue.indexOf(data['dataJigyoubuoyaKbn']) : 0;
+        cmbJigyoubuOyaKbn.selectedIndex = (copy && !insertFlg) ? jigyoubuOyaKbnValue.indexOf(data['dataJigyoubuOyaKbn']) : 0;
         {{-- 「事業部親CD」 --}}
         nyuryokuData['dataJigyoubuoyaCd'].value = copy ? data['dataJigyoubuoyaCd'] : '';
     
@@ -433,7 +474,7 @@
         {{-- 検索ボタン ※削除時のみ制限 --}}
         nyuryokuData['btnSanshou'].disabled = deleteFlg;
         nyuryokuData['dataJigyoubuName'].disabled = deleteFlg; {{-- 「事業部名」 --}}
-        cmbJigyoubuoyaKbn.isDisabled = deleteFlg; {{-- 「事業部親区分」 --}}
+        cmbJigyoubuOyaKbn.isDisabled = deleteFlg; {{-- 「事業部親区分」 --}}
         nyuryokuData['dataJigyoubuoyaCd'].disabled = deleteFlg;  {{-- 「事業部親CD」 --}}
         dateStart.isDisabled = deleteFlg;    {{-- 「有効期間（自）」 --}}
 
@@ -450,13 +491,16 @@
     {{-- データグリッド更新 --}}
     var fncJushinGridData = function(data, errorFlg)
     {
+        console.log(data)
         {{-- 「データ更新中」非表示 --}}
         ClosePopupDlg();
         {{-- データエラー判定 ※common_function.js参照 --}}
         if(IsAjaxDataError(data, errorFlg)) return;
-        {{-- ボタン制御更新 --}}
+        /* ボタン制御更新 */
         SetEnableButton(data[1].length);
-        {{-- グリッドデータ反映＆並び順と選択位置保持 ※common_function.js参照 --}}
+        /* 件数更新 */
+        $("#zenkenCnt").html(data[1].length);
+        /* グリッドデータ反映＆並び順と選択位置保持 ※common_function.js参照 */
         selectedRows = SortMultiRowData(gridMaster, data[1], 'dataJigyoubuCd');
     }
 
@@ -532,7 +576,7 @@
             {{-- 「事業部名」 --}}
             if(nyuryokuData['dataJigyoubuName'].value != data['dataJigyoubuName']) return true;
             {{-- 「事業部親区分」 --}}
-            if(jigyoubuoyaKbnValue[cmbJigyoubuoyaKbn.selectedIndex] != data['dataJigyoubuKbn']) return true;
+            if(jigyoubuOyaKbnValue[cmbJigyoubuOyaKbn.selectedIndex] != data['dataJigyoubuKbn']) return true;
             {{-- 「事業部親CD」 --}}
             if((nyuryokuData['dataJigyoubuoyaCd'].value != data['dataJigyoubuoyaCd']) &&
               !(nyuryokuData['dataJigyoubuoyaCd'].value == '' && data['dataJigyoubuoyaCd'] == null)) return true;
@@ -559,7 +603,7 @@
             return;
         }
         {{-- 事業部親区分のコンボボックスの値取得 --}}
-        nyuryokuData['dataJigyoubuoyaKbn'].value = jigyoubuoyaKbnValue[cmbJigyoubuoyaKbn.selectedIndex];
+        nyuryokuData['dataJigyoubuOyaKbn'].value = jigyoubuOyaKbnValue[cmbJigyoubuOyaKbn.selectedIndex];
         {{-- POST送信用オブジェクト配列 --}}
         let soushinData = {};
         {{-- フォーム要素から送信データを格納 --}}

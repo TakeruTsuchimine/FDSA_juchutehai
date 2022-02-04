@@ -19,28 +19,28 @@
     <div class="form-column" style="width:50%;">
         {{-- 「受注日」 --}}
         <label>
-            <span style="width:4.5em; margin-right:5px;">{{__('juchu_date')}}</span>
+            <span style="width:6em; margin-right:5px;">{{__('juchu_date')}}</span>
             <input id="dataJuchuStartDate" name="dataJuchuStartDate" type="hidden" style="width:9em;">
             <span style="margin:0 5px;">～</span>
             <input id="dataJuchuEndDate" name="dataJuchuEndDate" type="hidden" style="width:9em;">
         </label>
         {{-- 「納期」 --}}
         <label>
-            <span style="width:4.5em; margin-right:5px;">{{__('nouki_date')}}</span>
+            <span style="width:6em; margin-right:5px;">{{__('nouki_date')}}</span>
             <input id="dataNoukiStartDate" name="dataNoukiStartDate" type="hidden" style="width:9em;">
             <span style="margin:0 5px;">～</span>
             <input id="dataNoukiEndDate" name="dataNoukiEndDate" type="hidden" style="width:9em;">
         </label>
         {{-- 「受注番号」 --}}
         <label>
-            <span style="width:4.5em;">{{__('juchu_no')}}</span>
+            <span style="width:6em;">{{__('juchu_no')}}</span>
             <input name="dataStartJuchuNo" class="form-control" type="text" style="width:14em;">
             <span style="margin:0 5px;">～</span>
             <input name="dataEndJuchuNo" class="form-control" type="text" style="width:14em;">
         </label>
         {{-- 「客先注文番号」 --}}
         <label>
-            <span style="width:7.5em;">{{__('tokuisaki_chumon_no')}}</span>
+            <span style="width:6em;">{{__('tokuisaki_chumon_no')}}</span>
             <input name="dataChumonNo" class="form-control" type="text" maxlength="30" autocomplete="off"
                 style="width:27em;">
         </label>
@@ -91,280 +91,411 @@
 @endsection
 
 {{-- 「入力ダイアログ」 --}}
-@section('nyuryoku')
-{{-- 入力フォーム全体 --}}
-<div class="flex-box" style="padding:5px 10px;">
-    <div class="form-column">
-        <div class="form-column">
-            {{-- 「受注日」 --}}
-            <label>
-                <span style="width:4.5em; margin-right:5px;">{{__('juchu_date')}}</span>
-                <input id="dataJuchuDate" name="dataJuchuDate" type="hidden">
-            </label>
-        </div>
-        <div class="form-column">
-            {{-- 「受注番号」 --}}
-            <label>
-                <span style="width:4.5em;">{{__('juchu_no')}}</span>
-                {{-- コード検査を行う項目は、スタイルクラス「code-check」を宣言 --}}
-                <input name="dataJuchuNo" class="form-control code-check" type="text" maxlength="20" autocomplete="off"
-                    style="width:22em;" pattern="^([a-zA-Z0-9]{0,20})$"
-                    title="{{ __('半角英数字') }}20{{ __('文字以内で入力してください') }}" required>
-            </label>
-        </div>
-        <div class="form-column">
-            {{-- 「得意先CD」 --}}
-            <label>
-                <span style="width:4.5em;">{{__('tokuisaki_cd')}}</span>
-                <span class="icon-field"> {{-- アイコンボタンを設置する入力項目は、スタイルクラス「icon-field」を宣言 --}}
+@section('nyuryoku')     
+<!-- 入力フォーム全体 -->
+<div class="flex-box flex-column" style="padding:5px 10px;">
+    <!-- 基本設定 -->
+    <div class="flex-box flex-between item-start">
+    <!-- 一列目 -->
+        <div class="flex-box flex-start flex-column item-start">
+            <div class="form-column">
+                {{-- 「受注日」 --}}
+                <label>
+                    <span style="width:5.5em; margin-right:5px;">{{__('juchu_date')}}</span>
+                    <input id="dataJuchuDate" name="dataJuchuDate" type="hidden">
+                </label>
+            </div>
+            <div class="form-column">
+                {{-- 「受注番号」 --}}
+                <label>
+                    <span style="width:5.5em;">{{__('juchu_no')}}</span>
                     {{-- コード検査を行う項目は、スタイルクラス「code-check」を宣言 --}}
-                    <input id="dataTokuisakiCd" name="dataTokuisakiCd" class="form-control code-check" type="text" maxlength="10"
-                        autocomplete="off" style="width:8em;" pattern="^([a-zA-Z0-9]{0,10})$"
-                        title="{{ __('半角英数字') }}10{{ __('文字以内で入力してください') }}">
-                    {{-- 検索アイコンは、スタイルクラス「search-btn」を宣言 --}}
-                    <i class="fas fa-search search-btn"></i>
-                </span>
-                {{-- フォーカス時のイベントを「onfocus="blur();"」に設定してフォーカス対象を無効にする --}}
-                <input name="dataTokuisakiName" class="form-control" type="text" style="width:30em;" onfocus="blur();"
-                    readonly>
-            </label>
+                    <input name="dataJuchuNo" class="form-control code-check" type="text" maxlength="20" autocomplete="off"
+                        style="width:22em;" pattern="^([a-zA-Z0-9]{0,20})$"
+                        title="{{ __('半角英数字') }}20{{ __('文字以内で入力してください') }}" required>
+                </label>
+            </div>
+            <div class="form-column">
+                {{-- 「事業部CD」 --}}
+                <label>
+                    <span style="width:5.5em;">{{__('jigyoubu_cd')}}</span>
+                    <span class="icon-field"> {{-- アイコンボタンを設置する入力項目は、スタイルクラス「icon-field」を宣言 --}}
+                        {{-- コード検査を行う項目は、スタイルクラス「code-check」を宣言 --}}
+                        <input id="dataJigyoubuCd" name="dataJigyoubuCd" class="form-control code-check" type="text" maxlength="10"
+                            autocomplete="off" style="width:8em;" pattern="^([a-zA-Z0-9]{0,10})$"
+                            title="{{ __('半角英数字') }}10{{ __('文字以内で入力してください') }}" required>
+                        {{-- 検索アイコンは、スタイルクラス「search-btn」を宣言 --}}
+                        <i class="fas fa-search search-btn"></i>
+                    </span>
+                    {{-- フォーカス時のイベントを「onfocus="blur();"」に設定してフォーカス対象を無効にする --}}
+                    <input name="dataJigyoubuName" class="form-control" type="text" style="width:28em;" onfocus="blur();"
+                        readonly>
+                </label>
+            </div>
+            <div class="form-column">
+                {{-- 「業務取引区分CD」 --}}
+                <label>
+                    <span style="width:5.5em;">{{__('job_cd')}}</span>
+                    <span class="icon-field"> {{-- アイコンボタンを設置する入力項目は、スタイルクラス「icon-field」を宣言 --}}
+                        {{-- コード検査を行う項目は、スタイルクラス「code-check」を宣言 --}}
+                        <input id="dataJobCd" name="dataJobCd" class="form-control code-check" type="text" maxlength="10"
+                            autocomplete="off" style="width:8em;" pattern="^([a-zA-Z0-9]{0,10})$"
+                            title="{{ __('半角英数字') }}10{{ __('文字以内で入力してください') }}" required>
+                        {{-- 検索アイコンは、スタイルクラス「search-btn」を宣言 --}}
+                        <i class="fas fa-search search-btn"></i>
+                    </span>
+                    {{-- フォーカス時のイベントを「onfocus="blur();"」に設定してフォーカス対象を無効にする --}}
+                    <input name="dataJobName" class="form-control" type="text" style="width:28em;" onfocus="blur();"
+                        readonly>
+                </label>
+            </div>
+            <div class="form-column">
+                {{-- 「得意先CD」 --}}
+                <label>
+                    <span style="width:5.8em;">{{__('tokuisaki_cd')}}</span>
+                    <span class="icon-field"> {{-- アイコンボタンを設置する入力項目は、スタイルクラス「icon-field」を宣言 --}}
+                        {{-- コード検査を行う項目は、スタイルクラス「code-check」を宣言 --}}
+                        <input id="dataTokuisakiCd" name="dataTokuisakiCd" class="form-control code-check" type="text" maxlength="10"
+                            autocomplete="off" style="width:8em;" pattern="^([a-zA-Z0-9]{0,10})$"
+                            title="{{ __('半角英数字') }}10{{ __('文字以内で入力してください') }}">
+                        {{-- 検索アイコンは、スタイルクラス「search-btn」を宣言 --}}
+                        <i class="fas fa-search search-btn"></i>
+                    </span>
+                    {{-- フォーカス時のイベントを「onfocus="blur();"」に設定してフォーカス対象を無効にする --}}
+                    <input name="dataTokuisakiName" class="form-control" type="text" style="width:28em;" onfocus="blur();"
+                        readonly>
+                </label>
+            </div>
+            <div class="form-column">
+                {{-- 「納入先CD」 --}}
+                <label>
+                    <span style="width:5.8em;">{{__('nounyusaki_cd')}}</span>
+                    <span class="icon-field"> {{-- アイコンボタンを設置する入力項目は、スタイルクラス「icon-field」を宣言 --}}
+                        {{-- コード検査を行う項目は、スタイルクラス「code-check」を宣言 --}}
+                        <input id="dataNounyusakiCd" name="dataNounyusakiCd" class="form-control code-check" type="text" maxlength="10"
+                            autocomplete="off" style="width:8em;" pattern="^([a-zA-Z0-9]{0,10})$"
+                            title="{{ __('半角英数字') }}10{{ __('文字以内で入力してください') }}">
+                        {{-- 検索アイコンは、スタイルクラス「search-btn」を宣言 --}}
+                        <i class="fas fa-search search-btn"></i>
+                    </span>
+                    {{-- フォーカス時のイベントを「onfocus="blur();"」に設定してフォーカス対象を無効にする --}}
+                    <input id="dataNounyusakiName" name="dataNounyusakiName" class="form-control" type="text" style="width:28em;"
+                            onfocus="blur();" readonly>
+                </label>
+            </div>
+            <div class="form-column">
+                {{-- 「品目CD」 --}}
+                <label>
+                    <span style="width:5.8em;">{{__('hinmoku_cd')}}</span>
+                    <span class="icon-field"> {{-- アイコンボタンを設置する入力項目は、スタイルクラス「icon-field」を宣言 --}}
+                        {{-- コード検査を行う項目は、スタイルクラス「code-check」を宣言 --}}
+                        <input name="dataHinmokuCd" class="form-control code-check" type="text" maxlength="10"
+                            autocomplete="off" style="width:8em;" pattern="^([a-zA-Z0-9]{0,10})$"
+                            title="{{ __('半角英数字') }}10{{ __('文字以内で入力してください') }}">
+                        {{-- 検索アイコンは、スタイルクラス「search-btn」を宣言 --}}
+                        <i class="fas fa-search search-btn"></i>
+                    </span>
+                    {{-- フォーカス時のイベントを「onfocus="blur();"」に設定してフォーカス対象を無効にする --}}
+                    <input name="dataHinmokuName" class="form-control" type="text" style="width:28em;" onfocus="blur();"
+                        readonly>
+                </label>
+            </div>
         </div>
-        <div class="form-column">
-            {{-- 「納入先CD」 --}}
-            <label>
-                <span style="width:4.5em;">{{__('nounyusaki_cd')}}</span>
-                <span class="icon-field"> {{-- アイコンボタンを設置する入力項目は、スタイルクラス「icon-field」を宣言 --}}
-                    {{-- コード検査を行う項目は、スタイルクラス「code-check」を宣言 --}}
-                    <input id="dataNounyusakiCd" name="dataNounyusakiCd" class="form-control code-check" type="text" maxlength="10"
-                        autocomplete="off" style="width:8em;" pattern="^([a-zA-Z0-9]{0,10})$"
-                        title="{{ __('半角英数字') }}10{{ __('文字以内で入力してください') }}">
-                    {{-- 検索アイコンは、スタイルクラス「search-btn」を宣言 --}}
-                    <i class="fas fa-search search-btn"></i>
-                </span>
-                {{-- フォーカス時のイベントを「onfocus="blur();"」に設定してフォーカス対象を無効にする --}}
-                <input id="dataNounyusakiName" name="dataNounyusakiName" class="form-control" type="text" style="width:30em;"
-                       onfocus="blur();" readonly>
-            </label>
-        </div>
-        <div class="form-column">
-            {{-- 「営業担当」 --}}
-            <label>
-                <span style="width:6em;">{{__('eigyou_tantousha_cd')}}</span>
-                <span class="icon-field"> {{-- アイコンボタンを設置する入力項目は、スタイルクラス「icon-field」を宣言 --}}
-                    {{-- コード検査を行う項目は、スタイルクラス「code-check」を宣言 --}}
-                    <input name="dataEigyouCd" class="form-control code-check" type="text" maxlength="10"
-                        autocomplete="off" style="width:8em;" pattern="^([a-zA-Z0-9]{0,10})$"
-                        title="{{ __('半角英数字') }}10{{ __('文字以内で入力してください') }}">
-                    {{-- 検索アイコンは、スタイルクラス「search-btn」を宣言 --}}
-                    <i class="fas fa-search search-btn"></i>
-                </span>
-                {{-- フォーカス時のイベントを「onfocus="blur();"」に設定してフォーカス対象を無効にする --}}
-                <input name="dataEigyouName" class="form-control" type="text" style="width:15em;" onfocus="blur();"
-                    readonly>
-            </label>
-        </div>
-        <div class="form-column">
-            {{-- 「アシスタントCD」 --}}
-            <label>
-                <span style="width:6em;">{{__('assistant_cd')}}</span>
-                <span class="icon-field"> {{-- アイコンボタンを設置する入力項目は、スタイルクラス「icon-field」を宣言 --}}
-                    {{-- コード検査を行う項目は、スタイルクラス「code-check」を宣言 --}}
-                    <input name="dataAssistantCd" class="form-control code-check" type="text" maxlength="10"
-                        autocomplete="off" style="width:8em;" pattern="^([a-zA-Z0-9]{0,10})$"
-                        title="{{ __('半角英数字') }}10{{ __('文字以内で入力してください') }}">
-                    {{-- 検索アイコンは、スタイルクラス「search-btn」を宣言 --}}
-                    <i class="fas fa-search search-btn"></i>
-                </span>
-                {{-- フォーカス時のイベントを「onfocus="blur();"」に設定してフォーカス対象を無効にする --}}
-                <input name="dataAssistantName" class="form-control" type="text" style="width:15em;" onfocus="blur();"
-                    readonly>
-            </label>
-        </div>
-        <div class="form-column">
-            {{-- 「客先注番1」 --}}
-            <label>
-                <span style="width:5em;">{{__('tokuisaki_chumon_no1')}}</span>
-                <input name="dataChumonNo1" class="form-control" type="text" maxlength="30" autocomplete="off"
-                    style="width:33em;" pattern="^([a-zA-Z0-9]{0,30})$"
-                    title="{{ __('半角英数字') }}30{{ __('文字以内で入力してください') }}">
-            </label>
-        </div>
-        <div class="form-column">
-            {{-- 「客先注番2」 --}}
-            <label>
-                <span style="width:5em;">{{__('tokuisaki_chumon_no2')}}</span>
-                <input name="dataChumonNo2" class="form-control" type="text" maxlength="30" autocomplete="off"
-                    style="width:33em;" pattern="^([a-zA-Z0-9]{0,30})$"
-                    title="{{ __('半角英数字') }}30{{ __('文字以内で入力してください') }}">
-            </label>
-        </div>
-        <div class="form-column">
-            {{-- 「客先品番」 --}}
-            <label>
-                <span style="width:5em;">{{__('tokuisaki_chumon_no3')}}</span>
-                <input name="dataChumonNo3" class="form-control" type="text" maxlength="30" autocomplete="off"
-                    style="width:33em;" pattern="^([a-zA-Z0-9]{0,30})$"
-                    title="{{ __('半角英数字') }}30{{ __('文字以内で入力してください') }}">
-            </label>
-        </div>
-        <div class="form-column">
-            {{-- 「品目CD」 --}}
-            <label>
-                <span style="width:4.5em;">{{__('hinmoku_cd')}}</span>
-                <span class="icon-field"> {{-- アイコンボタンを設置する入力項目は、スタイルクラス「icon-field」を宣言 --}}
-                    {{-- コード検査を行う項目は、スタイルクラス「code-check」を宣言 --}}
-                    <input name="dataHinmokuCd" class="form-control code-check" type="text" maxlength="10"
-                        autocomplete="off" style="width:8em;" pattern="^([a-zA-Z0-9]{0,10})$"
-                        title="{{ __('半角英数字') }}10{{ __('文字以内で入力してください') }}">
-                    {{-- 検索アイコンは、スタイルクラス「search-btn」を宣言 --}}
-                    <i class="fas fa-search search-btn"></i>
-                </span>
-                {{-- フォーカス時のイベントを「onfocus="blur();"」に設定してフォーカス対象を無効にする --}}
-                <input name="dataHinmokuName" class="form-control" type="text" style="width:30em;" onfocus="blur();"
-                    readonly>
-            </label>
-        </div>
-        <div class="form-column">
-            {{-- 「単位CD」 --}}
-            <label>
-                <span style="width:4.5em;">{{__('tani_cd')}}</span>
-                <span class="icon-field"> {{-- アイコンボタンを設置する入力項目は、スタイルクラス「icon-field」を宣言 --}}
-                    {{-- コード検査を行う項目は、スタイルクラス「code-check」を宣言 --}}
-                    <input name="dataTaniCd" class="form-control code-check" type="text" maxlength="10"
-                        autocomplete="off" style="width:8em;" pattern="^([a-zA-Z0-9]{0,10})$"
-                        title="{{ __('半角英数字') }}10{{ __('文字以内で入力してください') }}">
-                    {{-- 検索アイコンは、スタイルクラス「search-btn」を宣言 --}}
-                    <i class="fas fa-search search-btn"></i>
-                </span>
-                {{-- フォーカス時のイベントを「onfocus="blur();"」に設定してフォーカス対象を無効にする --}}
-                <input name="dataTaniName" class="form-control" type="text" style="width:12em;" onfocus="blur();"
-                    readonly>
-            </label>
-        </div>
-        <div class="form-column">
-            {{-- 「希望納期」 --}}
-            <label>
-                <span style="width:5.5em;">{{__('nouki_date')}}</span>
-                <input id="dataNoukiDate" name="dataNoukiDate" type="hidden">
-            </label>
-        </div>
-        <div class="form-column">
-            {{-- 「出荷予定日」 --}}
-            <label>
-                <span style="width:5.5em;">{{__('shukka_date')}}</span>
-                <input id="dataShukkaDate" name="dataShukkaDate" type="hidden">
-            </label>
+        <!-- 二列目 -->
+        <div class="flex-box flex-start flex-column item-start" style="padding-left:10px; width:28em;">
+            <div class="form-column">
+                {{-- 「直送先名」 --}}
+                <label>
+                    <span style="width:9.7em;">{{__('chokusousaki_name')}}</span>
+                    <input name="dataChokusousakiName" class="form-control code-check" type="text" maxlength="20" autocomplete="off"></input>
+                </label>
+            </div>
+            <div class="form-column">
+                {{-- 「直送先住所」 --}}
+                <label>
+                    <span style="width:9.7em;">{{__('chokusousaki_jusho')}}</span>
+                    <input name="dataChokusousakiJusho" class="form-control code-check" type="text" maxlength="20" autocomplete="off"></input>
+                </label>
+            </div>
+            <div class="form-column">
+                {{-- 「単位CD」 --}}
+                <label>
+                    <span style="width:6.5em;">{{__('tani_cd')}}</span>
+                    <span class="icon-field"> {{-- アイコンボタンを設置する入力項目は、スタイルクラス「icon-field」を宣言 --}}
+                        {{-- コード検査を行う項目は、スタイルクラス「code-check」を宣言 --}}
+                        <input name="dataTaniCd" class="form-control code-check" type="text" maxlength="10"
+                            autocomplete="off" style="width:8em;" pattern="^([a-zA-Z0-9]{0,10})$"
+                            title="{{ __('半角英数字') }}10{{ __('文字以内で入力してください') }}">
+                        {{-- 検索アイコンは、スタイルクラス「search-btn」を宣言 --}}
+                        <i class="fas fa-search search-btn"></i>
+                    </span>
+                    {{-- フォーカス時のイベントを「onfocus="blur();"」に設定してフォーカス対象を無効にする --}}
+                    <input name="dataTaniName" class="form-control" type="text" style="width:12em;" onfocus="blur();"
+                        readonly>
+                </label>
+            </div>
+            <div class="form-column">
+                {{-- 「営業担当者CD」 --}}
+                <label>
+                    <span style="width:6.5em;">{{__('eigyou_tantousha_cd')}}</span>
+                    <span class="icon-field"> {{-- アイコンボタンを設置する入力項目は、スタイルクラス「icon-field」を宣言 --}}
+                        {{-- コード検査を行う項目は、スタイルクラス「code-check」を宣言 --}}
+                        <input name="dataEigyouCd" class="form-control code-check" type="text" maxlength="10"
+                            autocomplete="off" style="width:8em;" pattern="^([a-zA-Z0-9]{0,10})$"
+                            title="{{ __('半角英数字') }}10{{ __('文字以内で入力してください') }}">
+                        {{-- 検索アイコンは、スタイルクラス「search-btn」を宣言 --}}
+                        <i class="fas fa-search search-btn"></i>
+                    </span>
+                    {{-- フォーカス時のイベントを「onfocus="blur();"」に設定してフォーカス対象を無効にする --}}
+                    <input name="dataEigyouName" class="form-control" type="text" style="width:12em;" onfocus="blur();"
+                        readonly>
+                </label>
+            </div>
+            <div class="form-column">
+                {{-- 「アシスタントCD」 --}}
+                <label>
+                    <span style="width:6.5em;">{{__('assistant_cd')}}</span>
+                    <span class="icon-field"> {{-- アイコンボタンを設置する入力項目は、スタイルクラス「icon-field」を宣言 --}}
+                        {{-- コード検査を行う項目は、スタイルクラス「code-check」を宣言 --}}
+                        <input name="dataAssistantCd" class="form-control code-check" type="text" maxlength="10"
+                            autocomplete="off" style="width:8em;" pattern="^([a-zA-Z0-9]{0,10})$"
+                            title="{{ __('半角英数字') }}10{{ __('文字以内で入力してください') }}">
+                        {{-- 検索アイコンは、スタイルクラス「search-btn」を宣言 --}}
+                        <i class="fas fa-search search-btn"></i>
+                    </span>
+                    {{-- フォーカス時のイベントを「onfocus="blur();"」に設定してフォーカス対象を無効にする --}}
+                    <input name="dataAssistantName" class="form-control" type="text" style="width:12em;" onfocus="blur();"
+                        readonly>
+                </label>
+            </div>
+            <div class="form-column">
+                {{-- 「配送便CD」 --}}
+                <label>
+                    <span style="width:6.5em;">{{__('haisoubin_cd')}}</span>
+                    <span class="icon-field"> {{-- アイコンボタンを設置する入力項目は、スタイルクラス「icon-field」を宣言 --}}
+                        {{-- コード検査を行う項目は、スタイルクラス「code-check」を宣言 --}}
+                        <input name="dataHaisoubinCd" class="form-control code-check" type="text" maxlength="10"
+                            autocomplete="off" style="width:8em;" pattern="^([a-zA-Z0-9]{0,10})$"
+                            title="{{ __('半角英数字') }}10{{ __('文字以内で入力してください') }}">
+                        {{-- 検索アイコンは、スタイルクラス「search-btn」を宣言 --}}
+                        <i class="fas fa-search search-btn"></i>
+                    </span>
+                    {{-- フォーカス時のイベントを「onfocus="blur();"」に設定してフォーカス対象を無効にする --}}
+                    <input name="dataHaisoubinName" class="form-control" type="text" style="width:12em;" onfocus="blur();"
+                        readonly>
+                </label>
+            </div>
         </div>
     </div>
-    <div class="form-column" style="margin-left: 10px;">
-        <div class="form-column">
-            {{-- 「受注数」 --}}
-            <label>
-                <span style="width:4.5em;">{{__('juchu_qty')}}</span>
-                {{-- 「受注数」コントロール本体 --}}
-                <div id="numJuchuQty"></div>
-                <input name="dataJuchuQty" type="hidden">
-            </label>
+    <div class="tabs">
+        <input id="tab0" type="radio" name="tab_item" checked>
+        <label class="tab_item" for="tab0" style="width:32%; display: flex; justify-content: space-between; 
+            margin-left: 1%; padding-left: 1%;">受注</label>
+        <input id="tab1" type="radio" name="tab_item">
+        <label class="tab_item" for="tab1" style="width:32%; display: flex; justify-content: space-between; 
+            margin-left: 1%; padding-left: 1%;">客先注番・品番</label>
+        <input id="tab2" type="radio" name="tab_item">
+        <label class="tab_item" for="tab2" style="width:32%; display: flex; justify-content: space-between; 
+            margin-left: 1%; padding-left: 1%;">その他</label>
+            
+        <!-- tab0 -->
+        <div class="tab_content" id="tab0_content">
+            <div class="flex-box flex-between item-start">
+                <!-- 一列目 -->
+                <div class="flex-box flex-start flex-column item-start">   
+                    <div class="form-column">
+                        {{-- 「受注数」 --}}
+                        <label>
+                            <span style="width:4.5em;">{{__('juchu_qty')}}</span>
+                            {{-- 「受注数」コントロール本体 --}}
+                            <div id="numJuchuQty"></div>
+                            <input name="dataJuchuQty" type="hidden">
+                        </label>
+                    </div>
+                    <div class="form-column">
+                        {{-- 「受注単価」 --}}
+                        <label>
+                            <span style="width:4.5em;">{{__('juchu_tanka')}}</span>
+                            {{-- 「受注単価」コントロール本体 --}}
+                            <div id="numJuchuTanka"></div>
+                            <input name="dataJuchuTanka" type="hidden">
+                        </label>
+                    </div>
+                    <div class="form-column">
+                        {{-- 「受注金額」 --}}
+                        <label>
+                            <span style="width:4.5em;">{{__('juchu_kin')}}</span>
+                            {{-- 「受注金額」コントロール本体 --}}
+                            <div id="numJuchuKin"></div>
+                            <input name="dataJuchuKin" type="hidden">
+                        </label>
+                    </div>
+                    <div class="form-column">
+                        {{-- 「手配数量」 --}}
+                        <label>
+                            <span style="width:4.5em;">{{__('tehai_qty')}}</span>
+                            {{-- 「手配数量」コントロール本体 --}}
+                            <div id="numTehaiQty"></div>
+                            <input name="dataTehaiQty" type="hidden">
+                        </label>
+                    </div>
+                </div>
+                <!-- 二列目 -->
+                <div class="flex-box flex-start flex-column item-start" style="padding-left:10px; width:30em;">
+                    <div class="form-column">
+                        {{-- 「仮単価区分」 --}}
+                        <label>
+                            <span style="width:5.5em;">{{__('karitanka_kbn')}}</span>
+                            {{-- 「仮単価区分」コンボボックス本体 --}}
+                            <div id="cmbKaritankaKbn" style="width:10em;"></div>
+                            {{-- 「仮単価区分」フォーム送信データ --}}
+                            <input name="dataKaritankaKbn" type="hidden">
+                        </label>
+                    </div>
+                    <div class="form-column">
+                        {{-- 「受注区分」 --}}
+                        <label>
+                            <span style="width:5.5em;">{{__('juchu_kbn')}}</span>
+                            {{-- 「受注区分」コンボボックス本体 --}}
+                            <div id="cmbJuchuKbn" style="width:10em;"></div>
+                            {{-- 「受注区分」フォーム送信データ --}}
+                            <input name="dataJuchuKbn" type="hidden">
+                        </label>
+                    </div>
+                    <div class="form-column">
+                        {{-- 「まとめ区分」 --}}
+                        <label>
+                            <span style="width:5.5em;">{{__('matome_kbn')}}</span>
+                            {{-- 「受注区分」コンボボックス本体 --}}
+                            <div id="cmbMatomeKbn" style="width:10em;"></div>
+                            {{-- 「受注区分」フォーム送信データ --}}
+                            <input name="dataMatomeKbn" type="hidden">
+                        </label>
+                    </div>
+                    <div class="form-column">
+                        {{-- 「製造指示_no」 --}}
+                        <label>
+                            <span style="width:5.5em;">{{__('seizou_shiji_no')}}</span>
+                            {{-- コード検査を行う項目は、スタイルクラス「code-check」を宣言 --}}
+                            <input name="dataSeizouShijiNo" class="form-control code-check" type="text" maxlength="20" autocomplete="off"
+                                style="width:20em;">
+                        </label>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="form-column">
-            {{-- 「受注単価」 --}}
-            <label>
-                <span style="width:4.5em;">{{__('juchu_tanka')}}</span>
-                {{-- 「受注単価」コントロール本体 --}}
-                <div id="numJuchuTanka"></div>
-                <input name="dataJuchuTanka" type="hidden">
-            </label>
+
+        <!-- tab1 -->
+        <div class="tab_content " id="tab1_content">
+            <div class="flex-box flex-between item-start">
+                <!-- 一列目 -->
+                <div class="flex-box flex-start flex-column item-start">   
+                    <div class="form-column">
+                        {{-- 「客先注番1」 --}}
+                        <label>
+                            <span style="width:5em;">{{__('tokuisaki_chumon_no1')}}</span>
+                            <input name="dataChumonNo1" class="form-control" type="text" maxlength="30" autocomplete="off"
+                                style="width:33em;" pattern="^([a-zA-Z0-9]{0,30})$"
+                                title="{{ __('半角英数字') }}30{{ __('文字以内で入力してください') }}">
+                        </label>
+                    </div>
+                    <div class="form-column">
+                        {{-- 「客先注番2」 --}}
+                        <label>
+                            <span style="width:5em;">{{__('tokuisaki_chumon_no2')}}</span>
+                            <input name="dataChumonNo2" class="form-control" type="text" maxlength="30" autocomplete="off"
+                                style="width:33em;" pattern="^([a-zA-Z0-9]{0,30})$"
+                                title="{{ __('半角英数字') }}30{{ __('文字以内で入力してください') }}">
+                        </label>
+                    </div>
+                    <div class="form-column">
+                        {{-- 「客先品番」 --}}
+                        <label>
+                            <span style="width:5em;">{{__('tokuisaki_chumon_no3')}}</span>
+                            <input name="dataChumonNo3" class="form-control" type="text" maxlength="30" autocomplete="off"
+                                style="width:33em;" pattern="^([a-zA-Z0-9]{0,30})$"
+                                title="{{ __('半角英数字') }}30{{ __('文字以内で入力してください') }}">
+                        </label>
+                    </div>
+                </div>
+                <!-- 二列目 -->
+                <div class="flex-box flex-start flex-column item-start" style="padding-left:10px; width:30em;">
+                    
+                </div>
+            </div>
         </div>
-        <div class="form-column">
-            {{-- 「受注金額」 --}}
-            <label>
-                <span style="width:4.5em;">{{__('juchu_kin')}}</span>
-                {{-- 「受注金額」コントロール本体 --}}
-                <div id="numJuchuKin"></div>
-                <input name="dataJuchuKin" type="hidden">
-            </label>
+
+        <!-- tab2 -->
+        <div class="tab_content" id="tab2_content">
+            <div class="flex-box flex-between item-start">
+                <!-- 一列目 -->
+                <div class="flex-box flex-start flex-column item-start">   
+                    <div class="form-column">
+                        {{-- 「備考1」 --}}
+                        <label style="height:3.5em;">
+                            <span style="width:4.5em;">{{__('notes1')}}</span>
+                            <textarea name="dataNote1" class="form-control" maxlength="120" autocomplete="off"></textarea>
+                        </label>
+                    </div>
+                    <div class="form-column">
+                        {{-- 「備考2」 --}}
+                        <label style="height:3.5em;">
+                            <span style="width:4.5em;">{{__('notes2')}}</span>
+                            <textarea name="dataNote2" class="form-control" maxlength="60" autocomplete="off"></textarea>
+                        </label>
+                    </div>
+                    <div class="form-column">
+                        {{-- 「備考3」 --}}
+                        <label style="height:3.5em;">
+                            <span style="width:4.5em;">{{__('notes3')}}</span>
+                            <textarea name="dataNote3" class="form-control" maxlength="60" autocomplete="off"></textarea>
+                        </label>
+                    </div>
+                </div>
+                <!-- 二列目 -->
+                <div class="flex-box flex-start flex-column item-start" style="padding-left:10px; width:30em;">
+                    <div class="form-column">
+                        {{-- 「希望納期」 --}}
+                        <label>
+                            <span style="width:5.5em;">{{__('nouki_date')}}</span>
+                            <input id="dataNoukiDate" name="dataNoukiDate" type="hidden">
+                        </label>
+                    </div>
+                    <div class="form-column">
+                        {{-- 「出荷予定日」 --}}
+                        <label>
+                            <span style="width:5.5em;">{{__('shukka_date')}}</span>
+                            <input id="dataShukkaDate" name="dataShukkaDate" type="hidden">
+                        </label>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="form-column">
-            {{-- 「仮単価区分」 --}}
-            <label>
-                <span style="width:5.5em;">{{__('karitanka_kbn')}}</span>
-                {{-- 「仮単価区分」コンボボックス本体 --}}
-                <div id="cmbKaritankaKbn" style="width:10em;"></div>
-                {{-- 「仮単価区分」フォーム送信データ --}}
-                <input name="dataKaritankaKbn" type="hidden">
-            </label>
-        </div>
-        <div class="form-column">
-            {{-- 「受注区分」 --}}
-            <label>
-                <span style="width:5.5em;">{{__('juchu_kbn')}}</span>
-                {{-- 「受注区分」コンボボックス本体 --}}
-                <div id="cmbJuchuKbn" style="width:10em;"></div>
-                {{-- 「受注区分」フォーム送信データ --}}
-                <input name="dataJuchuKbn" type="hidden">
-            </label>
-        </div>
-        <div class="form-column">
-            {{-- 「配送便CD」 --}}
-            <label>
-                <span style="width:4.5em;">{{__('haisoubin_cd')}}</span>
-                <span class="icon-field"> {{-- アイコンボタンを設置する入力項目は、スタイルクラス「icon-field」を宣言 --}}
-                    {{-- コード検査を行う項目は、スタイルクラス「code-check」を宣言 --}}
-                    <input name="dataHaisoubinCd" class="form-control code-check" type="text" maxlength="10"
-                        autocomplete="off" style="width:8em;" pattern="^([a-zA-Z0-9]{0,10})$"
-                        title="{{ __('半角英数字') }}10{{ __('文字以内で入力してください') }}">
-                    {{-- 検索アイコンは、スタイルクラス「search-btn」を宣言 --}}
-                    <i class="fas fa-search search-btn"></i>
-                </span>
-                {{-- フォーカス時のイベントを「onfocus="blur();"」に設定してフォーカス対象を無効にする --}}
-                <input name="dataHaisoubinName" class="form-control" type="text" style="width:12em;" onfocus="blur();"
-                    readonly>
-            </label>
-        </div>
-        <div class="form-column">
-            {{-- 「備考1」 --}}
-            <label style="height:3.5em;">
-                <span style="width:4.5em;">{{__('notes1')}}</span>
-                <textarea name="dataNote1" class="form-control" maxlength="120" autocomplete="off"></textarea>
-            </label>
-        </div>
-        <div class="form-column">
-            {{-- 「備考2」 --}}
-            <label style="height:3.5em;">
-                <span style="width:4.5em;">{{__('notes2')}}</span>
-                <textarea name="dataNote2" class="form-control" maxlength="60" autocomplete="off"></textarea>
-            </label>
-        </div>
-        <div class="form-column">
-            {{-- 「備考3」 --}}
-            <label style="height:3.5em;">
-                <span style="width:4.5em;">{{__('notes3')}}</span>
-                <textarea name="dataNote3" class="form-control" maxlength="60" autocomplete="off"></textarea>
-            </label>
-        </div>
-        <div class="form-column">
-            {{-- 「有効期間（自）」 --}}
-            <label>
-                <span>{{__('yukoukikan_start_date')}}</span>
-                <input id="dataStartDate" name="dataStartDate" type="hidden">
-            </label>
-        </div>
-        <div class="form-column">
-            {{-- 「登録日」 --}}
-            <label>
-                <span style="width:10em;">{{__('touroku_dt')}}</span>
-                <input name="dataTourokuDt" class="form-control-plaintext" type="text" readonly>
-            </label>
-        </div>
-        <div class="form-column">
-            {{-- 「更新日」 --}}
-            <label>
-                <span style="width:10em;">{{__('koushin_dt')}}</span>
-                <input name="dataKoushinDt" class="form-control-plaintext" type="text" readonly>
-            </label>
-        </div>
+    </div>
+
+    <div class="form-column">
+        {{-- 「有効期間（自）」 --}}
+        <label>
+            <span>{{__('yukoukikan_start_date')}}</span>
+            <input id="dataStartDate" name="dataStartDate" type="hidden">
+        </label>
+    </div>
+    <div class="form-column">
+        {{-- 「登録日」 --}}
+        <label>
+            <span style="width:10em;">{{__('touroku_dt')}}</span>
+            <input name="dataTourokuDt" class="form-control-plaintext" type="text" readonly>
+        </label>
+    </div>
+    <div class="form-column">
+        {{-- 「更新日」 --}}
+        <label>
+            <span style="width:10em;">{{__('koushin_dt')}}</span>
+            <input name="dataKoushinDt" class="form-control-plaintext" type="text" readonly>
+        </label>
     </div>
 </div>
+
 {{-- 内部入力値 --}}
 {{-- 「処理種別」
 　※入力ダイアログの操作、新規・修正・削除のどの処理で開いたかを判別 --}}
@@ -410,18 +541,26 @@
         valueChanged: (sender) => { SumJuchuKin(); }
     });
     var numJuchuTanka = new wijmo.input.InputNumber('#numJuchuTanka', {
-        isRequired: false, format: 'c2', min: 0, max: 9999999999999999,
+        isRequired: false, format: 'n2', min: 0, max: 9999999999999999,
         valueChanged: (sender) => { SumJuchuKin(); }
     });
-    var numJuchuKin = new wijmo.input.InputNumber('#numJuchuKin', { isRequired: false, isDisabled: true, format: 'c2', min: 0, max: 9999999999999999});
+    var numJuchuKin = new wijmo.input.InputNumber('#numJuchuKin', {
+        isRequired: false, isDisabled: true, format: 'n2', min: 0, max: 9999999999999999
+    });
+    var numTehaiQty = new wijmo.input.InputNumber('#numTehaiQty', {
+        isRequired: false, format: 'n2', min: 0, max: 9999999999999999,
+        valueChanged: (sender) => { SumJuchuKin(); }
+    });
     {{-- 権限区分選択値 --}}
     {{-- コンボボックス宣言 --}}
-    var cmbKaritankaKbn = new wijmo.input.ComboBox('#cmbKaritankaKbn', { isRequired: false, itemsSource: ['確定単価','仮単価'] });
+    var cmbKaritankaKbn = new wijmo.input.ComboBox('#cmbKaritankaKbn', { isRequired: false, itemsSource: ['0:確定単価','1:仮単価'] });
     {{-- カテゴリー種別 --}}
     var juchuKbn = [];
     {{-- 分類管理CD --}}
     var juchuKbnCd = [];
     var cmbJuchuKbn = new wijmo.input.ComboBox('#cmbJuchuKbn', { isRequired: false　});
+
+    var cmbMatomeKbn = new wijmo.input.ComboBox('#cmbMatomeKbn', { isRequired: false, itemsSource: ['0:単体受注','1:同一品目まとめ','2:異品目まとめ'] });
 
     {{-- ------- --}}
     {{-- 初期処理 --}}
@@ -466,6 +605,16 @@
             {
                 binding: 'dataJuchuNo',
                 header : "{{__('juchu_no')}}",
+                width  : 100
+            },
+            {
+                binding: 'dataJigyoubuName',
+                header : "{{__('jigyoubu_name')}}",
+                width  : 100
+            },
+            {
+                binding: 'dataJobName',
+                header : "{{__('job_name')}}",
                 width  : 100
             },
             {
@@ -522,14 +671,12 @@
                 width: 150
             },
             {
-                {{-- 「有効期間（自）」 --}}
                 binding: 'dataStartDate',
                 header: "{{ __('yukoukikan_start_date') }}",
                 width: 150
                     
             },
             {
-                {{-- 「有効期間（至）」 --}}
                 binding: 'dataEndDate',
                 header : "{{ __('yukoukikan_end_date') }}",
                 width  : 150
@@ -640,6 +787,10 @@
         {{-- CSV出力用グリッドのレイアウト設定 --}}
         let columns = [{ binding: 'dataJuchuDate', header: "{{ __('juchu_date') }}" },
                        { binding: 'dataJuchuNo', header: "{{ __('tantousha_name') }}" },
+                       { binding: 'dataJigyoubuCd', header: "{{ __('jigyoubu_cd') }}" },
+                       { binding: 'dataJigyoubuName', header: "{{ __('jigyoubu_name') }}" },
+                       { binding: 'dataJobCd', header: "{{ __('job_cd') }}" },
+                       { binding: 'dataJobName', header: "{{ __('job_name') }}" },
                        { binding: 'dataTokuisakiCd', header: "{{ __('tokuisaki_cd') }}" },
                        { binding: 'dataTokuisakiName', header: "{{ __('tokuisaki_name') }}" },
                        { binding: 'dataNounyusakiCd', header: "{{ __('nounyusaki_cd') }}" },
@@ -698,6 +849,14 @@
         {{-- 「受注No」 --}}
         nyuryokuData['dataJuchuNo'].value = (copy && !insertFlg) ? data['dataJuchuNo'] : '';
         nyuryokuData['dataJuchuNo'].disabled = !insertFlg;
+        {{-- 「事業部CD」 --}}
+        nyuryokuData['dataJigyoubuCd'].value = copy ? data['dataJigyoubuCd'] : '';   
+        {{-- 「事業部名」 --}}
+        nyuryokuData['dataJigyoubuName'].value = copy ? data['dataJigyoubuName'] : '';   
+        {{-- 「業務分類CD」 --}}
+        nyuryokuData['dataJobCd'].value = copy ? data['dataJobCd'] : '';
+        {{-- 「業務分類名」 --}}
+        nyuryokuData['dataJobName'].value = copy ? data['dataJobName'] : '';
         {{-- 「得意先CD」 --}}
         nyuryokuData['dataTokuisakiCd'].value = copy ? data['dataTokuisakiCd'] : '';   
         {{-- 「得意先名」 --}}
@@ -732,6 +891,8 @@
         dateNouki.value = !insertFlg ? data['dataNoukiDate'] : null;
         {{-- 「出荷予定日」 --}}
         dateShukka.value = !insertFlg ? data['dataShukkaDate'] : null;
+        {{-- 「手配数量」 --}}
+        numTehaiQty.value = copy = copy ? data['dataTehaiQty'] : 0;
         {{-- 「受注数量」 --}}
         numJuchuQty.value = copy ? data['dataJuchuQty'] : 0;
         {{-- 「受注単価」 --}}
@@ -742,6 +903,8 @@
         cmbKaritankaKbn.selectedIndex = copy ? data['dataKaritankaKbn'] : 0;
         {{-- 「受注区分」 --}}
         cmbJuchuKbn.selectedIndex = copy ? juchuKbnCd.indexOf(data['dataJuchuKbn']) : 0;
+        {{-- 「まとめ区分」 --}}
+        cmbMatomeKbn.selectedIndex = copy ? data['dataMatomeKbn'] : 0;
         {{-- 「配送便CD」 --}}
         nyuryokuData['dataHaisoubinCd'].value = copy ? data['dataHaisoubinCd'] : '';   
         {{-- 「配送便名」 --}}
@@ -771,6 +934,8 @@
         {{-- 在庫照会ボタン ※削除時のみ制限 --}}
         nyuryokuData['btnZaikoShoukai'].disabled = deleteFlg;
         dateJuchu.isDisabled = deleteFlg;    {{-- 「受注日」 --}} 
+        nyuryokuData['dataJigyoubuCd'].disabled = deleteFlg;  {{-- 「事業部CD」 --}}
+        nyuryokuData['dataJobCd'].disabled = deleteFlg;  {{-- 「業務分類CD」 --}}
         nyuryokuData['dataTokuisakiCd'].disabled = deleteFlg;  {{-- 「得意先CD」 --}}
         nyuryokuData['dataNounyusakiCd'].disabled = deleteFlg; {{-- 「納入先CD」 --}}
         nyuryokuData['dataEigyouCd'].disabled = deleteFlg; {{-- 「営業担当CD」 --}}
@@ -786,6 +951,8 @@
         numJuchuTanka.isDisabled = deleteFlg;    {{-- 「受注単価」 --}} 
         cmbKaritankaKbn.isDisabled = deleteFlg; {{-- 「仮単価区分」 --}}
         cmbJuchuKbn.isDisabled = deleteFlg; {{-- 「受注区分」 --}}
+        cmbMatomeKbn.isDisabled = deleteFlg; {{-- 「まとめ区分」 --}}
+        numTehaiQty.isDisabled = deleteFlg; {{-- 「手配数量」 --}}
         nyuryokuData['dataHaisoubinCd'].disabled = deleteFlg; {{-- 「配送便CD」 --}}
         nyuryokuData['dataNote1'].disabled = deleteFlg; {{-- 「備考1」 --}}
         nyuryokuData['dataNote2'].disabled = deleteFlg; {{-- 「備考2」 --}}
@@ -980,9 +1147,11 @@
             {{-- 「出荷予定日」 --}}
             if((nyuryokuData['dataShukkaDate'].value != data['dataShukkaDate']) &&
               !(nyuryokuData['dataShukkaDate'].value == '' && data['dataShukkaDate'] == null)) return true;
+            {{-- 「手配数量」 --}}
+            if(nyuryokuData['dataTehaiQty'].value != data['dataTehaiQty']) return true;
             {{-- 「受注数量」 --}}
             if((nyuryokuData['dataJuchuQty'].value != data['dataJuchuQty'])) return true;
-              console.log(i++);
+              //console.log(i++);
             {{-- 「受注単価」 --}}
             if((nyuryokuData['dataJuchuTanka'].value != data['dataJuchuTanka'])) return true;
             {{-- 「受注金額」 --}}
@@ -991,6 +1160,8 @@
             if(cmbKaritankaKbn.selectedIndex != data['dataKaritankaKbn']) return true;
             {{-- 「受注区分」 --}}
             if(juchuKbnCd[cmbJuchuKbn.selectedIndex] != data['dataJuchuKbn']) return true;
+            {{-- 「まとめ区分」 --}}
+            if(matomeKbnValue[cmbMatomeKbn.selectedIndex] != data['dataMatomeKbn']) return true;
             {{-- 「配送便CD」 --}}
             if((nyuryokuData['dataHaisoubinCd'].value != data['dataHaisoubinCd']) &&
               !(nyuryokuData['dataHaisoubinCd'].value == '' && data['dataHaisoubinCd'] == null)) return true;
@@ -1023,6 +1194,8 @@
             ClosePopupDlg();
             return;
         }
+        {{-- 手配数量 --}}
+        nyuryokuData['dataTehaiQty'].value = numTehaiQty.value;
         {{-- 受注数量 --}}
         nyuryokuData['dataJuchuQty'].value = numJuchuQty.value;
         {{-- 受注単価 --}}
@@ -1032,7 +1205,14 @@
         {{-- 仮単価区分のコンボボックスの値取得 --}}
         nyuryokuData['dataKaritankaKbn'].value = cmbKaritankaKbn.selectedIndex;
         {{-- 受注区分のコンボボックスの値取得 --}}
-        nyuryokuData['dataJuchuKbn'].value = juchuKbnCd[cmbJuchuKbn.selectedIndex];
+        if(juchuKbnCd[cmbJuchuKbn.selectedIndex] === undefined){
+            nyuryokuData['dataJuchuKbn'].value = '';
+        }
+        else{
+            nyuryokuData['dataJuchuKbn'].value = juchuKbnCd[cmbJuchuKbn.selectedIndex];
+        }
+        {{-- まとめ区分のコンボボックスの値取得 --}}
+        nyuryokuData['dataMatomeKbn'].value = cmbMatomeKbn.selectedIndex;
         {{-- POST送信用オブジェクト配列 --}}
         let soushinData = {};
         {{-- フォーム要素から送信データを格納 --}}
@@ -1061,6 +1241,7 @@
         }
         else
         {
+            console.log(soushinData,'soushin')
             {{-- 「データ更新中」表示 --}}
             ShowPopupDlg("{{__('データ更新中')}}");
             {{-- 非同期データ更新開始 --}}
@@ -1073,6 +1254,12 @@
         {{-- 連動テキスト要素のある要素を判別 --}}
         switch($(this)[0].name)
         {
+            {{-- 事業部CD --}}
+            case 'dataJigyoubuCd':
+            break;
+            {{-- 業務分類CD --}}
+            case 'dataJobCd':
+            break;
             {{-- 得意先CD --}}
             case 'dataTokuisakiCd':
             break;
@@ -1137,6 +1324,16 @@
         {{-- 選択対象の名前を判別 --}}
         switch(currentCdElement.name)
         {
+            {{-- 事業部CD --}}
+            case 'dataJigyoubuCd':
+            ShowSentakuDlg("{{ __('jigyoubu_cd') }}", "{{ __('jigyoubu_name') }}",
+                           currentCdElement, currentNameElement, "{{ url('/inquiry/0100') }}", targetDate, '', 1);
+            break;
+            {{-- 業務分類CD --}}
+            case 'dataJobCd':
+            ShowSentakuDlg("{{ __('job_cd') }}", "{{ __('job_name') }}",
+                           currentCdElement, currentNameElement, "{{ url('/inquiry/3500') }}", targetDate);
+            break;
             {{-- 得意先CD --}}
             case 'dataTokuisakiCd':
             ShowSentakuDlg("{{ __('tokuisaki_cd') }}", "{{ __('tokuisaki_name') }}",

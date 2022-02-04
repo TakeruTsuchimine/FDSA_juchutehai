@@ -30,17 +30,26 @@ class PCMST_3101 extends Controller
         // マスタ共通処理クラス宣言
         $master = new class_Master($tableName, 'taishou_cd');
         try {
+            // SQLバインド値
+            $SQLBind = array();
+
             ///////////////////
             // POSTデータ受信 //
             ///////////////////
-            //
-            // 入力値のエラーチェック
-            //
-            // トランザクション種別
-            $SQLType = empty($request->dataSQLType) ? 0 : (int)$request->dataSQLType;
-            if ($SQLType < 1) {
-                $resultMsg .= '「' . __('データ') . '」' . __('が正常に送信されていません。') . '\n';
-                $resultFlg = false;
+
+            $dataId = $request->dataId;
+            $dataLastId = $request->dataLastId;
+            $deleteFlg = $request->deleteFlg;
+
+            if($dataLastId < $dataId){
+                $SQLType = 1;
+            }
+            else{
+                $SQLType = 2;
+            }
+
+            if($deleteFlg == 1){
+                $SQLType = 3;
             }
 
             // 対象CD
@@ -51,101 +60,215 @@ class PCMST_3101 extends Controller
                 $resultFlg = false;
             }
 
-            // 有効期間（自）
-            $yukoukikanStartDate = date('Y/m/d', strtotime('2000-01-01'));
+            // 事業部CD
+            $jigyoubuCd = $request->dataJigyoubuCd;
+            // POSTデータチェックエラー
+            if (is_null($jigyoubuCd) || $jigyoubuCd === '') {
+                $resultMsg .= '「' . __('jigyoubu_cd') . '」' . __('が正常に送信されていません。') . '\n';
+                $resultFlg = false;
+            }
+
+            // リソース区分
+            $resourceKbn = $request->dataResourceKbn;
+            // POSTデータチェックエラー
+            if (is_null($resourceKbn) || $resourceKbn === '') {
+                $resultMsg .= '「' . __('resource_kbn') . '」' . __('が正常に送信されていません。') . '\n';
+                $resultFlg = false;
+            }
+
+            // コードが存在しない場合はエラー
+            $result = $common->GetCdCount('jigyoubu_master', 'jigyoubu_cd', $jigyoubuCd);
+            if ($result < 1) {
+                $resultMsg .= __('登録されていない') . '「' . __('jigyoubu_cd') . '」' . __('です。') . '<br>';
+                $resultVal[] = 'dataJigyoubuCd';
+                $resultFlg = false;
+            }
 
             // 登録者ID
             $loginId = empty($request->dataLoginId) ? 0 : (int)$request->dataLoginId;
+            
+            // 対象日
+            $taishouDate = $request->dataTaishouDate;
 
-            ///////////////////////////
-            // Insert 及び Delete処理 //
-            ///////////////////////////
-            // トランザクション別処理
+            // シフトCD
+            $shiftCd = $request->dataShiftCd;
+
+            // 終了時刻（通常勤務）
+            $endJikokuTsujou = $request->dataEndJikokuTsujou;
+
+            // 終了時刻（残業）
+            $endJikokuZangyou = $request->dataEndJikokuZangyou;
+
+            // 指定範囲経過時間（通常勤務）
+            $keikaJikanTsujou = $request->dataKeikaJikanTsujou;
+
+            // 指定範囲経過時間（残業分）
+            $keikaJikanZangyou = $request->dataKeikaJikanZangyou;
+
+            $dateMax = $request->dateMax;
+
+            $date = $request->date;
+
+            if($endJikokuTsujou == ''){
+                $endJikokuTsujou = 0;
+            }
+            if($endJikokuZangyou == ''){
+                $endJikokuTsujou = 0;
+            }
+            if($keikaJikanTsujou == ''){
+                $keikaJikanTsujou = 0;
+            }
+            if($keikaJikanZangyou == ''){
+                $keikaJikanZangyou = 0;
+            }
+
+            if($shiftCd == ''){
+                $shiftCd = '@';
+            }
+            if($shiftCd == '休'){
+                $shiftCd = 'H';
+            }
+
+            if (!$resultFlg) throw new Exception($resultMsg);
+
+            ////////////////
+            // DELETE処理 //
+            ////////////////
             switch ($SQLType) {
+            case SQL_INSERT:
 
-                    ////////////////
-                    // DELETE処理 //
-                    ////////////////
-                case SQL_DELETE:
-                    // レコードID
-                    $dataId = $request->dataId;
-                    if (empty($dataId)) {
-                        $resultMsg .= '「' . __('ID') . '」' . __('が正常に送信されていません。') . '<br>';
-                        $resultFlg = false;
-                    }
-                    // データ処理開始
-                    $master->DeleteMasterData($taishouCd, $yukoukikanStartDate, $loginId, $dataId);
-                    break;
-                    // DELETE処理終了 //
+                ///////////////////
+                // 送信データ作成 //
+                ///////////////////
+                // SQL選択項目
+                $SQLHeadText = "
+                    insert into 
+                    " . $tableName . "( id, 
+                                        jigyoubu_cd,
+                                        resource_kbn, 
+                                        taishou_cd, 
+                                        taishou_date, 
+                                        shift_cd, 
+                                        end_jikoku_tsujou, 
+                                        end_jikoku_zangyou, 
+                                        keika_jikan_tsujou, 
+                                        keika_jikan_zangyou) ";
 
-                    ////////////////
-                    // INSERT処理 //
-                    ////////////////
-                default:
-                    // 対象CDは新規登録の際、既に存在する対象コードの場合はエラー
-                    $result = $common->GetCdCount($tableName, 'taishou_cd', $taishouCd);
-                    if ($result > 0 && $SQLType === SQL_INSERT) {
-                        $resultMsg .= __('既に登録されている') . '「' . __('taishou_cd') . '」' . __('です。') . '<br>';
-                        $resultVal[] = 'dataTaishouCd';
-                        $resultFlg = false;
-                    }
+                // SQL条件項目
+                $SQLBodyText = "
+                values ("   . $dataId . ",'"
+                            . $jigyoubuCd . "',"
+                            . $resourceKbn . ",'"
+                            . $taishouCd . "','"
+                            . $taishouDate . "','"
+                            . $shiftCd . "',"
+                            . $endJikokuTsujou . ","
+                            . $endJikokuZangyou . ","
+                            . $keikaJikanTsujou . ","
+                            . $keikaJikanZangyou . ")";
+                //現在年月日
+                //$nowDate = date("Y-m-d");
+                // クエリの設定
+                $SQLText = ($SQLHeadText . $SQLBodyText);
+                $query->StartConnect();
+                $query->SetQuery($SQLText, SQL_SELECT);
+                // バインド値のセット
+                //$SQLBind[] = array('today', $nowDate, TYPE_DATE);
+                //$query->SetBindArray($SQLBind);
+                // クエリの実行
+                $result = $query->ExecuteSelect();
 
-                    // 対象日
-                    $taishouDate = $request->dataTaishouDate;
+                $resultVal[] = $common->GetMaxId($tableName);
+                break;
 
-                    // シフトCD
-                    $shiftCd = $request->dataShiftCd;
+            case SQL_UPDATE:
 
-                    // リソース区分
-                    $resourceKbn = $request->dataResourceKbn;
+                ///////////////////
+                // 送信データ作成 //
+                ///////////////////
+                //現在年月日
+                //$nowDate = date("Y-m-d");
+                $SQLHeadText = "
+                update " . $tableName . " set ";
+                $SQLBodyText = "( id, 
+                                  jigyoubu_cd,
+                                  resource_kbn, 
+                                  taishou_cd, 
+                                  taishou_date, 
+                                  shift_cd, 
+                                  end_jikoku_tsujou, 
+                                  end_jikoku_zangyou, 
+                                  keika_jikan_tsujou, 
+                                  keika_jikan_zangyou) = ("
+                                  . $dataId . ",'"
+                                  . $jigyoubuCd . "',"
+                                  . $resourceKbn . ",'"
+                                  . $taishouCd . "','"
+                                  . $taishouDate . "','"
+                                  . $shiftCd . "',"
+                                  . $endJikokuTsujou . ","
+                                  . $endJikokuZangyou . ","
+                                  . $keikaJikanTsujou . ","
+                                  . $keikaJikanZangyou . ")";
+                $SQLTailText = "where id =" . $dataId;
+                // クエリの設定
+                $SQLText = ($SQLHeadText . $SQLBodyText . $SQLTailText);
+                $query->StartConnect();
+                $query->SetQuery($SQLText, SQL_SELECT);
+                // バインド値のセット
+                //$SQLBind[] = array('today', $nowDate, TYPE_DATE);
+                //$query->SetBindArray($SQLBind);
+                // クエリの実行
+                $result = $query->ExecuteSelect();
 
-                    // 事業部CD
-                    $jigyoubuCd = $request->dataJigyoubuCd;
-                    // POSTデータチェックエラー
-                    if (is_null($jigyoubuCd) || $jigyoubuCd === '') {
-                        $resultMsg .= '「' . __('jigyoubu_cd') . '」' . __('が正常に送信されていません。') . '<br>';
-                        $resultFlg = false;
-                    }
-                    // コードが存在しない場合はエラー
-                    $result = $common->GetCdCount('jigyoubu_master', 'jigyoubu_cd', $jigyoubuCd);
-                    if ($result < 1) {
-                        $resultMsg .= __('登録されていない') . '「' . __('jigyoubu_cd') . '」' . __('です。') . '<br>';
-                        $resultVal[] = 'dataJigyoubuCd';
-                        $resultFlg = false;
-                    }
+                $resultVal[] = $common->GetMaxId($tableName);
+                break;
 
-                    if (!$resultFlg) throw new Exception($resultMsg);
+            case SQL_DELETE:
 
-                    // 有効期間終了の設定
-                    $yukoukikanEndDate = date('Y/m/d', strtotime('2199-12-31'));
-                    // バインドの設定
-                    $SQLBind = array();
-                    $SQLBind[] = array('jigyoubu_cd', $jigyoubuCd, TYPE_STR);
-                    $SQLBind[] = array('taishou_cd', $taishouCd, TYPE_STR);
-                    $SQLBind[] = array('taishou_date', $taishouDate, TYPE_DATE);
-                    $SQLBind[] = array('shift_cd', $shiftCd, TYPE_STR);
-                    $SQLBind[] = array('resource_kbn', $resourceKbn, TYPE_INT);
-                    $SQLBind[] = array('end_jikoku_tsujou', $end_jikoku_tsujou, TYPE_INT);
-                    $SQLBind[] = array('end_jikoku_zangyou', $end_jikoku_zangyou, TYPE_INT);
-                    $SQLBind[] = array('keika_jikan_tsujou', $keika_jikan_tsujou, TYPE_INT);
-                    $SQLBind[] = array('keika_jikan_zangyou', $keika_jikan_zangyou, TYPE_INT);
-                    // データ処理開始
-                    $master->InsertMasterData($SQLBind, $taishouCd, $yukoukikanStartDate, $yukoukikanEndDate, $loginId, $SQLType);
-                    $resultVal[] = $common->GetMaxId($tableName);
-                    break;
-                    // INSERT処理終了 //
+                // SQL選択項目
+                $SQLHeadText = "
+                delete from " . $tableName;
+
+                // SQL条件項目
+                $SQLBodyText = "
+                where id = " . $dataId;
+
+                ///////////////////
+                // 送信データ作成 //
+                ///////////////////
+                //現在年月日
+                //$nowDate = date("Y-m-d");
+                // クエリの設定
+                $SQLText = ($SQLHeadText . $SQLBodyText);
+                $query->StartConnect();
+                $query->SetQuery($SQLText, SQL_SELECT);
+                // バインド値のセット
+                //$SQLBind[] = array('today', $nowDate, TYPE_DATE);
+                //$query->SetBindArray($SQLBind);
+                // クエリの実行
+                $result = $query->ExecuteSelect();
+
+                $resultVal[] = $common->GetMaxId($tableName);
+
+                break;
             }
         } catch (\Throwable $e) {
             if ($resultFlg) {
                 $resultFlg = false;
                 $resultMsg = $e->getMessage() . ' File：' . $e->getFile() . ' Line：' . $e->getLine();
             }
+        } finally {
+            $query -> CloseQuery();
         }
+        
         // 処理結果送信
         $resultData = array();
         $resultData[] = $resultFlg;
         $resultData[] = mb_convert_encoding($resultMsg, 'UTF-8', 'UTF-8');
         $resultData[] = mb_convert_encoding($resultVal, 'UTF-8', 'UTF-8');
+        $resultData[] = mb_convert_encoding($dateMax, 'UTF-8', 'UTF-8');
+        $resultData[] = mb_convert_encoding($date, 'UTF-8', 'UTF-8');
         return $resultData;
     }
 }

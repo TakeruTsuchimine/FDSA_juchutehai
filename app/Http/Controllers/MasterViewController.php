@@ -132,9 +132,13 @@ class MasterViewController extends Controller
                 $pageTitle = __('受注入力');
                 $targetPage = 'PVJUI_3800';
                 break;
+                // 「受注入力」
+            case '4100':
+                $pageTitle = __('受注手配');
+                $targetPage = 'PVJUI_4100';
+                break;
 
             // 真鍋対応分
-            // 「事業部マスタ」
                 // 「部署マスタ」
             case '0300':
                 $targetPage = 'PVMST_' . $targetPage;
@@ -182,7 +186,7 @@ class MasterViewController extends Controller
                 // 「メニュータブマスタ」
             case '6100':
                 $targetPage = 'PVMST_' . $targetPage;
-                $pageTitle = __('メニュータブ') . __('マスタ');
+                $pageTitle = __('メニューグループ') . __('マスタ');
                 break;
                 // 「メニューマスタ」
             case '6200':
@@ -202,17 +206,22 @@ class MasterViewController extends Controller
                 $pageTitle = __('機械割付候補') . __('マスタ');
                 break;
                 // 「得意先マスタ」
-            case '01400':
+            case '1400':
                 $targetPage = 'PVMST_' . $targetPage;
                 $pageTitle = __('得意先') . __('マスタ');
                 break;
+                // 「得意先別納入先マスタ」
+            case '1600':
+                $targetPage = 'PVMST_' . $targetPage;
+                $pageTitle = __('得意先別納入先') . __('マスタ');
+                break;
                 // 「仕入外注先マスタ」
-            case '01800':
+            case '1800':
                 $targetPage = 'PVMST_' . $targetPage;
                 $pageTitle = __('仕入外注先') . __('マスタ');
                 break;
                 // 「外注先手配候補マスタ」
-            case '01900':
+            case '1900':
                 $targetPage = 'PVMST_' . $targetPage;
                 $pageTitle = __('外注先手配候補') . __('マスタ');
                 break;
@@ -221,12 +230,27 @@ class MasterViewController extends Controller
                 $targetPage = 'PVMST_' . $targetPage;
                 $pageTitle = __('メーカ') . __('マスタ');
                 break;
+            // 「受注まとめ入力」
+            case '4000':
+                $pageTitle = __('受注まとめ入力');
+                $targetPage = 'PVJUI_4000';
+                break;
 
             // 工藤対応分
             // 「事業部マスタ」
             case '0100':
                 $targetPage = 'PVMST_' . $targetPage;
                 $pageTitle = __('事業部') . __('マスタ');
+                break;
+            // 「構成ヘッダマスタ」
+            case '3200':
+                $targetPage = 'PVMST_' . $targetPage;
+                $pageTitle = __('構成ヘッダ') . __('マスタ');
+                break;
+            // 「請求マスタ」
+            case '6300':
+                $targetPage = 'PVMST_' . $targetPage;
+                $pageTitle = __('請求書') . __('マスタ');
                 break;
 
             // 土嶺対応分
@@ -235,7 +259,7 @@ class MasterViewController extends Controller
                 $targetPage = 'PVMST_' . $targetPage;
                 $pageTitle = __('品目') . __('マスタ');
                 break;
-        }   
+        }
 
 
         // ページ呼び出し

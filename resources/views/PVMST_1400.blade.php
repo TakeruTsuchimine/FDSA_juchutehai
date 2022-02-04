@@ -1,13 +1,7 @@
 {{-- PHP処理 --}}
 <?php
     // アクセス権限
-    define("KEISHOU_KBN", array( '',
-                            '無し',
-                            '',
-                            '有り'));
-    define("SHOGUCHI_KBN", array( '',
-                            '通常',
-                            '',
+    define("SHOGUCHI_KBN", array( '通常',
                             '諸口'));
     define("NOUHINSHO_MIDASHI_KBN", array( '',
                             '見出しを請求書とする',)); 
@@ -408,20 +402,20 @@ define("TEKIYOU_TSUKI", array( '',
         <div class="form-column">
             {{-- 「得意先CD」 --}}
             <label>
-                <span style="width:6em;">{{__('tokuisaki_cd')}}</span>
-                <input name="dataTantoushaCd" class="form-control" type="text"
+                <span style="width:5em;">{{__('tokuisaki_cd')}}</span>
+                <input name="dataTokuisakiCd" class="form-control" type="text"
                        maxlength="10" autocomplete="off" style="width:8em;">
             </label>
             {{-- 「得意先名」 --}}
             <label>
-                <span style="width:6em;">{{__('tokuisaki_hyouji_name')}}</span>
-                <input name="dataTantoushaName" class="form-control" type="text"
-                       maxlength="60" autocomplete="off" style="width:22em;">
+                <span style="width:5em;">{{__('tokuisaki_hyouji_name')}}</span>
+                <input name="dataTokuisakiHyoujiName" class="form-control" type="text"
+                       maxlength="60" autocomplete="off" style="width:20em;">
             </label>
             {{-- 「事業部CD」 --}}
             <label>
-                <span style="width:6em;">{{__('jigyoubu_cd')}}</span>
-                <span class="icon-field"> {{-- アイコンボタンを設置する入力項目は、スタイルクラス「icon-field」を宣言 --}}
+                <span style="width:5em;">{{__('jigyoubu_cd')}}</span>
+                <span class="icon-field"> <!-- アイコンボタンを設置する入力項目は、スタイルクラス「icon-field」を宣言 -->
                     <input name="dataJigyoubuCd" class="form-control" type="text"
                            maxlength="6" autocomplete="off" style="width:8em;">
                     {{-- 検索アイコンは、スタイルクラス「search-btn」を宣言 --}}
@@ -429,23 +423,7 @@ define("TEKIYOU_TSUKI", array( '',
                 </span>
                 {{-- フォーカス時のイベントを「onfocus="blur();"」に設定してフォーカス対象を無効にする --}}
                 <input name="dataJigyoubuName" class="form-control" type="text"
-                       style="width:22em;" onfocus="blur();" readonly>
-            </label>
-        </div>
-        {{-- 二列目 --}}
-        <div class="form-column">
-            {{-- 「請求先CD」 --}}
-            <label>
-                <span style="width:4.5em;">{{__('seikyusaki_cd')}}</span>
-                <span class="icon-field"> {{-- アイコンボタンを設置する入力項目は、スタイルクラス「icon-field」を宣言 --}}
-                    <input name="dataSeikyusakiCd" class="form-control" type="text"
-                           maxlength="10" autocomplete="off" style="width:8em;">
-                    {{-- 検索アイコンは、スタイルクラス「search-btn」を宣言 --}}
-                    <i class="fas fa-search search-btn"></i>
-                </span>
-                {{-- フォーカス時のイベントを「onfocus="blur();"」に設定してフォーカス対象を無効にする --}}
-                <input name="dataSeikyusakiName" class="form-control" type="text"
-                       style="width:22em;" onfocus="blur();" readonly>
+                       style="width:20em;" onfocus="blur();" readonly>
             </label>
         </div>
         {{-- 表示件数 --}}
@@ -501,13 +479,13 @@ define("TEKIYOU_TSUKI", array( '',
             </label>
             {{-- 「住所1」 --}}
             <label>
-                <span style="width:7em;">{{__('jusyo1')}}</span>
+                <span style="width:7em;">{{__('jusho1')}}</span>
                 <input name="dataJusho1" class="form-control" type="text"
                        maxlength="60" autocomplete="off" style="width:20em;">
             </label>
             {{-- 「住所2」 --}}
             <label>
-                <span style="width:7em;">{{__('jusyo2')}}</span>
+                <span style="width:7em;">{{__('jusho2')}}</span>
                 <input name="dataJusho2" class="form-control" type="text"
                        maxlength="60" autocomplete="off" style="width:20em;">
             </label>
@@ -524,8 +502,8 @@ define("TEKIYOU_TSUKI", array( '',
                        maxlength="14" autocomplete="off" style="width:15em;">
             </label>
         </div>
-        <div class="flex-box flex-center flex-column item-start "style="margin: 0 0px 0 0">
-            {{-- 「得意先略称」 --}}
+        <div class="flex-box flex-center flex-column item-start "style="margin: 0px 30px 0px 40px">
+            <!-- 「得意先略称」 -->
             <label>
                 <span style="width:9em;">{{__('tokuisaki_ryaku')}}</span>
                 <input name="dataTokuisakiRyaku" class="form-control" type="text"
@@ -559,7 +537,7 @@ define("TEKIYOU_TSUKI", array( '',
             </label>
             {{-- 「営業担当者CD」 --}}
             <label>
-                <span style="width:9em;">{{__('eigyo_tantousha_cd')}}</span>
+                <span style="width:9em;">{{__('eigyou_tantousha_cd')}}</span>
                 <span class="icon-field"> {{-- アイコンボタンを設置する入力項目は、スタイルクラス「icon-field」を宣言 --}}
                 <input name="dataEigyoTantoushaCd" class="form-control code-check" type="text"
                     maxlength="10" autocomplete="off" style="width:10em;">
@@ -586,21 +564,22 @@ define("TEKIYOU_TSUKI", array( '',
             <div class="display">
             {{-- 「支店CD」 --}}
             <label>
-                <span style="width:9em;">{{__('shiten_cd')}}</span>
-                <span class="icon-field"> {{-- アイコンボタンを設置する入力項目は、スタイルクラス「icon-field」を宣言 --}}
-                    <input name="dataShitenCd" class="form-control" type="text"
-                           maxlength="5" autocomplete="off" style="width:10em;">
-                    {{-- 検索アイコンは、スタイルクラス「search-btn」を宣言 --}}
+                <span style="width:6.6em;">{{__('keishou_kbn')}}</span>
+                <span class="icon-field"> <!-- アイコンボタンを設置する入力項目は、スタイルクラス「icon-field」を宣言 -->
+                    <input name="dataKeishouKbn" class="form-control" type="text"
+                           maxlength="6" autocomplete="off" style="width:10em;"
+                            pattern="^([a-zA-Z0-9]{0,1})$" required>
+                    <!-- 検索アイコンは、スタイルクラス「search-btn」を宣言 -->
                     <i class="fas fa-search search-btn"></i>
                 </span>
-                {{-- フォーカス時のイベントを「onfocus="blur();"」に設定してフォーカス対象を無効にする --}}
-                <input name="dataShitenName" class="form-control" type="text"
+                <!-- フォーカス時のイベントを「onfocus="blur();"」に設定してフォーカス対象を無効にする -->
+                <input name="dataBunruiName" class="form-control" type="text"
                        style="width:14em;" onfocus="blur();" readonly>
             </label>
             </div>
             {{-- 「敬称区分」 --}}
             <label>
-                <span style="width:9em;">{{__('keisho_kbn')}}</span>
+                <span style="width:9em;">{{__('keishou_kbn')}}</span>
                 {{-- 「」コンボボックス本体 --}}
                 <div id="cmbKeishoKbn" style="width:18em;"></div>
                 {{-- 「」フォーム送信データ --}}
@@ -626,11 +605,14 @@ define("TEKIYOU_TSUKI", array( '',
     </div>
     <div class="tabs">
         <input id="denpyou" type="radio" name="tab_item">
-        <label class="tab_item" for="denpyou"style="width:17em;">伝票・税設定</label>
+        <label class="tab_item" for="denpyou" style="width:32%; display: flex; justify-content: space-between; 
+            margin-left: 1%; padding-left: 1%;">伝票・税設定</label>
         <input id="seikyu" type="radio" name="tab_item"checked>
-        <label class="tab_item" for="seikyu"style="width:17em;">請求</label>
+        <label class="tab_item" for="seikyu"style="width:32%; display: flex; justify-content: space-between; 
+            margin-left: 1%; padding-left: 1%;">請求</label>
         <input id="sonota" type="radio" name="tab_item">
-        <label class="tab_item" for="sonota"style="width:17em;">他設定</label>
+        <label class="tab_item" for="sonota"style="width:32%; display: flex; justify-content: space-between; 
+            margin-left: 1%; padding-left: 1%;">他設定</label>
         <div class="tab_content" id="denpyou_content">
             <div class="tab_content_description">
                 <div class="flex-box flex-between item-start">
@@ -653,7 +635,7 @@ define("TEKIYOU_TSUKI", array( '',
                         </label>
                         {{-- 「専用伝票発行区分」 --}}
                         <label>
-                            <span style="width:7em;">{{__('senyou_denpyou_hakko_kbn')}}</span>
+                            <span style="width:7em;">{{__('senyou_denpyou_hakkou_kbn')}}</span>
                             {{-- 「」コンボボックス本体 --}}
                             <div id="cmbSenyouDenpyouHakkoKbn" style="width:18em;"></div>
                             {{-- 「」フォーム送信データ --}}
@@ -695,7 +677,7 @@ define("TEKIYOU_TSUKI", array( '',
                         </label>
                         {{-- 「金額計算丸目」 --}}
                         <label>
-                            <span style="width:7.5em;">{{__('kingaku_keisan_marune')}}</span>
+                            <span style="width:7.5em;">{{__('kingaku_keisan_marume')}}</span>
                             {{-- 「」コンボボックス本体 --}}
                             <div id="cmbKingakuKeisanMarume" style="width:10em;"></div>
                             {{-- 「」フォーム送信データ --}}
@@ -731,7 +713,7 @@ define("TEKIYOU_TSUKI", array( '',
                     </label>
                     {{-- 「入金親コード」 --}}
                     <label>
-                        <span style="width:8.6em;">{{__('nyukin_oya_code')}}</span>
+                        <span style="width:8.6em;">{{__('nyukin_oya_cd')}}</span>
                         <span class="icon-field"> {{-- アイコンボタンを設置する入力項目は、スタイルクラス「icon-field」を宣言 --}}
                         <input name="dataNyukinOyaCode" class="form-control code-check" type="text"
                             maxlength="10" autocomplete="off" style="width:8em;">
@@ -789,7 +771,7 @@ define("TEKIYOU_TSUKI", array( '',
                     <div class="flex-box flex-center flex-column item-start"style="margin: 0 300 0 0">        
                         {{-- 「入金予定月1」 --}}
                         <label>
-                            <span id="displayNyukinTsuki1"style="width:7em;">{{__('nyukin_tsuki1')}}</span>
+                            <span id="displayNyukinTsuki1"style="width:7em;">{{__('nyukin_tsuki')}}</span>
                             {{-- 「」コンボボックス本体 --}}
                             <div id="cmbNyukinTsuki1" style="width:10em;"></div>
                             {{-- 「」フォーム送信データ --}}
@@ -971,18 +953,7 @@ define("TEKIYOU_TSUKI", array( '',
     {{-- wijmoコントロール宣言 --}}
     {{-- -------------------- --}}
 
-    {{-- 敬称区分選択値 --}}
-    var keishoKbn = [];
-    {{-- 敬称区分データ登録値 --}}
-    var keishoKbnValue = [];
-    {{-- 敬称区分の元データに入力がある場合は選択値として格納 --}}
-    @for($i = 0;$i < count(KEISHOU_KBN);$i++)
-        @if(KEISHOU_KBN[$i] !== '')
-            keishoKbn.push('{{ KEISHOU_KBN[$i] }}');
-            keishoKbnValue.push({{ $i }});
-        @endif
-    @endfor
-    {{-- 諸口区分選択値 --}}
+    /* 諸口区分選択値 */
     var shokuchiKbn = [];
     {{-- 諸口区分データ登録値 --}}
     var shokuchiKbnValue = [];
@@ -1257,13 +1228,12 @@ define("TEKIYOU_TSUKI", array( '',
             kaishuKouzaKbnValue.push({{ $i }});
         @endif
     @endfor
-    {{-- コンボボックス宣言 --}}
-    var cmbKeishoKbn = new wijmo.input.ComboBox('#cmbKeishoKbn', { itemsSource: keishoKbn });
-    var cmbShokuchiKbn = new wijmo.input.ComboBox('#cmbShokuchiKbn', { itemsSource: shokuchiKbn });
-    var cmbNouhinshoMidashiKbn = new wijmo.input.ComboBox('#cmbNouhinshoMidashiKbn', { itemsSource: nouhinshoMidashiKbn });
-    var cmbNouhinshoHakkouKbn = new wijmo.input.ComboBox('#cmbNouhinshoHakkouKbn', { itemsSource: nouhinshoHakkouKbn });
-    var cmbSenyouDenpyouHakkoKbn = new wijmo.input.ComboBox('#cmbSenyouDenpyouHakkoKbn', { itemsSource: senyouDenpyouHakkouKbn });
-    var cmbSeikyushoHakkouKbn = new wijmo.input.ComboBox('#cmbSeikyushoHakkouKbn', { itemsSource: seikyushoHakkouKbn });
+    /* コンボボックス宣言 */
+    var cmbShokuchiKbn = new wijmo.input.ComboBox('#cmbShokuchiKbn', { itemsSource: shokuchiKbn, isRequired: false });
+    var cmbNouhinshoMidashiKbn = new wijmo.input.ComboBox('#cmbNouhinshoMidashiKbn', { itemsSource: nouhinshoMidashiKbn, isRequired: false });
+    var cmbNouhinshoHakkouKbn = new wijmo.input.ComboBox('#cmbNouhinshoHakkouKbn', { itemsSource: nouhinshoHakkouKbn, isRequired: false });
+    var cmbSenyouDenpyouHakkouKbn = new wijmo.input.ComboBox('#cmbSenyouDenpyouHakkouKbn', { itemsSource: senyouDenpyouHakkouKbn, isRequired: false });
+    var cmbSeikyushoHakkouKbn = new wijmo.input.ComboBox('#cmbSeikyushoHakkouKbn', { itemsSource: seikyushoHakkouKbn, isRequired: false });
     var cmbTokuisakiTorihikiKbn = new wijmo.input.ComboBox('#cmbTokuisakiTorihikiKbn', { itemsSource: tokuisakiTorihikiKbn });
     var cmbSeikyusakiTorihikiKbn = new wijmo.input.ComboBox('#cmbSeikyusakiTorihikiKbn', { itemsSource: seikyusakiTorihikiKbn });
     var cmbHurikomiTesuryouKbn = new wijmo.input.ComboBox('#cmbHurikomiTesuryouKbn', { itemsSource: hurikomiTesuryouKbn });
@@ -1361,15 +1331,20 @@ define("TEKIYOU_TSUKI", array( '',
         SetFncKey(null);
         {{-- 入力ダイアログ表示イベント登録 ※common_function.js参照 --}}
         SetNyuryokuData(fncNyuryokuData);
-        {{-- 「表示」ボタンイベント登録 ※common_function.js参照 --}}
-        SetBtnHyouji(fncShowDataGrid); 
-        {{-- 「CSV出力」ボタンイベント登録 ※common_function.js参照 --}}
-        SetBtnCSV(fncExportCSV);
+        /* 「表示」ボタンイベント登録 ※common_function.js参照 */
+        SetBtnHyouji(fncShowDataGrid);
+        /* 「Excel出力」ボタンイベント登録 ※common_function.js参照 */
+        SetBtnExcel(fncExportExcel);
 
         {{-- グリッド初期処理--}}
         InitGrid();
-        
-        {{-- グリッドデータの表示 --}}
+
+        /* ボタン制御更新 */
+        SetEnableButton(0);
+        /* 件数更新 */
+        $("#zenkenCnt").html(0);
+
+        /* グリッドデータの表示 */
         $('#btnHyouji').click();
     }
     {{-- グリッド共有変数 --}}
@@ -1380,53 +1355,59 @@ define("TEKIYOU_TSUKI", array( '',
     {{-- グリッド初期処理--}}
     function InitGrid()
     {
-        {{-- MultiRowのレイアウト設定 --}}
-        let columns = [{ cells: [{ binding: 'dataTokuisakiCd',   header: "{{__('tokuisaki_cd')}}", width: 130 },]},
-                       { cells: [{ binding: 'dataTokuisakiHyoujiName', header: "{{__('tokuisaki_hyouji_name')}}", width: 130 },]},
-                       { cells: [{ binding: 'dataJigyoubuCd', header: "{{__('jigyoubu_cd')}}", width: 130 },]},
-                       { cells: [{ binding: 'dataJigyoubuName',            header: "{{__('jigyoubu_name')}}", width: 130 },]},
-                       { cells: [{ binding: 'dataTokuisakiName1',        header: "{{__('tokuisaki_name1')}}", width: 130 },]},
-                       { cells: [{ binding: 'dataTokuisakiName2',      header: "{{__('tokuisaki_name2')}}", width: 130 },]},
+        /* MultiRowのレイアウト設定 */
+        let columns = [{ cells: [{ binding: 'dataTokuisakiCd',   header: "{{__('tokuisaki_cd')}}", width: 130 },
+                                 { binding: 'dataTokuisakiHyoujiName', header: "{{__('tokuisaki_hyouji_name')}}"}]},
+                       { cells: [{ binding: 'dataJigyoubuCd', header: "{{__('jigyoubu_cd')}}", width: 130 },
+                                 { binding: 'dataJigyoubuName',            header: "{{__('jigyoubu_name')}}"}]},
+                       { cells: [{ binding: 'dataTokuisakiName1',        header: "{{__('tokuisaki_name1')}}", width: 130 },
+                                 { binding: 'dataTokuisakiName2',      header: "{{__('tokuisaki_name2')}}"}]},
                        { cells: [{ binding: 'dataTokuisakiKana',         header: "{{__('tokuisaki_kana')}}", width:130 },]},
-                       { cells: [{ binding: 'dataEigyoTantoushaCd',      header: "{{__('eigyo_tantousha_cd')}}", width:130 },]},
-                       { cells: [{ binding: 'dataAssistantCd',      header: "{{__('assistant_cd')}}", width:160 },]},
-                       { cells: [{ binding: 'dataSeikyusakiCd',      header: "{{__('seikyusaki_cd')}}", width:130 },]},
-                       { cells: [{ binding: 'dataNyukinOyaCode',      header: "{{__('nyukin_oya_code')}}", width:130 },]},
-                       { cells: [{ binding: 'dataYubinbangou',      header: "{{__('yubinbangou')}}", width:130 },]},
-                       { cells: [{ binding: 'dataJusho1',      header: "{{__('jusyo1')}}", width:130 },]},
-                       { cells: [{ binding: 'dataJusho2',      header: "{{__('jusyo2')}}", width:130 },]},
-                       { cells: [{ binding: 'dataTelNo',      header: "{{__('tel_no')}}", width:130 },]},
-                       { cells: [{ binding: 'dataFaxNo',      header: "{{__('fax_no')}}", width:130 },]},
-                       { cells: [{ binding: 'dataSenpouRenrakusaki',      header: "{{__('senpou_renrakusaki')}}", width:130 },]},
-                       { cells: [{ binding: 'dataShohizeiKeisanTani',      header: "{{__('shohizei_keisan_tani')}}", width:130 },]},
-                       { cells: [{ binding: 'dataShohizeiKeisanHoushiki',      header: "{{__('shohizei_keisan_houshiki')}}", width:130 },]},
-                       { cells: [{ binding: 'dataShohizeiKeisanMarume',      header: "{{__('shohizei_keisan_marume')}}", width:130 },]},
-                       { cells: [{ binding: 'dataKingakuKeisanMarume',      header: "{{__('kingaku_keisan_marune')}}", width:130 },]},
-                       { cells: [{ binding: 'dataShimeDay1',      header: "{{__('shime_day1')}}", width:130 },]},
-                       { cells: [{ binding: 'dataShimeDay2',      header: "{{__('shime_day2')}}", width:130 },]},
-                       { cells: [{ binding: 'dataTekiyouTsuki',      header: "{{__('tekiyou_tsuki')}}", width:130 },]},
-                       { cells: [{ binding: 'dataNyukinTsuki1',      header: "{{__('nyukin_tsuki1')}}", width:130 },]},
-                       { cells: [{ binding: 'dataNyukinDay1',      header: "{{__('nyukin_day1')}}", width:130 },]},
-                       { cells: [{ binding: 'dataKaishuhouhou1',      header: "{{__('kaishuhouhou1')}}", width:130 },]},
-                       { cells: [{ binding: 'datategataSate1',      header: "{{__('tegata_sate1')}}", width:130 },]},
-                       { cells: [{ binding: 'dataShiharaiKaishuJoukenKin',      header: "{{__('shiharai_kaishu_jougen_kin')}}", width:130 },]},
-                       { cells: [{ binding: 'dataKaishuhouhou2',      header: "{{__('kaishuhouhou2')}}", width:130 },]},
-                       { cells: [{ binding: 'dataNyukinTsuki2',      header: "{{__('nyukin_tsuki2')}}", width:130 },]},
-                       { cells: [{ binding: 'dataNyukinDay2',      header: "{{__('nyukin_day2')}}", width:130 },]},
-                       { cells: [{ binding: 'dataTegataSate2',      header: "{{__('tegata_sate2')}}", width:130 },]},
-                       { cells: [{ binding: 'dataGinkouCd',      header: "{{__('ginkou_cd')}}", width:130 },]},
-                       { cells: [{ binding: 'dataShitenCd',      header: "{{__('shiten_cd')}}", width:130 },]},
-                       { cells: [{ binding: 'dataKaishukouzaNo',      header: "{{__('kaishukouza_no')}}", width:130 },]},
-                       { cells: [{ binding: 'dataYoshingendogaku',      header: "{{__('yoshingendogaku')}}", width:130 },]},
-                       { cells: [{ binding: 'dataBikou1',      header: "{{__('bikou1')}}", width:130 },]},
-                       { cells: [{ binding: 'dataBikou2',      header: "{{__('bikou2')}}", width:130 },]},
-                       { cells: [{ binding: 'dataBikou3',      header: "{{__('bikou3')}}", width:130 },]},
-                       { cells: [{ binding: 'dataKoumZumenHokanbasho',      header: "{{__('koum_zumen_hokanbasho')}}", width:130 },]},
-                       { cells: [{ binding: 'dataEigyoZumenHokanbasho',      header: "{{__('eigyo_zumen_hokanbasho')}}", width:130 },]},
-                       { cells: [{ binding: 'dataStartDate',          header: "{{__('yukoukikan_start_date')}}", width: 130 }] },
-                       { cells: [{ binding: 'dataEndDate',            header: "{{__('yukoukikan_end_date')}}", width: 130 }] },
-                       { cells: [{ binding: 'dataIndex', width: 0 }] }]; 
-        {{-- グリッドの設定 --}}
+                       { cells: [{ binding: 'dataEigyouTantoushaCd',      header: "{{__('eigyou_tantousha_cd')}}", width:130 },
+                                 { binding: 'dataEigyouTantoushaName',      header: "{{__('eigyou_tantousha_name')}}"}]},
+                       { cells: [{ binding: 'dataAssistantCd',      header: "{{__('assistant_cd')}}", width:160 },
+                                 { binding: 'dataAssistantName',      header: "{{__('eigyou_tantousha_name')}}"}]},
+                       { cells: [{ binding: 'dataSeikyusakiCd',      header: "{{__('seikyusaki_cd')}}", width:130 }]},
+                       { cells: [{ binding: 'dataNyukinOyaCd',      header: "{{__('nyukin_oya_cd')}}", width:130 }]},
+                       { cells: [{ binding: 'dataJusho1',      header: "{{__('jusho1')}}", width:130 },
+                                 { binding: 'dataJusho2',      header: "{{__('jusho2')}}", width:130 }]},
+                       { cells: [{ binding: 'dataTelNo',      header: "{{__('tel_no')}}", width:130 },
+                                 { binding: 'dataFaxNo',      header: "{{__('fax_no')}}", width:130 }]},
+                       { cells: [{ binding: 'dataSenpouRenrakusaki',      header: "{{__('senpou_renrakusaki')}}", width:130 }]},
+                       { cells: [{ binding: 'dataKeishouKbn',      header: "{{__('keishou_kbn')}}", width:130 }]},
+                       { cells: [{ binding: 'dataShokuchiKbn',      header: "{{__('shokuchi_kbn')}}", width:130 }]},
+                       { cells: [{ binding: 'dataNouhinshoMidashiKbn',      header: "{{__('nouhinsho_midashi_kbn')}}", width:200 },
+                                 { binding: 'dataNouhinshoHakkouKbn',      header: "{{__('nouhinsho_hakkou_kbn')}}"}]},
+                       { cells: [{ binding: 'dataSenyouDenpyouHakkouKbn',      header: "{{__('senyou_denpyou_hakkou_kbn')}}", width:200 },
+                                 { binding: 'dataSeikyushoHakkouKbn',      header: "{{__('seikyusho_hakkou_kbn')}}"}]},
+                       { cells: [{ binding: 'dataTokuisakiTorihikiKbn',      header: "{{__('tokuisaki_torihiki_kbn')}}", width:200 },
+                                 { binding: 'dataSeikyusakiTorihikiKbn',      header: "{{__('seikyusaki_torihiki_kbn')}}"}]},
+                       { cells: [{ binding: 'dataShohizeiKeisanTani',      header: "{{__('shohizei_keisan_tani')}}", width:200 },
+                                 { binding: 'dataShohizeiKeisanHoushiki',      header: "{{__('shohizei_keisan_houshiki')}}"}]},
+                       { cells: [{ binding: 'dataShohizeiKeisanMarume',      header: "{{__('shohizei_keisan_marume')}}", width:200 },
+                                 { binding: 'dataKingakuKeisanMarume',      header: "{{__('kingaku_keisan_marume')}}"}]},
+                       { cells: [{ binding: 'dataShimeDay1',      header: "{{__('shime_day1')}}", width:130 },
+                                 { binding: 'dataShimeDay2',      header: "{{__('shime_day2')}}"}]},
+                       { cells: [{ binding: 'dataTekiyouTsuki',      header: "{{__('tekiyou_tsuki')}}", width:130 }]},
+                       { cells: [{ binding: 'dataKaishuHouhou',      header: "{{__('kaishu_houhou')}}", width:130 }]},
+                       { cells: [{ binding: 'dataNyukinTsuki',      header: "{{__('nyukin_tsuki')}}", width:130 }]},
+                       { cells: [{ binding: 'dataNyukinDay',      header: "{{__('nyukin_day')}}", width:130 }]},
+                       { cells: [{ binding: 'dataTegataSate',      header: "{{__('tegata_sate')}}", width:130 }]},
+                       { cells: [{ binding: 'dataFurikomiTesuryouKbn',      header: "{{__('furikomi_tesuryou_kbn')}}", width:200 }]},
+                       { cells: [{ binding: 'dataYoshingendogaku',      header: "{{__('yoshingendogaku')}}", width:130 }]},
+                       { cells: [{ binding: 'dataKoumuZumenHokanbasho',      header: "{{__('koumu_zumen_hokanbasho')}}", width:200 }]},
+                       { cells: [{ binding: 'dataEigyouZumenHokanbasho',      header: "{{__('eigyou_zumen_hokanbasho')}}", width:200 }]},
+                       { cells: [{ binding: 'dataBikou1',      header: "{{__('bikou1')}}", width:170 }]},
+                       { cells: [{ binding: 'dataBikou2',      header: "{{__('bikou2')}}", width:170 }]},
+                       { cells: [{ binding: 'dataBikou3',      header: "{{__('bikou3')}}", width:170 }]},
+                       { cells: [{ binding: 'dataBikou4',      header: "{{__('bikou4')}}", width:170 }]},
+                       { cells: [{ binding: 'dataStartDate',          header: "{{__('yukoukikan_start_date')}}", width: 150 },
+                                 { binding: 'dataEndDate',          header: "{{__('yukoukikan_end_date')}}"}] },
+                       { cells: [{ binding: 'dataTourokuDt',            header: "{{__('touroku_dt')}}", width: 180 },
+                                 { binding: 'dataKoushinDt',            header: "{{__('koushin_dt')}}"}] },
+                       { cells: [{ binding: 'dataTourokushaName',            header: "{{__('tourokusha_name')}}", width: 180 },
+                                 { binding: 'dataKoushinshaName',            header: "{{__('koushinsha_name')}}"}] }];
+        /* グリッドの設定 */
         let gridOption = {
             {{-- レイアウト設定 ※MultiRow専用 --}}
             layoutDefinition: columns,
@@ -1535,60 +1516,62 @@ define("TEKIYOU_TSUKI", array( '',
         ShowPopupDlg("{{ __('データ読込中') }}");
         {{-- グリッドのデータ受信 --}}
         AjaxData("{{ url('/master/1400') }}", soushinData, fncJushinGridData);
-        {{-- 検索件数の取得フラグの送信データを追加 --}}
-        soushinData["dataCntFlg"] = true;
-        {{-- 検索件数のデータ受信 --}}
-        AjaxData("{{ url('/master/1400') }}", soushinData, fncJushinDataCnt);
     }
-    {{-- 「CSV出力」ボタンイベント --}}
-    var fncExportCSV = function()
+    /* 「Excel出力」ボタンイベント */
+    var fncExportExcel = function()
     {
-        {{-- CSV出力用グリッドのレイアウト設定 --}}
-        let columns = [{ cells: [{ binding: 'dataTokuisakiCd',   header: "{{__('tokuisaki_cd')}}", width: 130 },]},
-                       { cells: [{ binding: 'dataTokuisakiHyoujiName', header: "{{__('tokuisaki_hyouji_name')}}", width: 130 },]},
-                       { cells: [{ binding: 'dataJigyoubuCd', header: "{{__('jigyoubu_cd')}}", width: 130 },]},
-                       { cells: [{ binding: 'dataJigyoubuName',            header: "{{__('jigyoubu_name')}}", width: 130 },]},
-                       { cells: [{ binding: 'dataTokuisakiName1',        header: "{{__('tokuisaki_name1')}}", width: 130 },]},
-                       { cells: [{ binding: 'dataTokuisakiName2',      header: "{{__('tokuisaki_name2')}}", width: 130 },]},
-                       { cells: [{ binding: 'dataTokuisakiKana',         header: "{{__('tokuisaki_kana')}}", width:130 },]},
-                       { cells: [{ binding: 'dataEigyoTantoushaCd',      header: "{{__('eigyo_tantousha_cd')}}", width:130 },]},
-                       { cells: [{ binding: 'dataAssistantCd',      header: "{{__('assistant_cd')}}", width:160 },]},
-                       { cells: [{ binding: 'dataSeikyusakiCd',      header: "{{__('seikyusaki_cd')}}", width:130 },]},
-                       { cells: [{ binding: 'dataNyukinOyaCode',      header: "{{__('nyukin_oya_code')}}", width:130 },]},
-                       { cells: [{ binding: 'dataYubinbangou',      header: "{{__('yubinbangou')}}", width:130 },]},
-                       { cells: [{ binding: 'dataJusho1',      header: "{{__('jusyo1')}}", width:130 },]},
-                       { cells: [{ binding: 'dataJusho2',      header: "{{__('jusyo2')}}", width:130 },]},
-                       { cells: [{ binding: 'dataTelNo',      header: "{{__('tel_no')}}", width:130 },]},
-                       { cells: [{ binding: 'dataFaxNo',      header: "{{__('fax_no')}}", width:130 },]},
-                       { cells: [{ binding: 'dataSenpouRenrakusaki',      header: "{{__('senpou_renrakusaki')}}", width:130 },]},
-                       { cells: [{ binding: 'dataShohizeiKeisanTani',      header: "{{__('shohizei_keisan_tani')}}", width:130 },]},
-                       { cells: [{ binding: 'dataShohizeiKeisanHoushiki',      header: "{{__('shohizei_keisan_houshiki')}}", width:130 },]},
-                       { cells: [{ binding: 'dataShohizeiKeisanMarume',      header: "{{__('shohizei_keisan_marume')}}", width:130 },]},
-                       { cells: [{ binding: 'dataKingakuKeisanMarume',      header: "{{__('kingaku_keisan_marune')}}", width:130 },]},
-                       { cells: [{ binding: 'dataShimeDay1',      header: "{{__('shime_day1')}}", width:130 },]},
-                       { cells: [{ binding: 'dataShimeDay2',      header: "{{__('shime_day2')}}", width:130 },]},
-                       { cells: [{ binding: 'dataTekiyouTsuki',      header: "{{__('tekiyou_tsuki')}}", width:130 },]},
-                       { cells: [{ binding: 'dataNyukinTsuki1',      header: "{{__('nyukin_tsuki1')}}", width:130 },]},
-                       { cells: [{ binding: 'dataNyukinDay1',      header: "{{__('nyukin_day1')}}", width:130 },]},
-                       { cells: [{ binding: 'dataKaishuhouhou1',      header: "{{__('kaishuhouhou1')}}", width:130 },]},
-                       { cells: [{ binding: 'datategataSate1',      header: "{{__('tegata_sate1')}}", width:130 },]},
-                       { cells: [{ binding: 'dataShiharaiKaishuJoukenKin',      header: "{{__('shiharai_kaishu_jougen_kin')}}", width:130 },]},
-                       { cells: [{ binding: 'dataKaishuhouhou2',      header: "{{__('kaishuhouhou2')}}", width:130 },]},
-                       { cells: [{ binding: 'dataNyukinTsuki2',      header: "{{__('nyukin_tsuki2')}}", width:130 },]},
-                       { cells: [{ binding: 'dataNyukinDay2',      header: "{{__('nyukin_day2')}}", width:130 },]},
-                       { cells: [{ binding: 'dataTegataSate2',      header: "{{__('tegata_sate2')}}", width:130 },]},
-                       { cells: [{ binding: 'dataGinkouCd',      header: "{{__('ginkou_cd')}}", width:130 },]},
-                       { cells: [{ binding: 'dataShitenCd',      header: "{{__('shiten_cd')}}", width:130 },]},
-                       { cells: [{ binding: 'dataKaishukouzaNo',      header: "{{__('kaishukouza_no')}}", width:130 },]},
-                       { cells: [{ binding: 'dataYoshingendogaku',      header: "{{__('yoshingendogaku')}}", width:130 },]},
-                       { cells: [{ binding: 'dataBikou1',      header: "{{__('bikou1')}}", width:130 },]},
-                       { cells: [{ binding: 'dataBikou2',      header: "{{__('bikou2')}}", width:130 },]},
-                       { cells: [{ binding: 'dataBikou3',      header: "{{__('bikou3')}}", width:130 },]},
-                       { cells: [{ binding: 'dataKoumZumenHokanbasho',      header: "{{__('koum_zumen_hokanbasho')}}", width:130 },]},
-                       { cells: [{ binding: 'dataEigyoZumenHokanbasho',      header: "{{__('eigyo_zumen_hokanbasho')}}", width:130 },]},
-                       { cells: [{ binding: 'dataStartDate',          header: "{{__('yukoukikan_start_date')}}", width: 130 }] },
-                       { cells: [{ binding: 'dataEndDate',            header: "{{__('yukoukikan_end_date')}}", width: 130 }] }];
-        {{-- 現在のグリッドの並び替え条件取得 --}}
+        /* Excel出力用グリッドのレイアウト設定 */
+        let columns = [
+                    { binding: 'dataTokuisakiCd',   header: "{{__('tokuisaki_cd')}}"},
+                    { binding: 'dataTokuisakiHyoujiName', header: "{{__('tokuisaki_hyouji_name')}}"},
+                    { binding: 'dataJigyoubuCd', header: "{{__('jigyoubu_cd')}}"},
+                    { binding: 'dataJigyoubuName',            header: "{{__('jigyoubu_name')}}"},
+                    { binding: 'dataTokuisakiName1',        header: "{{__('tokuisaki_name1')}}"},
+                    { binding: 'dataTokuisakiName2',      header: "{{__('tokuisaki_name2')}}"},
+                    { binding: 'dataTokuisakiKana',         header: "{{__('tokuisaki_kana')}}"},
+                    { binding: 'dataEigyouTantoushaCd',      header: "{{__('eigyou_tantousha_cd')}}"},
+                    { binding: 'dataEigyouTantoushaName',      header: "{{__('eigyou_tantousha_name')}}"},
+                    { binding: 'dataAssistantCd',      header: "{{__('assistant_cd')}}"},
+                    { binding: 'dataAssistantName',      header: "{{__('eigyou_tantousha_name')}}"},
+                    { binding: 'keishou_kbn',      header: "{{__('keishou_kbn')}}"},
+                    { binding: 'dataShokuchiKbn',      header: "{{__('shokuchi_kbn')}}"},
+                    { binding: 'dataTokuisakiTorihikiKbn',      header: "{{__('tokuisaki_torihiki_kbn')}}"},
+                    { binding: 'dataNouhinshoMidashiKbn',      header: "{{__('nouhinsho_midashi_kbn')}}"},
+                    { binding: 'dataNouhinshoHakkouKbn',      header: "{{__('nouhinsho_hakkou_kbn')}}"},
+                    { binding: 'dataSenyouDenpyouHakkouKbn',      header: "{{__('senyou_denpyou_hakkouu_kbn')}}"},
+                    { binding: 'dataSeikyushoHakkouKbn',      header: "{{__('seikyusho_hakkou_kbn')}}"},
+                    { binding: 'dataSeikyusakiTorihikiKbn',      header: "{{__('seikyusaki_torihiki_kbn')}}"},
+                    { binding: 'dataSeikyusakiCd',      header: "{{__('seikyusaki_cd')}}"},
+                    { binding: 'dataNyukinOyaCd',      header: "{{__('nyukin_oya_cd')}}"},
+                    { binding: 'dataJusho1',      header: "{{__('jusho1')}}"},
+                    { binding: 'dataJusho2',      header: "{{__('jusho2')}}"},
+                    { binding: 'dataTelNo',      header: "{{__('tel_no')}}"},
+                    { binding: 'dataFaxNo',      header: "{{__('fax_no')}}"},
+                    { binding: 'dataSenpouRenrakusaki',      header: "{{__('senpou_renrakusaki')}}"},
+                    { binding: 'dataShohizeiKeisanTani',      header: "{{__('shohizei_keisan_tani')}}"},
+                    { binding: 'dataShohizeiKeisanHoushiki',      header: "{{__('shohizei_keisan_houshiki')}}"},
+                    { binding: 'dataShohizeiKeisanMarume',      header: "{{__('shohizei_keisan_marume')}}"},
+                    { binding: 'dataKingakuKeisanMarume',      header: "{{__('kingaku_keisan_marume')}}"},
+                    { binding: 'dataShimeDay1',      header: "{{__('shime_day1')}}"},
+                    { binding: 'dataShimeDay2',      header: "{{__('shime_day2')}}"},
+                    { binding: 'dataTekiyouTsuki',      header: "{{__('tekiyou_tsuki')}}"},
+                    { binding: 'dataNyukinTsuki',      header: "{{__('nyukin_tsuki')}}"},
+                    { binding: 'dataNyukinDay',      header: "{{__('nyukin_day')}}"},
+                    { binding: 'dataKaishuHouhou',      header: "{{__('kaishu_houhou')}}"},
+                    { binding: 'dataTegataSate',      header: "{{__('tegata_sate')}}"},
+                    { binding: 'dataBikou1',      header: "{{__('bikou1')}}"},
+                    { binding: 'dataBikou2',      header: "{{__('bikou2')}}"},
+                    { binding: 'dataBikou3',      header: "{{__('bikou3')}}"},
+                    { binding: 'dataBikou4',      header: "{{__('bikou4')}}"},
+                    { binding: 'dataKoumuZumenHokanbasho',      header: "{{__('koumu_zumen_hokanbasho')}}"},
+                    { binding: 'dataEigyouZumenHokanbasho',      header: "{{__('eigyou_zumen_hokanbasho')}}"},
+                    { binding: 'dataStartDate',          header: "{{__('yukoukikan_start_date')}}"},
+                    { binding: 'dataEndDate',          header: "{{__('yukoukikan_end_date')}}"},
+                    { binding: 'dataTourokuDt',            header: "{{__('touroku_dt')}}"},
+                    { binding: 'dataTourokushaName',            header: "{{__('tourokusha_name')}}"},
+                    { binding: 'dataKoushinDt',            header: "{{__('koushin_dt')}}"},
+                    { binding: 'dataKoushinshaName',            header: "{{__('koushinsha_name')}}"}];
+        /* 現在のグリッドの並び替え条件取得 */
         let sortState = gridMaster.collectionView.sortDescriptions.map(
             function (sd)
             {
@@ -1596,12 +1579,12 @@ define("TEKIYOU_TSUKI", array( '',
                 return { property: sd.property, ascending: sd.ascending }
             }
         );
-        {{-- CSV出力時の並び替え条件を設定 --}}
+        /* Excel出力時の並び替え条件を設定 */
         let sortDesc = new wijmo.collections.SortDescription(sortState[0].property, sortState[0].ascending);
-        {{-- CSVファイル作成
+        /* Excelファイル作成
              ※ファイル名は「ページタイトル+yyyymmddhhMMss（年月日時分秒）+.csv」
-             ※common_function.js参照 --}}
-        ExportCSVFile(gridMaster.itemsSource, columns, sortDesc, '{{ $pageTitle }}'+ getNowDateTime() +'.csv');
+             ※common_function.js参照 */
+        ExportExcelFile(gridMaster.itemsSource, columns, sortDesc, '{{ $pageTitle }}'+ getNowDateTime() +'.csv');
     }
     {{-- 「新規・参照新規・修正・削除」ボタンイベント
          ※mode → 入力ダイアログの操作、新規・修正・削除のどの処理で開いたかを判別する処理種別
@@ -1646,13 +1629,11 @@ define("TEKIYOU_TSUKI", array( '',
         nyuryokuData['dataNyukinOyaCode'].value = copy ? data['dataNyukinOyaCode'] : '';
         {{-- 「請求先CD」 --}}
         nyuryokuData['dataSeikyusakiCd'].value = copy ? data['dataSeikyusakiCd'] : '';
-        {{-- 「銀行CD」 --}}
-        nyuryokuData['dataGinkouCd'].value = copy ? data['dataGinkouCd'] : '';
-        {{-- 「支店CD」 --}}
-        nyuryokuData['dataShitenCd'].value = copy ? data['dataShitenCd'] : '';
-        {{-- 「敬称区分」 --}}
-        cmbKeishoKbn.selectedIndex = (copy && !insertFlg) ? keishoKbnValue.indexOf(data['dataKeishoKbn']) : 0;
-        {{-- 「諸口区分」 --}}
+        /* 「敬称区分」 */
+        nyuryokuData['dataKeishouKbn'].value = copy ? data['dataKeishouKbn'] : '';
+        /* 「分類名」 */
+        nyuryokuData['dataBunruiName'].value = copy ? data['dataBunruiName'] : '';
+        /* 「諸口区分」 */
         cmbShokuchiKbn.selectedIndex = (copy && !insertFlg) ? shokuchiKbnValue.indexOf(data['dataShokuchiKbn']) : 0;
         {{-- 「納品書見出区分」 --}}
         cmbNouhinshoMidashiKbn.selectedIndex = (copy && !insertFlg) ? nouhinshoMidashiKbnValue.indexOf(data['dataNouhinshoMidashiKbn']) : 0;
@@ -1688,35 +1669,25 @@ define("TEKIYOU_TSUKI", array( '',
         cmbShohizeiKeisanMarume.selectedIndex = (copy && !insertFlg) ? shohizeiKeisanMarumeValue.indexOf(data['dataShohizeiKeisanMarume']) : 0;
         {{-- 「金額計算丸目」 --}}
         cmbKingakuKeisanMarume.selectedIndex = (copy && !insertFlg) ? kingakuKeisanMarumeValue.indexOf(data['dataKingakuKeisanMarume']) : 0;
-        {{-- 「締日1」 --}}
-        cmbShimeDay1.selectedIndex = (copy && !insertFlg) ? shimebi1Value.indexOf(data['dataShimeDay1']) : 0;
-        {{-- 「締日2」 --}}
-        cmbShimeDay2.selectedIndex = (copy && !insertFlg) ? shimebi2Value.indexOf(data['dataShimeDay2']) : 0;
-        {{-- 「適用月」 --}}
-        cmbTekiyouTsuki.selectedIndex = (copy && !insertFlg) ? tekiyouTsukiValue.indexOf(data['dataTekiyouTsuki']) : 0;
-        {{-- 「入金予定月1」 --}}
-        cmbNyukinTsuki1.selectedIndex = (copy && !insertFlg) ? nyukinYoteiTsuki1Value.indexOf(data['dataNyukinTsuki1']) : 0;
-        {{-- 「入金日1」 --}}
-        cmbNyukinDay1.selectedIndex = (copy && !insertFlg) ? nyukinbi1Value.indexOf(data['dataNyukinDay1']) : 0;
-        {{-- 「回収方法1」 --}}
-        cmbKaishuhouhou1.selectedIndex = (copy && !insertFlg) ? kaishuhouhou1Value.indexOf(data['dataKaishuhouhou1']) : 0;
-        {{-- 「手形サイト1」 --}}
-        cmbTegataSate1.selectedIndex = (copy && !insertFlg) ? tegataSate1Value.indexOf(data['dataTegataSate1']) : 0;
-        {{-- 「支払・回収額上限」 --}}
-        cmbShiharaiKaishuJoukenKin.selectedIndex = (copy && !insertFlg) ? shiharaiKaishuJoukenKinValue.indexOf(data['dataShiharaiKaishuJoukenKin']) : 0;
-        {{-- 「回収方法2」 --}}
-        cmbKaishuhouhou2.selectedIndex = (copy && !insertFlg) ? kaishuhouhou2Value.indexOf(data['dataKaishuhouhou2']) : 0;
-        {{-- 「入金予定月2」 --}}
-        cmbNyukinTsuki2.selectedIndex = (copy && !insertFlg) ? nyukinYoteiTsuki2Value.indexOf(data['dataNyukinTsuki2']) : 0;
-        {{-- 「入金日2」 --}}
-        cmbNyukinDay2.selectedIndex = (copy && !insertFlg) ? nyukinbi2Value.indexOf(data['dataNyukinDay2']) : 0;
-        {{-- 「手形サイト2」 --}}
-        cmbTegataSate2.selectedIndex = (copy && !insertFlg) ? tegataSate2Value.indexOf(data['dataTegataSate2']) : 0;
-        {{-- 「回収口座区分」 --}}
-        cmbKaishukouzaKbn.selectedIndex = (copy && !insertFlg) ? kaishuKouzaKbnValue.indexOf(data['dataKaishukouzaKbn']) : 0;
-        {{-- 「回収口座番号」 --}}
-        nyuryokuData['dataKaishukouzaNo'].value = copy ? data['dataKaishukouzaNo'] : '';
-        {{-- 「与信限度額」 --}}
+        /* 「締日1」 */
+        let numberFlg=(nyuryokuData['dataShimeDay1'] != 0);
+        nyuryokuData['dataShimeDay1'].value = (copy && numberFlg) ? data['dataShimeDay1'] : 1;
+        /* 「締日2」 */
+        numberFlg=(nyuryokuData['dataShimeDay2'] != 0);
+        nyuryokuData['dataShimeDay2'].value = (copy && numberFlg) ? data['dataShimeDay2'] : 1;
+        /* 「適用月」 */
+        numberFlg=(nyuryokuData['dataTekiyouTsuki'] != 0);
+        nyuryokuData['dataTekiyouTsuki'].value = (copy && numberFlg) ? data['dataTekiyouTsuki'] : 1;
+        /* 「入金予定月」 */
+        cmbNyukinTsuki.selectedIndex = (copy && !insertFlg) ? nyukinYoteiTsukiValue.indexOf(data['dataNyukinTsuki']) : 0;
+        /* 「入金日」 */
+        numberFlg=(nyuryokuData['dataNyukinDay'] != 0);
+        nyuryokuData['dataNyukinDay'].value = (copy && numberFlg) ? data['dataNyukinDay'] : 1;
+        /* 「回収方法」 */
+        cmbKaishuHouhou.selectedIndex = (copy && !insertFlg) ? kaishuHouhouValue.indexOf(data['dataKaishuHouhou']) : 0;
+        /* 「手形サイト」 */
+        cmbTegataSate.selectedIndex = (copy && !insertFlg) ? tegataSateValue.indexOf(data['dataTegataSate']) : 0;
+        /* 「与信限度額」 */
         nyuryokuData['dataYoshingendogaku'].value = copy ? data['dataYoshingendogaku'] : '';
         {{-- 「備考1」 --}}
         nyuryokuData['dataBikou1'].value = copy ? data['dataBikou1'] : '';
@@ -1724,11 +1695,13 @@ define("TEKIYOU_TSUKI", array( '',
         nyuryokuData['dataBikou2'].value = copy ? data['dataBikou2'] : '';
         {{-- 「備考3」 --}}
         nyuryokuData['dataBikou3'].value = copy ? data['dataBikou3'] : '';
-        {{-- 「工務用図面保管場所」 --}}
-        nyuryokuData['dataKoumZumenHokanbasho'].value = copy ? data['dataKoumZumenHokanbasho'] : '';
-        {{-- 「営業用図面保管場所」 --}}
-        nyuryokuData['dataEigyoZumenHokanbasho'].value = copy ? data['dataEigyoZumenHokanbasho'] : '';
-        {{-- 「有効期間（自）」 --}}
+        /* 「備考4」 */
+        nyuryokuData['dataBikou4'].value = copy ? data['dataBikou4'] : '';
+        /* 「工務用図面保管場所」 */
+        nyuryokuData['dataKoumuZumenHokanbasho'].value = copy ? data['dataKoumuZumenHokanbasho'] : '';
+        /* 「営業用図面保管場所」 */
+        nyuryokuData['dataEigyouZumenHokanbasho'].value = copy ? data['dataEigyouZumenHokanbasho'] : '';
+        /* 「有効期間（自）」 */
         dateStart.value = !insertFlg ? data['dataStartDate'] : getNowDate();
         {{-- 「登録日時」 --}}
         nyuryokuData['dataTourokuDt'].value = !insertFlg ? data['dataTourokuDt'] : '';
@@ -1744,62 +1717,52 @@ define("TEKIYOU_TSUKI", array( '',
         let deleteFlg = (mode == MODE_DELETE);
         {{-- レコードID ※削除時のみ必要 --}}
         nyuryokuData['dataId'].value = deleteFlg ? data['dataId'] : '';
-        {{-- 検索ボタン ※削除時のみ制限 --}}
-        nyuryokuData['btnSanshou'].disabled = deleteFlg; 
-        nyuryokuData['dataTokuisakiCd'].disabled = deleteFlg; {{-- 「得意先名」 --}}
-        nyuryokuData['dataTokuisakiRyaku'].disabled = deleteFlg;
-        nyuryokuData['dataTokuisakiRyaku2'].disabled = deleteFlg;
-        nyuryokuData['dataTokuisakiHyoujiName'].disabled = deleteFlg;
-        nyuryokuData['dataTokuisakiName1'].disabled = deleteFlg;
-        nyuryokuData['dataTokuisakiName2'].disabled = deleteFlg;
-        nyuryokuData['dataTokuisakiKana'].disabled = deleteFlg;
-        nyuryokuData['dataJigyoubuCd'].disabled = deleteFlg;
-        nyuryokuData['dataEigyoTantoushaCd'].disabled = deleteFlg;
-        nyuryokuData['dataAssistantCd'].disabled = deleteFlg;
-        nyuryokuData['dataNyukinOyaCode'].disabled = deleteFlg;
-        nyuryokuData['dataSeikyusakiCd'].disabled = deleteFlg;
-        nyuryokuData['dataGinkouCd'].disabled = deleteFlg;
-        nyuryokuData['dataShitenCd'].disabled = deleteFlg;
-        cmbKeishoKbn.isDisabled = deleteFlg;
-        cmbShokuchiKbn.isDisabled = deleteFlg;
-        cmbNouhinshoMidashiKbn.isDisabled = deleteFlg;
-        cmbNouhinshoHakkouKbn.isDisabled = deleteFlg;
-        cmbSenyouDenpyouHakkoKbn.isDisabled = deleteFlg;
-        cmbSeikyushoHakkouKbn.isDisabled = deleteFlg;
-        cmbTokuisakiTorihikiKbn.isDisabled = deleteFlg;
-        cmbSeikyusakiTorihikiKbn.isDisabled = deleteFlg;
-        cmbHurikomiTesuryouKbn.isDisabled = deleteFlg;
-        nyuryokuData['dataYubinbangou'].disabled = deleteFlg;
-        nyuryokuData['dataJusho1'].disabled = deleteFlg;
-        nyuryokuData['dataJusho2'].disabled = deleteFlg;
-        nyuryokuData['dataTelNo'].disabled = deleteFlg;
-        nyuryokuData['dataFaxNo'].disabled = deleteFlg;
-        nyuryokuData['dataSenpouRenrakusaki'].disabled = deleteFlg;
-        cmbShouhizeiKeisanTani.isDisabled = deleteFlg;
-        cmbShohizeiKeisanHoushiki.isDisabled = deleteFlg;
-        cmbShohizeiKeisanMarume.isDisabled = deleteFlg;
-        cmbKingakuKeisanMarume.isDisabled = deleteFlg;
-        cmbShimeDay1.isDisabled = deleteFlg;
-        cmbShimeDay2.isDisabled = deleteFlg;
-        cmbTekiyouTsuki.isDisabled = deleteFlg;
-        cmbNyukinTsuki1.isDisabled = deleteFlg;
-        cmbNyukinDay1.isDisabled = deleteFlg;
-        cmbKaishuhouhou1.isDisabled = deleteFlg;
-        cmbTegataSate1.isDisabled = deleteFlg;
-        cmbShiharaiKaishuJoukenKin.isDisabled = deleteFlg;
-        cmbKaishuhouhou2.isDisabled = deleteFlg;
-        cmbNyukinTsuki2.isDisabled = deleteFlg;
-        cmbNyukinDay2.isDisabled = deleteFlg;
-        cmbTegataSate2.isDisabled = deleteFlg;
-        cmbKaishukouzaKbn.isDisabled = deleteFlg;
-        nyuryokuData['dataKaishukouzaNo'].disabled = deleteFlg;
-        nyuryokuData['dataYoshingendogaku'].disabled = deleteFlg;
-        nyuryokuData['dataBikou1'].disabled = deleteFlg;
-        nyuryokuData['dataBikou2'].disabled = deleteFlg;
-        nyuryokuData['dataBikou3'].disabled = deleteFlg;
-        nyuryokuData['dataKoumZumenHokanbasho'].disabled = deleteFlg;
-        nyuryokuData['dataEigyoZumenHokanbasho'].disabled = deleteFlg;
-        dateStart.isDisabled = deleteFlg;    {{-- 「有効期間（自）」 --}}
+        /* 検索ボタン ※削除時のみ制限 */
+        nyuryokuData['btnSanshou'].disabled = deleteFlg;
+        nyuryokuData['dataTokuisakiRyaku'].disabled = deleteFlg;        /* 「得意先略称」 */
+        nyuryokuData['dataTokuisakiRyaku2'].disabled = deleteFlg;       /* 「得意先略称2」 */
+        nyuryokuData['dataTokuisakiHyoujiName'].disabled = deleteFlg;   /* 「表示名」 */
+        nyuryokuData['dataTokuisakiName1'].disabled = deleteFlg;        /* 「得意先名1」 */
+        nyuryokuData['dataTokuisakiName2'].disabled = deleteFlg;        /* 「得意先名2」 */
+        nyuryokuData['dataTokuisakiKana'].disabled = deleteFlg;         /* 「得意先カナ」 */
+        nyuryokuData['dataJigyoubuCd'].disabled = deleteFlg;            /* 「事業部CD」 */
+        nyuryokuData['dataEigyouTantoushaCd'].disabled = deleteFlg;     /* 「営業担当者CD」 */
+        nyuryokuData['dataAssistantCd'].disabled = deleteFlg;           /* 「アシスタントCD」 */
+        nyuryokuData['dataNyukinOyaCd'].disabled = deleteFlg;           /* 「入金親CD」 */
+        nyuryokuData['dataSeikyusakiCd'].disabled = deleteFlg;          /* 「請求先CD」 */
+        nyuryokuData['dataKeishouKbn'].disabled = deleteFlg;            /* 「敬称区分」 */
+        cmbShokuchiKbn.isDisabled = deleteFlg;                          /* 「諸口区分」 */
+        cmbNouhinshoMidashiKbn.isDisabled = deleteFlg;                  /* 「納品書見出区分」 */
+        cmbNouhinshoHakkouKbn.isDisabled = deleteFlg;                   /* 「納品書発行区分」 */
+        cmbSenyouDenpyouHakkouKbn.isDisabled = deleteFlg;               /* 「専用伝票区分」 */
+        cmbSeikyushoHakkouKbn.isDisabled = deleteFlg;                   /* 「請求書発行区分」 */
+        cmbTokuisakiTorihikiKbn.isDisabled = deleteFlg;                 /* 「得意先取引区分」 */
+        cmbSeikyusakiTorihikiKbn.isDisabled = deleteFlg;                /* 「請求先取引区分」 */
+        cmbFurikomiTesuryouKbn.isDisabled = deleteFlg;                  /* 「振込手数料区分」 */
+        nyuryokuData['dataJusho1'].disabled = deleteFlg;                /* 「住所1」 */
+        nyuryokuData['dataJusho2'].disabled = deleteFlg;                /* 「住所2」 */
+        nyuryokuData['dataTelNo'].disabled = deleteFlg;                 /* 「電話番号」 */
+        nyuryokuData['dataFaxNo'].disabled = deleteFlg;                 /* 「FAX番号」 */
+        nyuryokuData['dataSenpouRenrakusaki'].disabled = deleteFlg;     /* 「先方連絡先」 */
+        cmbShohizeiKeisanTani.isDisabled = deleteFlg;                   /* 「消費税計算単位」 */
+        cmbShohizeiKeisanHoushiki.isDisabled = deleteFlg;               /* 「消費税計算方式」 */
+        cmbShohizeiKeisanMarume.isDisabled = deleteFlg;                 /* 「消費税計算丸目」 */
+        cmbKingakuKeisanMarume.isDisabled = deleteFlg;                  /* 「金額計算丸目」 */
+        nyuryokuData['dataShimeDay1'].disabled = deleteFlg;             /* 「締日1」 */
+        nyuryokuData['dataShimeDay2'].disabled = deleteFlg;             /* 「締日2」 */
+        nyuryokuData['dataTekiyouTsuki'].disabled = deleteFlg;          /* 「適用月（締日2）」 */
+        cmbNyukinTsuki.isDisabled = deleteFlg;                          /* 「入金予定月」 */
+        nyuryokuData['dataNyukinDay'].disabled = deleteFlg;             /* 「入金日」 */
+        cmbKaishuHouhou.isDisabled = deleteFlg;                         /* 「回収方法」 */
+        cmbTegataSate.isDisabled = deleteFlg;                           /* 「手形サイト」 */
+        nyuryokuData['dataYoshingendogaku'].disabled = deleteFlg;       /* 「与信限度額」 */
+        nyuryokuData['dataBikou1'].disabled = deleteFlg;                /* 「備考1」 */
+        nyuryokuData['dataBikou2'].disabled = deleteFlg;                /* 「備考2」 */
+        nyuryokuData['dataBikou3'].disabled = deleteFlg;                /* 「備考3」 */
+        nyuryokuData['dataBikou4'].disabled = deleteFlg;                /* 「備考4」 */
+        nyuryokuData['dataKoumuZumenHokanbasho'].disabled = deleteFlg;  /* 「工務用図面保管場所」 */
+        nyuryokuData['dataEigyouZumenHokanbasho'].disabled = deleteFlg; /* 「営業用図面保管場所」 */
+        dateStart.isDisabled = deleteFlg;                               /* 「有効期間（自）」 */
 
         {{-- 入力フォームのスタイル初期化 ※common_function.js参照　--}}
         InitFormStyle();
@@ -1818,20 +1781,15 @@ define("TEKIYOU_TSUKI", array( '',
         ClosePopupDlg();
         {{-- データエラー判定 ※common_function.js参照 --}}
         if(IsAjaxDataError(data, errorFlg)) return;
-        {{-- グリッドデータ反映＆並び順と選択位置保持 ※common_function.js参照 --}}
+        /* ボタン制御更新 */
+        SetEnableButton(data[1].length);
+        /* 件数更新 */
+        $("#zenkenCnt").html(data[1].length);
+        /* グリッドデータ反映＆並び順と選択位置保持 ※common_function.js参照 */
         selectedRows = SortMultiRowData(gridMaster, data[1], 'dataTokuisakiCd');
     }
 
-    {{-- 検索件数更新 --}}
-    var fncJushinDataCnt = function(data, errorFlg)
-    {
-        {{-- データエラー判定 ※common_function.js参照 --}}
-        if(IsAjaxDataError(data, errorFlg)) return;
-        {{-- 件数更新 --}}
-        $("#zenkenCnt").html(data[1]);
-    }
-
-    {{-- DBデータ更新 --}}
+    /* DBデータ更新 */
     var fncUpdateData = function(data, errorFlg)
     {
         {{-- 「データ更新中」非表示 --}}
@@ -1891,24 +1849,34 @@ define("TEKIYOU_TSUKI", array( '',
             let data = gridMaster.collectionView.currentItem;
             {{-- 更新処理以外の処理の場合は判定せずにtrue --}}
             if(nyuryokuData['dataSQLType'].value != MODE_UPDATE) return true;
-            {{-- 「得意先名」 --}}
-            if(nyuryokuData['dataTokuisakiRyaku'].value != data['dataTokuisakiRyaku']) return true;
-            if(nyuryokuData['dataTokuisakiRyaku2'].value != data['dataTokuisakiRyaku2']) return true;
-            if(nyuryokuData['dataTokuisakiHyoujiName'].value != data['dataTokuisakiHyoujiName']) return true;
-            if(nyuryokuData['dataTokuisakiName1'].value != data['dataTokuisakiName1']) return true;
-            if(nyuryokuData['dataTokuisakiName2'].value != data['dataTokuisakiName2']) return true;
-            if(nyuryokuData['dataTokuisakiKana'].value != data['dataTokuisakiKana']) return true;
+            if((nyuryokuData['dataTokuisakiRyaku'].value != data['dataTokuisakiRyaku']) &&
+              !(nyuryokuData['dataTokuisakiRyaku'].value == '' && data['dataTokuisakiRyaku'] == null)) return true;
+            if((nyuryokuData['dataTokuisakiRyaku2'].value != data['dataTokuisakiRyaku2']) &&
+              !(nyuryokuData['dataTokuisakiRyaku2'].value == '' && data['dataTokuisakiRyaku2'] == null)) return true;
+            if((nyuryokuData['dataTokuisakiHyoujiName'].value != data['dataTokuisakiHyoujiName']) &&
+              !(nyuryokuData['dataTokuisakiHyoujiName'].value == '' && data['dataTokuisakiHyoujiName'] == null)) return true;
+            if((nyuryokuData['dataTokuisakiName1'].value != data['dataTokuisakiName1']) &&
+              !(nyuryokuData['dataTokuisakiName1'].value == '' && data['dataTokuisakiName1'] == null)) return true;
+            if((nyuryokuData['dataTokuisakiName2'].value != data['dataTokuisakiName2']) &&
+              !(nyuryokuData['dataTokuisakiName2'].value == '' && data['dataTokuisakiName2'] == null)) return true;
+            if((nyuryokuData['dataTokuisakiKana'].value != data['dataTokuisakiKana']) &&
+              !(nyuryokuData['dataTokuisakiKana'].value == '' && data['dataTokuisakiKana'] == null)) return true;
             if(nyuryokuData['dataJigyoubuCd'].value != data['dataJigyoubuCd']) return true;
-            if(nyuryokuData['dataEigyoTantoushaCd'].value != data['dataEigyoTantoushaCd']) return true;
-            if(nyuryokuData['dataEigyoTantoushaCd'].value != data['dataEigyoTantoushaCd']) return true;
-            if(nyuryokuData['dataAssistantCd'].value != data['dataAssistantCd']) return true;
-            if(nyuryokuData['dataNyukinOyaCode'].value != data['dataNyukinOyaCode']) return true;
-            if(nyuryokuData['dataSeikyusakiCd'].value != data['dataSeikyusakiCd']) return true;
-            if(nyuryokuData['dataGinkouCd'].value != data['dataGinkouCd']) return true;
-            if(nyuryokuData['dataShitenCd'].value != data['dataShitenCd']) return true;
-            if(nyuryokuData[''].value != data['']) return true;
-            {{-- 「敬称区分」 --}}
-            if(keishoKbnValue[cmbKeishoKbn.selectedIndex] != data['dataKeishoKbn']) return true;
+            if(nyuryokuData['dataJigyoubuName'].value != data['dataJigyoubuName']) return true;
+            if((nyuryokuData['dataEigyouTantoushaCd'].value != data['dataEigyouTantoushaCd']) &&
+              !(nyuryokuData['dataEigyouTantoushaCd'].value == '' && data['dataEigyouTantoushaCd'] == null)) return true;
+            if((nyuryokuData['dataEigyouTantoushaName'].value != data['dataEigyouTantoushaName']) &&
+              !(nyuryokuData['dataEigyouTantoushaName'].value == '' && data['dataEigyouTantoushaName'] == null)) return true;
+            if((nyuryokuData['dataAssistantCd'].value != data['dataAssistantCd']) &&
+              !(nyuryokuData['dataAssistantCd'].value == '' && data['dataAssistantCd'] == null)) return true;
+            if((nyuryokuData['dataAssistantName'].value != data['dataAssistantName']) &&
+              !(nyuryokuData['dataAssistantName'].value == '' && data['dataAssistantName'] == null)) return true;
+            if((nyuryokuData['dataNyukinOyaCd'].value != data['dataNyukinOyaCd']) &&
+              !(nyuryokuData['dataNyukinOyaCd'].value == '' && data['dataNyukinOyaCd'] == null)) return true;
+            if((nyuryokuData['dataSeikyusakiCd'].value != data['dataSeikyusakiCd']) &&
+              !(nyuryokuData['dataSeikyusakiCd'].value == '' && data['dataSeikyusakiCd'] == null)) return true;
+            if((nyuryokuData['dataKeishouKbn'].value != data['dataKeishouKbn']) &&
+              !(nyuryokuData['dataKeishouKbn'].value == '' && data['dataKeishouKbn'] == null)) return true;
             if(shokuchiKbnValue[cmbShokuchiKbn.selectedIndex] != data['dataShokuchiKbn']) return true;
             if(nouhinshoMidashiKbnValue[cmbNouhinshoMidashiKbn.selectedIndex] != data['dataNouhinshoMidashiKbn']) return true;
             if(nouhinshoHakkouKbnValue[cmbNouhinshoHakkouKbn.selectedIndex] != data['dataNouhinshoHakkouKbn']) return true;
@@ -1970,8 +1938,7 @@ define("TEKIYOU_TSUKI", array( '',
             ClosePopupDlg();
             return;
         }
-        {{-- 権限区分のコンボボックスの値取得 --}}
-        nyuryokuData['dataKeishoKbn'].value = keishoKbnValue[cmbKeishoKbn.selectedIndex];
+        /* 権限区分のコンボボックスの値取得 */
         nyuryokuData['dataShokuchiKbn'].value = shokuchiKbnValue[cmbShokuchiKbn.selectedIndex];
         nyuryokuData['dataNouhinshoMidashiKbn'].value = nouhinshoMidashiKbnValue[cmbNouhinshoMidashiKbn.selectedIndex];
         nyuryokuData['dataNouhinshoHakkouKbn'].value = nouhinshoHakkouKbnValue[cmbNouhinshoHakkouKbn.selectedIndex];
@@ -2040,7 +2007,19 @@ define("TEKIYOU_TSUKI", array( '',
         {
             {{-- 事業部CD --}}
             case 'dataJigyoubuCd': break;
-            {{-- 該当しない場合は処理終了 --}}
+            /* 該当しない場合は処理終了 */
+            break;
+            /* 営業担当CD */
+            case 'dataEigyouTantoushaCd': break;
+            /* 該当しない場合は処理終了 */
+            break;
+            /* 敬称区分 */
+            case 'dataKeishouKbn': break;
+            /* 該当しない場合は処理終了 */
+            break;
+            /* アシスタントCD */
+            case 'dataAssistantCd': break;
+            /* 該当しない場合は処理終了 */
             default: return;
             break;
         }
@@ -2081,6 +2060,21 @@ define("TEKIYOU_TSUKI", array( '',
             case 'dataJigyoubuCd':
             ShowSentakuDlg("{{ __('jigyoubu_cd') }}", "{{ __('jigyoubu_name') }}",
                            currentCdElement, currentNameElement, "{{ url('/inquiry/0100') }}");
+            break;
+            /* 営業担当者CD */
+            case 'dataEigyouTantoushaCd':
+            ShowSentakuDlg("{{ __('eigyou_tantousha_cd') }}", "{{ __('eigyou_tantousha_name') }}",
+                           currentCdElement, currentNameElement, "{{ url('/inquiry/0400') }}");
+            break;
+            /* 敬称区分 */
+            case 'dataKeishouKbn':
+            ShowSentakuDlg("{{ __('keishou_kbn') }}", "{{ __('bunrui_name') }}",
+                           currentCdElement, currentNameElement, "{{ url('/inquiry/1300') }}");
+            break;
+            /* アシスタントCD */
+            case 'dataAssistantCd':
+            ShowSentakuDlg("{{ __('assistant_cd') }}", "{{ __('assistant_name') }}",
+                           currentCdElement, currentNameElement, "{{ url('/inquiry/0400') }}");
             break;
         }
     });

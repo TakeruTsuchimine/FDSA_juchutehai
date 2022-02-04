@@ -28,7 +28,10 @@ class PCINQ_1800 extends Controller
             //   SQL文作成   //
             ///////////////////
             // SQL選択項目
-            $SQLHeadText = " select ".$targetRowCd." , ".$targetRowName." from ".$targetTable;
+            $SQLHeadText = "
+            select shiiresaki_cd
+                  ,shiiresaki_ryaku
+            from   shiiresaki_master ";
             // SQL条件項目
             $SQLBodyText = "
             where  sakujo_dt is null
@@ -36,7 +39,8 @@ class PCINQ_1800 extends Controller
             and    :today <= case when yukoukikan_end_date is null
                                   then '2199-12-31'
                                   else yukoukikan_end_date end ";
-            $SQLTailText = " order by ".$targetRowCd;
+            $SQLTailText = "
+            order by shiiresaki_cd ";
             // SQLバインド値
             $SQLBind = array();
 

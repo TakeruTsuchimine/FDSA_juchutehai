@@ -19,15 +19,15 @@
     <div class="form-column">
         {{-- 「割付候補CD」 --}}
         <label>
-            <span style="width:8em;">{{__('waritsukekouho_cd')}}</span>
-            <input name="dataWaritsukekouhoCd" class="form-control code-check" type="text" 
+            <span style="width:8em;">{{__('waritsuke_kouho_cd')}}</span>
+            <input name="dataWaritsukeKouhoCd" class="form-control code-check" type="text" 
                 maxlength="10" autocomplete="off" style="width:10em;" 
                     pattern="^([a-zA-Z0-9]{0,10})$" title="{{ ('半角英数字10文字以内で入力してください')}}"   required>
         </label>
         {{-- 「割付候補名」 --}}
         <label>
-            <span style="width:8em;">{{__('waritsukekouho_name')}}</span>
-            <input name="dataWaritsukekouhoName" class="form-control code-check" type="text" 
+            <span style="width:8em;">{{__('waritsuke_kouho_name')}}</span>
+            <input name="dataWaritsukeKouhoName" class="form-control code-check" type="text" 
                 maxlength="20" autocomplete="off" style="width:12em;" required>
         </label>
         {{-- 「担当者CD」 --}}
@@ -80,15 +80,15 @@
             <div class="flex-box flex-center flex-column item-start"style="width: 90%;">
                 {{-- 「割付候補CD」 --}}
                 <label>
-                    <span style="width:8em;">{{__('waritsukekouho_cd')}}</span>
-                    <input name="dataWaritsukekouhoCd" class="form-control code-check" type="text" 
+                    <span style="width:8em;">{{__('waritsuke_kouho_cd')}}</span>
+                    <input name="dataWaritsukeKouhoCd" class="form-control code-check" type="text" 
                         maxlength="10" autocomplete="off" style="width:15em;" 
                             pattern="^([a-zA-Z0-9]{0,10})$" title="{{ ('半角英数字10文字以内で入力してください')}}"  required>
                 </label>
                 {{-- 「割付候補名」 --}}
                 <label>
-                    <span style="width:8em;">{{__('waritsukekouho_name')}}</span>
-                    <input name="dataWaritsukekouhoName" class="form-control code-check" type="text" 
+                    <span style="width:8em;">{{__('waritsuke_kouho_name')}}</span>
+                    <input name="dataWaritsukeKouhoName" class="form-control code-check" type="text" 
                         maxlength="20" autocomplete="off" style="width:18em;" required>
                 </label>
             </div>
@@ -109,7 +109,7 @@
                 <label>
                     <span style="width:5em;">{{__('setsumeibun')}}</span>
                     <input name="dataSetsumeibun" class="form-control code-check" type="text" 
-                        maxlength="512" autocomplete="off" style="width:30em;" required>
+                        maxlength="512" autocomplete="off" style="width:30em;">
                 </label>
             </div>
         </div>   
@@ -217,10 +217,10 @@ style="margin-right:10px;">
         SetFncKey(null);
         {{-- 入力ダイアログ表示イベント登録 ※common_function.js参照 --}}
         SetWaritsukeData(fncWaritsukeData);
-        {{-- 「表示」ボタンイベント登録 ※common_function.js参照 --}}
-        SetBtnHyouji(fncShowDataGrid); 
-        {{-- 「CSV出力」ボタンイベント登録 ※common_function.js参照 --}}
-        SetBtnCSV(fncExportCSV);
+        /* 「表示」ボタンイベント登録 ※common_function.js参照 */
+        SetBtnHyouji(fncShowDataGrid);
+        /* 「Excel出力」ボタンイベント登録 ※common_function.js参照 */
+        SetBtnExcel(fncExportExcel);
 
         {{-- グリッド初期処理--}}
         InitGrid();
@@ -237,14 +237,16 @@ style="margin-right:10px;">
     function InitGrid()
     {
         {{-- MultiRowのレイアウト設定 --}}
-        let columns = [{ cells: [{ binding: 'dataWaritsukekouhoCd',   header: "{{__('waritsukekouho_cd')}}", width: '2*' }]},
-                       { cells: [{ binding: 'dataWaritsukekouhoName', header: "{{__('waritsukekouho_name')}}", width: '2*' },]},
-                       { cells: [{ binding: 'dataSubNo', header: "{{__('sub_seq')}}", width: 130 },]},
-                       { cells: [{ binding: 'dataCntWaritsukeCd',            header: "{{__('cnt')}}", width: 130 }] },
-                       { cells: [{ binding: 'dataTantoushaCd',        header: "{{__('sentoTantosha_cd')}}", width: '2*' },]},
-                       { cells: [{ binding: 'dataTantoushaName',      header: "{{__('sentTantosha_name')}}", width: '2*' },]},
-                       { cells: [{ binding: 'dataKakouSkill',         header: "{{__('kakou_skill')}}", width:'1.7*' },]},
-                       { cells: [{ binding: 'dataKakounouryoku_keisu',      header: "{{__('kakou_nouryoku_keisu')}}", width:'1.7*' },]},
+        let columns = [{ cells: [{ binding: 'dataWaritsukeKouhoCd',   header: "{{__('waritsuke_kouho_cd')}}", width: '2*' },
+                                 { binding: 'dataWaritsukeKouhoName', header: "{{__('waritsuke_kouho_name')}}", width: '2*' }]},
+                       { cells: [{ binding: 'dataJigyoubuCd',   header: "{{__('jigyoubu_cd')}}", width: 130 },
+                                 { binding: 'dataJigyoubuName',   header: "{{__('jigyoubu_name')}}", width: 130 }]}, 
+                       { cells: [{ binding: 'dataSubNo', header: "{{__('sub_seqno')}}", width: 90 },]},
+                       { cells: [{ binding: 'dataCntWaritsukeCd',            header: "{{__('cnt')}}", width: 90 }] },
+                       { cells: [{ binding: 'dataTantoushaCd',        header: "{{__('sentou_tantosha_cd')}}", width: '2*' },
+                                 { binding: 'dataTantoushaName',      header: "{{__('sentou_tantosha_name')}}", width: '2*' }]},
+                       { cells: [{ binding: 'dataKakouSkill',         header: "{{__('sentou_kakou_skill')}}", width:'1.7*' },]},
+                       { cells: [{ binding: 'dataKakouNouryokuKeisu',      header: "{{__('sentou_kakou_nouryoku_keisu')}}", width:'1.7*' },]},
                        { cells: [{ binding: 'dataStartDate',          header: "{{__('yukoukikan_start_date')}}", width: '1.7*' }] },
                        { cells: [{ binding: 'dataEndDate',            header: "{{__('yukoukikan_end_date')}}", width: '1.7*' }] },
                        { cells: [{ binding: 'dataIndex', width: 0 }] }];  
@@ -357,26 +359,27 @@ style="margin-right:10px;">
         ShowPopupDlg("{{ __('データ読込中') }}");
         {{-- グリッドのデータ受信 --}}
         AjaxData("{{ url('/master/0500') }}", soushinData, fncJushinGridData);
-        {{-- 検索件数の取得フラグの送信データを追加 --}}
-        soushinData["dataCntFlg"] = true;
-        {{-- 検索件数のデータ受信 --}}
-        AjaxData("{{ url('/master/0500') }}", soushinData, fncJushinDataCnt);
     }
-    {{-- 「CSV出力」ボタンイベント --}}
-    var fncExportCSV = function()
+    /* 「Excel出力」ボタンイベント */
+    var fncExportExcel = function()
     {
-        {{-- CSV出力用グリッドのレイアウト設定 --}}
-        let columns = [{ binding: 'dataWaritsukekouhoCd',   header: "{{__('waritsukekouho_cd')}}" },
-                       { binding: 'dataWaritsukekouhoName', header: "{{__('waritsukekouho_name')}}" },
-                       { binding: 'dataSubNo', header: "{{__('sub_seq')}}" },
+        /* Excel出力用グリッドのレイアウト設定 */
+        let columns = [{ binding: 'dataJigyoubuCd',   header: "{{__('jigyoubu_cd')}}" },
+                       { binding: 'dataWaritsukeKouhoCd', header: "{{__('waritsuke_kouho_cd')}}" },
+                       { binding: 'dataWaritsukeKouhoName', header: "{{__('waritsuke_kouho_name')}}" },
+                       { binding: 'dataSubNo', header: "{{__('sub_seqno')}}" },
                        { binding: 'dataCntWaritsukeCd',            header: "{{__('cnt')}}" },
                        { binding: 'dataTantoushaCd',        header: "{{__('sentoTantosha_cd')}}"},
                        { binding: 'dataTantoushaName',      header: "{{__('sentTantosha_name')}}" },
                        { binding: 'dataKakouSkill',         header: "{{__('kakou_skill')}}" },
-                       { binding: 'dataKakounouryoku_keisu',      header: "{{__('kakou_nouryoku_keisu')}}" },
+                       { binding: 'dataKakouNouryokuKeisu',      header: "{{__('kakou_nouryoku_keisu')}}" },
                        { binding: 'dataStartDate',          header: "{{__('yukoukikan_start_date')}}" },
-                       { binding: 'dataEndDate',            header: "{{__('yukoukikan_end_date')}}" }];
-        {{-- 現在のグリッドの並び替え条件取得 --}}
+                       { binding: 'dataEndDate',            header: "{{__('yukoukikan_end_date')}}" },
+                       { binding: 'dataTourokuDt',            header: "{{__('touroku_dt')}}" },
+                       { binding: 'dataTourokushaId',            header: "{{__('tourokusha_id')}}" },
+                       { binding: 'dataKoushinDt',            header: "{{__('koushin_dt')}}" },
+                       { binding: 'dataKoushinshaId',            header: "{{__('koushinsha_id')}}" }];
+        /* 現在のグリッドの並び替え条件取得 */
         let sortState = gridMaster.collectionView.sortDescriptions.map(
             function (sd)
             {
@@ -384,12 +387,12 @@ style="margin-right:10px;">
                 return { property: sd.property, ascending: sd.ascending }
             }
         );
-        {{-- CSV出力時の並び替え条件を設定 --}}
+        /* Excel出力時の並び替え条件を設定 */
         let sortDesc = new wijmo.collections.SortDescription(sortState[0].property, sortState[0].ascending);
-        {{-- CSVファイル作成
+        /* Excelファイル作成
              ※ファイル名は「ページタイトル+yyyymmddhhMMss（年月日時分秒）+.csv」
-             ※common_function.js参照 --}}
-        ExportCSVFile(gridMaster.itemsSource, columns, sortDesc, '{{ $pageTitle }}'+ getNowDateTime() +'.csv');
+             ※common_function.js参照 */
+        ExportExcelFile(gridMaster.itemsSource, columns, sortDesc, '{{ $pageTitle }}'+ getNowDateTime() +'.csv');
     }
     {{-- 「新規・参照新規・修正・削除」ボタンイベント
          ※mode → 入力ダイアログの操作、新規・修正・削除のどの処理で開いたかを判別する処理種別
@@ -406,10 +409,10 @@ style="margin-right:10px;">
         {{-- 「処理種別」 --}}
         waritsukeData['dataSQLType'].value = mode;
         {{-- 「割付候補CD」 --}}
-        waritsukeData['dataWaritsukekouhoCd'].value = copy ? data['dataWaritsukekouhoCd'] : '';
-        waritsukeData['dataWaritsukekouhoCd'].disabled = !insertFlg;
+        waritsukeData['dataWaritsukeKouhoCd'].value = copy ? data['dataWaritsukeKouhoCd'] : '';
+        waritsukeData['dataWaritsukeKouhoCd'].disabled = !insertFlg;
         {{-- 「担当割付候補名」 --}}
-        waritsukeData['dataWaritsukekouhoName'].value = copy ? data['dataWaritsukekouhoName'] : '';
+        waritsukeData['dataWaritsukeKouhoName'].value = copy ? data['dataWaritsukeKouhoName'] : '';
         {{-- 「事業部CD」 --}}
         waritsukeData['dataJigyoubuCd'].value = copy ? data['dataJigyoubuCd'] : '';
         {{-- 「事業部名」 --}}
@@ -417,8 +420,8 @@ style="margin-right:10px;">
         {{-- 「説明文」 --}}
         waritsukeData['dataSetsumeibun'].value = copy ? data['dataSetsumeibun'] : '';
         if(mode==1 && copy==false){
-             waritsukeData['dataWaritsukekouhoCd'].value = '';
-             waritsukeData['dataWaritsukekouhoName'].value = '';
+             waritsukeData['dataWaritsukeKouhoCd'].value = '';
+             waritsukeData['dataWaritsukeKouhoName'].value = '';
              waritsukeData['dataSetsumeibun'].value = ''; 
              waritsukeData['dataJigyoubuCd'].value = '';
         }
@@ -431,8 +434,8 @@ style="margin-right:10px;">
         let deleteFlg = (mode == MODE_DELETE);
         {{-- レコードID ※削除時のみ必要 --}}
         waritsukeData['dataId'].value = deleteFlg ? data['dataId'] : '';
-        waritsukeData['dataWaritsukekouhoCd'].disabled = deleteFlg; 
-        waritsukeData['dataWaritsukekouhoName'].disabled = deleteFlg; 
+        waritsukeData['dataWaritsukeKouhoCd'].disabled = deleteFlg; 
+        waritsukeData['dataWaritsukeKouhoName'].disabled = deleteFlg; 
         waritsukeData['dataJigyoubuCd'].disabled = deleteFlg; {{-- 「事業部CD」 --}}
         waritsukeData['dataSetsumeibun'].disabled = deleteFlg; 
         waritsukeData['btnRight'].disabled = deleteFlg; 
@@ -447,8 +450,11 @@ style="margin-right:10px;">
     {
         let waritsukeData = document.forms['frmWaritsuke'].elements;
         if(mode==1 && copy==true){
-             waritsukeData['dataWaritsukekouhoCd'].value = '';
-             waritsukeData['dataWaritsukekouhoName'].value = '';
+            waritsukeData['dataWaritsukeKouhoCd'].value = '';
+            waritsukeData['dataWaritsukeKouhoName'].value = '';
+            waritsukeData['dataSetsumeibun'].value = '';
+            waritsukeData['dataJigyoubuCd'].value = '';
+            waritsukeData['dataJigyoubuName'].value = '';
         }
     }
 
@@ -465,39 +471,39 @@ style="margin-right:10px;">
         ClosePopupDlg();
         {{-- データエラー判定 ※common_function.js参照 --}}
         if(IsAjaxDataError(data, errorFlg)) return;
-        {{-- グリッドデータ反映＆並び順と選択位置保持 ※common_function.js参照 --}}
-        selectedRows = SortMultiRowData(gridMaster, data[1], 'dataWaritsukekouhoCd');
-        console.log(data[1],'data')
+        /* 件数更新 */
+        $("#zenkenCnt").html(data[1].length);
+        /* グリッドデータ反映＆並び順と選択位置保持 ※common_function.js参照 */
+        selectedRows = SortMultiRowData(gridMaster, data[1], 'dataWaritsukeKouhoCd');
+        //console.log(data[1],'data')
     }
 
-    {{-- 検索件数更新 --}}
-    var fncJushinDataCnt = function(data, errorFlg)
-    {
-        {{-- データエラー判定 ※common_function.js参照 --}}
-        if(IsAjaxDataError(data, errorFlg)) return;
-        {{-- 件数更新 --}}
-        $("#zenkenCnt").html(data[1]);
-    }
-
-    {{-- DBデータ更新 --}}
+    /* DBデータ更新 */
     var fncUpdateData = function(data, errorFlg)
     {
-        {{-- 「データ更新中」非表示 --}}
-        ClosePopupDlg();
+        //console.log(data,'aaaaaaaaaaaaa')
         {{-- データエラー判定 ※common_function.js参照 --}}
         if(!IsAjaxDataError(data, errorFlg))
         {
-            {{-- 「データ更新完了」表示 --}}
-            ShowAlertDlg('データ更新完了');
-            {{-- 選択行のデータIDを保持 ※common_function.js参照 --}}
-            SetSelectedRowId(data[2][0]);
-            {{-- 入力ダイアログを閉じる --}}
-            CloseWaritsukeDlg();
-            {{-- グリッドデータの表示 --}}
-            $('#btnHyouji').click();
+            console.log(data[3])
+            console.log(data[4])
+            if(data[3] == data[4]){
+                {{-- 「データ更新中」非表示 --}}
+                ClosePopupDlg();
+                {{-- 「データ更新完了」表示 --}}
+                ShowAlertDlg('データ更新完了');
+                {{-- 選択行のデータIDを保持 ※common_function.js参照 --}}
+                SetSelectedRowId(data[2][0]);
+                {{-- 入力ダイアログを閉じる --}}
+                CloseWaritsukeDlg();
+                {{-- グリッドデータの表示 --}}
+                $('#btnHyouji').click();
+            }
         }
         else
         {
+            {{-- 「データ更新中」非表示 --}}
+            ClosePopupDlg();
             {{-- エラー時処理 --}}
             {{-- データ判定対象要素 --}}
             let targetElement = data[2];
@@ -505,7 +511,7 @@ style="margin-right:10px;">
             let classText = '';
             {{-- 対象要素のCSSテキストを書き換える
                  ※コード検査を行う項目は、スタイルクラス「code-check」が宣言されている --}}
-            for(let i=0; i<$('.code-check').length; i++)
+            for(let i = 0; i<$('.code-check').length; i++)
             {
                 {{-- 対象要素のCSSテキストを取得 --}}
                 classText = $('.code-check')[i].className;
@@ -543,19 +549,19 @@ style="margin-right:10px;">
             {{-- 「事業部CD」 --}}
             if(waritsukeData['dataJigyoubuCd'].value != data['dataJigyoubuCd']) return true;
             {{-- 「割付候補CD」 --}}
-            if(waritsukeData['dataWaritsukekouhoCd'].value != data['dataWaritsukekouhoCd']) return true;
+            if(waritsukeData['dataWaritsukeKouhoCd'].value != data['dataWaritsukeKouhoCd']) return true;
             {{-- 「割付候補名」 --}}
-            if(waritsukeData['dataWaritsukekouhoName'].value != data['dataWaritsukekouhoName']) return true;
+            if(waritsukeData['dataWaritsukeKouhoName'].value != data['dataWaritsukeKouhoName']) return true;
             {{-- 「説明文」 --}}
             if(waritsukeData['dataSetsumeibun'] != data['dataSetsumeibun']) return true;
-            {{-- 「担当者ID」 --}}
-            if(data2['dataTantoshaId'] != data['dataTantoshaId']) return true;
             {{-- 「担当者CD」 --}}
             if(data2['dataTantoushaCd'] != data['dataTantoushaCd']) return true;
             {{-- 「加工スキル」 --}}
             if(data2['dataKakouSkill'] != data['dataKakouSkill']) return true;
-            {{-- 「加工能力係数」 --}}
-            if(data2['dataKakounouryoku_keisu'] != data['dataKakounouryoku_keisu']) return true;
+            /* 「加工能力係数」 */
+            if(data2['dataKakouNouryokuKeisu'] != data['dataKakouNouryokuKeisu']) return true;
+            /* 「有効期間（自）」 */
+            if(waritsukeData['dataStartDate'] != data['dataStartDate']) return true;
 
             {{-- 上記項目に変更が無い場合はfalse --}}
             return false;
@@ -578,81 +584,140 @@ style="margin-right:10px;">
             ClosePopupDlg();
             return;
         }
- 
-        //let waritsukeData = document.forms['frmWaritsuke'].elements;
 
+        // デバッグ用
         console.log(gridMasterRight.itemsSource,'gridMasterRight.itemsSource');
+        
+            //
+        if(waritsukeData['dataSQLType'].value == MODE_DELETE)
+        {
+            {{-- 「データチェック中」非表示 --}}
+            ClosePopupDlg();
+            {{-- 確認ダイアログを経由して処理 --}}
+            ShowConfirmDlg("このレコードを削除しますか？",
+            {{-- OKボタンを押したときの処理 --}}
+            function()
+            {
+                MakeSoushinData();
+            }, null);
+        }
+        else{
+            var dataWaritsukeFlg = false;
+            var dataSkillFlg = false;
+            var dataSkillFlg2 = true;
+            let waritsukeArray;
+            if(gridMasterRight.itemsSource.length === 0 || gridMasterRight.itemsSource === undefined){
+                ShowAlertDlg("{{__('右のグリッドにデータを移してください')}}");
+                // 「データチェック中」非表示
+                ClosePopupDlg();
+            }
+            else{
+                for(var c = 0; c < gridMasterRight.itemsSource.length; c++){
+                    let obj = gridMasterRight.itemsSource[c];
+                    if(obj.dataKakouSkill === '' || obj.dataKakouSkill === undefined){
+                        dataSkillFlg = true;
+                        break;
+                    }
+                }
+                for(var c = 0; c < gridMasterRight.itemsSource.length; c++){
+                    let obj = gridMasterRight.itemsSource[c];
+                    if(obj.dataKakouSkill == 'A' || obj.dataKakouSkill == 'B' || obj.dataKakouSkill == 'C' || obj.dataKakouSkill == 'D' || obj.dataKakouSkill == 'E'){
+                        dataSkillFlg2 = false;
+                    }
+                    else{
+                        break;
+                    }
+                }
+                //console.log(obj.dataKakouSkill)
+                if(waritsukeData['dataSQLType'].value == MODE_INSERT){
+                    for(var w = 0; w < gridMaster.itemsSource.length; w++){
+                        waritsukeArray = gridMaster.itemsSource[w];
+                        if(waritsukeArray['dataWaritsukeKouhoCd'] == waritsukeData['dataWaritsukeKouhoCd'].value){
+                            dataWaritsukeFlg = true;
+                        }
+                    }
+                }
+                if(dataSkillFlg === true){
+                    ShowAlertDlg("{{__('加工能力を入力してください')}}");
+                    // 「データチェック中」非表示
+                    ClosePopupDlg();
+                }
+                else if(dataSkillFlg2 === true){
+                    ShowAlertDlg("{{__('加工能力はA,B,C,D,Eのいずれかを入力してください')}}");
+                    // 「データチェック中」非表示
+                    ClosePopupDlg();
+                }
+                else if(dataWaritsukeFlg === true){
+                    ShowAlertDlg("{{__('その担当者割付候補CDは既に存在します')}}");
+                    // 「データチェック中」非表示
+                    ClosePopupDlg();
+                }
+                else{
+                    MakeSoushinData();
+                }
+            }
+        }
+    });
+
+    function MakeSoushinData(){
+        {{-- 入力フォーム要素 --}}
+        let waritsukeData = document.forms['frmWaritsuke'].elements;
         let obj = gridMasterRight.itemsSource[0];
-        let objName=Object.keys(obj).length;
-        let obj2=Object.keys(obj);
+        let objName = Object.keys(obj).length;
+        let obj2 = Object.keys(obj);
         console.log(objName,'obj');
         console.log(obj2[0],'item');
         console.log(waritsukeData.length,'waritsukeData.length');
-
         // 送信データ
         for(var i = 0; i < gridMasterRight.itemsSource.length; i++){
-            // 「データチェック中」非表示
             let obj = gridMasterRight.itemsSource[i];
             if(waritsukeData['dataSQLType'].value == MODE_INSERT)
             {
-                waritsukeHantei=true;
+                waritsukeHantei = true;
             }
             else
             {
-                waritsukeHantei=false;
+                waritsukeHantei = false;
             }
             let obj2={
                 'dataSQLType' :  waritsukeData['dataSQLType'].value,
                 'dataLoginId'   :  waritsukeData['dataLoginId'].value,
                 'dataHantei'    :  i,
                 'dataHantei2'   :  waritsukeHantei,
+                'dataHantei3'   :  gridMasterRight.itemsSource.length - 1
             }
             obj.dataSubNo = i + 1
-            obj.dataWaritsukekouhoCd=waritsukeData['dataWaritsukekouhoCd'].value
-            obj.dataWaritsukekouhoName=waritsukeData['dataWaritsukekouhoName'].value
-            obj.dataSetsumeibun=waritsukeData['dataSetsumeibun'].value
+            obj.dataWaritsukeKouhoCd = waritsukeData['dataWaritsukeKouhoCd'].value
+            obj.dataWaritsukeKouhoName = waritsukeData['dataWaritsukeKouhoName'].value
+            obj.dataJigyoubuCd = waritsukeData['dataJigyoubuCd'].value
+            obj.dataSetsumeibun = waritsukeData['dataSetsumeibun'].value
             Object.assign(obj,obj2);
+            console.log(obj,'obj')
             if(waritsukeData['dataSQLType'].value != MODE_DELETE)
             {
                 delete obj.dataId;
             }
             delete obj.EndData;
-            let soushinData=obj;
-            console.log(soushinData,'soushinData')
-            ClosePopupDlg();
-            //
-            if(waritsukeData['dataSQLType'].value == MODE_DELETE && i == 0)
-            {
-                {{-- 確認ダイアログを経由して処理 --}}
-            ShowConfirmDlg("このレコードを削除しますか？",
-            {{-- OKボタンを押したときの処理 --}}
-            function()
-            {
-                {{-- 「データ更新中」表示 --}}
-                ShowPopupDlg("{{__('データ更新中')}}");
-                {{-- 非同期データ更新開始 --}}
-                AjaxData("{{ url('/master/0501') }}", soushinData, fncUpdateData);
-            }, null);
-            }
-            else{
-                {{-- 「データ更新中」表示 --}}
-                ShowPopupDlg("{{__('データ更新中')}}");
-                {{-- 非同期データ更新開始 --}}
-                AjaxData("{{ url('/master/0501') }}", soushinData, fncUpdateData);
-                }
+            let soushinData = obj;
+            // 「データチェック中」非表示
+            //ClosePopupDlg();
+            console.log();
+        
+            {{-- 「データ更新中」表示 --}}
+            ShowPopupDlg("{{__('データ更新中')}}");
+            {{-- 非同期データ更新開始 --}}
+            AjaxData("{{ url('/master/0501') }}", soushinData, fncUpdateData);
         }
-    });
-    
-    {{-- テキスト変更時に連動するテキスト要素のリセット処理 --}}
+    }
+
+    /* テキスト変更時に連動するテキスト要素のリセット処理 */
     $('input[type="text"]').change(function() {
         {{-- 連動テキスト要素のある要素を判別 --}}
         switch($(this)[0].name)
         {
             {{-- 担当者CD --}}
             case 'dataTantoushaCd':break;
-            {{-- 割付CD --}}
-            case 'dataWaritsukekouhoCd':break;
-            {{-- 事業部CD --}}
+            /* 事業部CD */
             case 'dataJigyoubuCd':break;
             {{-- 該当しない場合は処理終了 --}}
             default: return;
@@ -699,69 +764,54 @@ style="margin-right:10px;">
             {{-- 事業部CD --}}
             case 'dataJigyoubuCd':
             ShowSentakuDlg("{{ __('jigyoubu_cd') }}", "{{ __('jigyoubu_name') }}",
-                           currentCdElement, currentNameElement, "{{ url('/inquiry/0100') }}");
-            break;
-            {{-- 割付CD --}}
-            case 'dataWaritsukekouhoCd':
-            ShowSentakuDlg("{{ __('waritsukekouho_cd') }}", "{{ __('waritsukekouho_name') }}",
-                           currentCdElement, currentNameElement, "{{ url('/inquiry/0500') }}");
+                           currentCdElement, currentNameElement, "{{ url('/inquiry/0100') }}", "", "", 1);
             break;
         }
     });
-    {{-- グリッド割付変数 --}}
+    // グリッド割付変数
     var gridMasterLeft;
     var gridMasterRight;
     var gridSearchRight;
     var gridSearchLeft;
     
-    function sinkiSend(){
+    function waritsukeSend(index,mode){
         let waritsukeData = document.forms['frmWaritsuke'].elements;
-        console.log(waritsukeData['dataWaritsukekouhoName'].value,'dataWaritsukekouhoName');
-        // 検索フォーム(送信データ)
-        let soushinDataRight = {}
-        // 非同期データ更新開始
-        AjaxData("{{ url('/inquiry/GridNoData') }}", soushinDataRight,WaritsukeGridRightSend); // グリッドデータ
-
-        let soushinDataLeft = {}
-        // 非同期データ更新開始
-        AjaxData("{{ url('/inquiry/GridLeft') }}", soushinDataLeft,WaritsukeGridLeftSend); // グリッドデータ
-    }
-
-    function shuseiSend(){
-        let waritsukeData = document.forms['frmWaritsuke'].elements;
-        console.log(waritsukeData['dataWaritsukekouhoName'].value,'dataWaritsukekouhoName');
-        // 検索フォーム(送信データ)
+        console.log(waritsukeData['dataWaritsukeKouhoName'].value,'dataWaritsukeKouhoName');
         let soushinDataRight = {
-            "dataWaritsukekouhoCd"    : GetKensakuWaritsukeData(waritsukeData['dataWaritsukekouhoCd'].value),
-            "dataWaritsukekouhoName"  : GetKensakuWaritsukeData(waritsukeData['dataWaritsukekouhoName'].value),
+            "dataWaritsukeKouhoCd"    : GetKensakuWaritsukeData(waritsukeData['dataWaritsukeKouhoCd'].value),
+            "dataWaritsukeKouhoName"  : GetKensakuWaritsukeData(waritsukeData['dataWaritsukeKouhoName'].value),
+            "dataSQLtype": index,
         }
-        // 非同期データ更新開始
-        AjaxData("{{ url('/inquiry/GridRight') }}", soushinDataRight,WaritsukeGridRightSend); // グリッドデータ
-
+        console.log(soushinDataRight)
         let soushinDataLeft = {
-            "dataWaritsukekouhoCd"    : GetKensakuWaritsukeData(waritsukeData['dataWaritsukekouhoCd'].value),
-            "dataWaritsukekouhoName"  : GetKensakuWaritsukeData(waritsukeData['dataWaritsukekouhoName'].value),
+            "dataWaritsukeKouhoCd"    : GetKensakuWaritsukeData(waritsukeData['dataWaritsukeKouhoCd'].value),
+            "dataWaritsukeKouhoName"  : GetKensakuWaritsukeData(waritsukeData['dataWaritsukeKouhoName'].value),
+            "dataSQLtype": index,
         }
-        // 非同期データ更新開始
-        AjaxData("{{ url('/inquiry/GridLeft') }}", soushinDataLeft,WaritsukeGridLeftSend); // グリッドデータ
-    }
-    function sakujoSend(){
-        let waritsukeData = document.forms['frmWaritsuke'].elements;
-        console.log(waritsukeData['dataWaritsukekouhoName'].value,'dataWaritsukekouhoName');
-        // 検索フォーム(送信データ)
-        let soushinDataRight = {
-            "dataWaritsukekouhoCd"    : GetKensakuWaritsukeData(waritsukeData['dataWaritsukekouhoCd'].value),
-            "dataWaritsukekouhoName"  : GetKensakuWaritsukeData(waritsukeData['dataWaritsukekouhoName'].value),
+        if(index==MODE_INSERT && mode==false){
+            // 検索フォーム(送信データ)
+            soushinDataRight = {"dataSQLtype": index,};
+            // 非同期データ更新開始
+            AjaxData("{{ url('/inquiry/GridNoData') }}", soushinDataRight,WaritsukeGridRightSend); // グリッドデータ
+            soushinDataLeft = {"dataSQLtype": index};
+            // 非同期データ更新開始
+            AjaxData("{{ url('/inquiry/GridTantou') }}", soushinDataLeft,WaritsukeGridLeftSend); // グリッドデータ
         }
-        // 非同期データ更新開始
-        AjaxData("{{ url('/inquiry/GridRight') }}", soushinDataRight,WaritsukeGridRightSend); // グリッドデータ
-
-        let soushinDataLeft = {
-            "dataWaritsukekouhoCd"    : GetKensakuWaritsukeData(waritsukeData['dataWaritsukekouhoCd'].value),
-            "dataWaritsukekouhoName"  : GetKensakuWaritsukeData(waritsukeData['dataWaritsukekouhoName'].value),
+        else if(index==MODE_INSERT && mode==true){
+            // 非同期データ更新開始
+            AjaxData("{{ url('/inquiry/GridRight') }}", soushinDataRight,WaritsukeGridRightSend); // グリッドデータ
+            AjaxData("{{ url('/inquiry/GridLeft') }}", soushinDataLeft,WaritsukeDataCheck); // グリッドデータ
+            fncWaritsukeSanshouData(index, mode);
         }
-        // 非同期データ更新開始
-        AjaxData("{{ url('/inquiry/GridNoData') }}", soushinDataLeft,WaritsukeGridLeftSend); // グリッドデータ
+        else if(index==MODE_UPDATE){
+            AjaxData("{{ url('/inquiry/GridRight') }}", soushinDataRight,WaritsukeGridRightSend); // グリッドデータ
+            AjaxData("{{ url('/inquiry/GridLeft') }}", soushinDataLeft,WaritsukeDataCheck); // グリッドデータ
+        }
+        else if(index==MODE_DELETE){
+            // 非同期データ更新開始
+            AjaxData("{{ url('/inquiry/GridRight') }}", soushinDataRight,WaritsukeGridRightSend); // グリッドデータ
+            AjaxData("{{ url('/inquiry/GridNoData') }}", soushinDataLeft,WaritsukeGridLeftSend); // グリッドデータ
+        }
     }
 
     function GetKensakuWaritsukeData(value)
@@ -769,27 +819,72 @@ style="margin-right:10px;">
         return (value != '') ? value : '';
     }
 
+    var WaritsukeDataCheck = function(data, errorFlg)
+    {
+        console.log(data,'data')
+        let data1 = data[1];
+        let data3 = data[3];
+        let data1Array;
+        let data3Array;
+        let data1Array2;
+        var dataFix;
+        for(var d = 0; d < data1.length; d++){
+            data1Array = data1[d];
+            for(var a = 0; a < data3.length; a++){
+                data3Array = data3[a];
+                //console.log(data1Array['dataKikaiCd'])
+                //console.log(data3Array['dataKikaiCd'])
+                if(data3Array['dataTantoushaCd'] == data1Array['dataTantoushaCd']){
+                    delete data1[d];
+                    //let addData = { 0: {}};
+                    //Object.assign(data1, addData);
+                    break;
+                }
+            }
+        }
+        dataFix = 0;
+        soushinData = new Array();
+        for(var t = 0; t < data1.length; t++){
+            data1Array2 = data1[t];
+            if(data1[t] !== undefined){
+                soushinData[dataFix] = data1Array2
+                dataFix++;
+            }
+        }
+        data1 = { 0: data[0], 1: soushinData, 2: data[3] }
+        //console.log(soushinData,'aaaaa')
+        WaritsukeGridLeftSend(data1, errorFlg);
+    }
+
     var WaritsukeGridRightSend = function(data, errorFlg)
     {
+        console.log(data)
         // グリッドの初期化
         if(gridMasterRight != null) gridMasterRight.dispose();
         if(gridSearchRight != null) gridSearchRight.dispose();
-
+        let isRead = false;
+        if(data[2] == 3) {
+            isRead = true;
+        }
         // マスタデータ一覧
         gridMasterRight = new wijmo.grid.FlexGrid('#gridMasterRight',{itemsSource: data[1],
             // レイアウト設定
             columns: [
-                { binding: 'dataTantoushaCd', header: "{{__('tantousha_cd')}}", width: 100},
-                { binding: 'dataTantoushaName',  header: "{{__('tantousha_name')}}", width: 100},
-                { binding: 'dataTantoushaId',      header: "{{__('tantousha_id')}}", width: 100},
+                { binding: 'dataTantoushaCd', header: "{{__('tantousha_cd')}}", isReadOnly: true, width: 100},
+                { binding: 'dataTantoushaName',  header: "{{__('tantousha_name')}}", isReadOnly: true, width: 100},
                 { binding: 'dataKakouSkill',         header: "{{__('kakou_skill')}}", width: 100},
-                { binding: 'dataKakounouryoku_keisu',      header: "{{__('kakou_nouryoku_keisu')}}", width: 150},
+                { binding: 'dataKakouNouryokuKeisu',      header: "{{__('kakou_nouryoku_keisu')}}", width: 150},
                 { binding: 'dataIndex', width: 0 }] ,
-                isReadOnly: false
+                isReadOnly: isRead
         });
 
         //選択モードの設定
         gridMasterRight.selectionMode = wijmo.grid.SelectionMode.MultiRange;
+
+        gridMasterRight.columns[0].dataType = wijmo.DataType.String;
+        gridMasterRight.columns[1].dataType = wijmo.DataType.String;
+        gridMasterRight.columns[2].dataType = wijmo.DataType.String;
+        gridMasterRight.columns[3].dataType = wijmo.DataType.Number;
 
         gridMasterRight.beginningEdit.addHandler(function (s, e) {
             setTimeout(function () {
@@ -798,9 +893,9 @@ style="margin-right:10px;">
                     s.activeEditor.setAttribute('maxlength', '10');
                 } else if (e.col == 1) {
                     s.activeEditor.setAttribute('maxlength', '20');
-                } else if (e.col == 3) {
+                } else if (e.col == 2) {
                     s.activeEditor.setAttribute('maxlength', '1');
-                } else if (e.col == 4) {
+                } else if (e.col == 3) {
                     s.activeEditor.setAttribute('maxlength', '5');
                 }
             });
@@ -825,20 +920,27 @@ style="margin-right:10px;">
 
     var WaritsukeGridLeftSend = function(data, errorFlg)
     {
+        console.log(data,"data")
+        console.log(data[2],"data[2]")
         // マスタデータ一覧
         if(gridMasterLeft != null) gridMasterLeft.dispose();
         if(gridSearchLeft != null) gridSearchLeft.dispose();
         gridMasterLeft = new wijmo.grid.FlexGrid('#gridMasterLeft',{itemsSource: data[1],
             // レイアウト設定
             columns: [
-                { binding: 'dataBumonCd',        header: "{{__('busho_cd')}}", width: 100},
+                { binding: 'dataBushoCd',        header: "{{__('busho_cd')}}", width: 100},
                 { binding: 'dataTantoushaCd',        header: "{{__('tantousha_cd')}}", width: 100},
                 { binding: 'dataTantoushaName',      header: "{{__('tantousha_name')}}", width: 100 },
                 { binding: 'dataKakouSkill',         header: "{{__('kakou_skill')}}", width: 125 },
                 { binding: 'dataIndex', width: 0 }] ,
-                isReadOnly: false
+                isReadOnly: true
         });
         gridMasterLeft.selectionMode = wijmo.grid.SelectionMode.MultiRange;
+
+        gridMasterRight.columns[0].dataType = wijmo.DataType.String;
+        gridMasterRight.columns[1].dataType = wijmo.DataType.String;
+        gridMasterRight.columns[2].dataType = wijmo.DataType.String;
+        gridMasterRight.columns[3].dataType = wijmo.DataType.String;
 
         gridMasterLeft.beginningEdit.addHandler(function (s, e) {
             setTimeout(function () {
@@ -985,15 +1087,19 @@ style="margin-right:10px;">
         gridMasterRight = new wijmo.grid.FlexGrid('#gridMasterRight',{itemsSource: gridDelete,
             // レイアウト設定
             columns: [
-                { binding: 'dataTantoushaCd', header: "{{__('tantousha_cd')}}", width: 100},
-                { binding: 'dataTantoushaName',  header: "{{__('tantousha_name')}}", width:100 },
-                { binding: 'dataTantoushaId',      header: "{{__('tantousha_id')}}", width: 100 },
+                { binding: 'dataTantoushaCd', header: "{{__('tantousha_cd')}}", isReadOnly: true, width: 100},
+                { binding: 'dataTantoushaName',  header: "{{__('tantousha_name')}}", isReadOnly: true, width:100 },
                 { binding: 'dataKakouSkill',         header: "{{__('kakou_skill')}}", width: 100 },
-                { binding: 'dataKakounouryoku_keisu',      header: "{{__('kakou_nouryoku_keisu')}}", width: 150 },
+                { binding: 'dataKakouNouryokuKeisu',      header: "{{__('kakou_nouryoku_keisu')}}", width: 150 },
                 { binding: 'dataIndex', width: 0 }] ,
             isReadOnly: false
         });
         gridMasterRight.selectionMode = wijmo.grid.SelectionMode.MultiRange;
+
+        gridMasterRight.columns[0].dataType = wijmo.DataType.String;
+        gridMasterRight.columns[1].dataType = wijmo.DataType.String;
+        gridMasterRight.columns[2].dataType = wijmo.DataType.String;
+        gridMasterRight.columns[3].dataType = wijmo.DataType.Number;
 
         gridMasterRight.beginningEdit.addHandler(function (s, e) {
             setTimeout(function () {
@@ -1002,9 +1108,9 @@ style="margin-right:10px;">
                     s.activeEditor.setAttribute('maxlength', '10');
                 } else if (e.col == 1) {
                     s.activeEditor.setAttribute('maxlength', '20');
-                } else if (e.col == 3) {
+                } else if (e.col == 2) {
                     s.activeEditor.setAttribute('maxlength', '1');
-                } else if (e.col == 4) {
+                } else if (e.col == 3) {
                     s.activeEditor.setAttribute('maxlength', '5');
                 }
             });
@@ -1036,14 +1142,19 @@ style="margin-right:10px;">
         gridMasterLeft = new wijmo.grid.FlexGrid('#gridMasterLeft',{itemsSource: selectItems,
             // レイアウト設定
             columns: [
-                { binding: 'dataBumonCd',        header: "{{__('busho_cd')}}", width: 100},
+                { binding: 'dataBushoCd',        header: "{{__('busho_cd')}}", width: 100},
                 { binding: 'dataTantoushaCd',        header: "{{__('tantousha_cd')}}", width: 100},
                 { binding: 'dataTantoushaName',      header: "{{__('tantousha_name')}}", width: 100 },
                 { binding: 'dataKakouSkill',         header: "{{__('kakou_skill')}}", width: 125 },
                 { binding: 'dataIndex', width: 0 }] ,
-                isReadOnly: false
+                isReadOnly: true
         });
         gridMasterLeft.selectionMode = wijmo.grid.SelectionMode.MultiRange;
+
+        gridMasterRight.columns[0].dataType = wijmo.DataType.String;
+        gridMasterRight.columns[1].dataType = wijmo.DataType.String;
+        gridMasterRight.columns[2].dataType = wijmo.DataType.String;
+        gridMasterRight.columns[3].dataType = wijmo.DataType.String;
 
         gridMasterLeft.beginningEdit.addHandler(function (s, e) {
             setTimeout(function () {
@@ -1122,19 +1233,7 @@ style="margin-right:10px;">
         // 入力初期値処理
         fncWaritsukeData(index, mode);
         
-        if(index==MODE_INSERT && mode==false){
-            sinkiSend();
-        }
-        else if(index==MODE_INSERT && mode==true){
-            shuseiSend();
-            fncWaritsukeSanshouData(index, mode);
-        }
-        else if(index==MODE_UPDATE){
-            shuseiSend();
-        }
-        else if(index==MODE_DELETE){
-            sakujoSend();
-        }
+        waritsukeSend(index, mode);
     }
     // ダイアログを閉じる
     function CloseWaritsukeDlg()
@@ -1176,18 +1275,18 @@ style="margin-right:10px;">
         // グリッドデータ表示
         fncBtnHyouji();
     });
-    // 「CSV出力」ボタンの実行関数変数
-    var fncBtnCSV = function(){}
-    // 「CSV出力」ボタンのイベント登録
-    function SetBtnCSV(fnc)
+    // 「Excel出力」ボタンの実行関数変数
+    var fncBtnExcel = function(){}
+    // 「Excel出力」ボタンのイベント登録
+    function SetBtnExcel(fnc)
     {
-        fncBtnCSV = fnc;
+        fncBtnExcel = fnc;
     }
-    // 「CSV出力」ボタン　クリック処理
-    $(document).on('click', '#btnCSV', function()
+    // 「Excel出力」ボタン　クリック処理
+    $(document).on('click', '#btnExcel', function()
     {
         // 確認してから実行
-        ShowConfirmDlg(msgCSV, fncBtnCSV, null);   
+        ShowConfirmDlg(msgExcel, fncBtnExcel, null);
     });
     // 「閉じる」ボタン　クリック処理
     $(document).on('click', '#btnClose', function()

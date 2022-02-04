@@ -1,0 +1,6 @@
+0000000000000000000000000000000000000000 a0ab2c9f6ac99f1f223bb15d25bca9b1988fb005 takumifunayama <mt.koala01n@gmail.com> 1637044464 +0900	branch: Created from main
+a0ab2c9f6ac99f1f223bb15d25bca9b1988fb005 b2bd26fd10832e1d9345b5b484dce32cee045461 takumifunayama <mt.koala01n@gmail.com> 1637044656 +0900	commit: [Add]ルーティング追加
+b2bd26fd10832e1d9345b5b484dce32cee045461 0fec6470da7fb7c4e9f5483ca28cefd220124a2b takumifunayama <mt.koala01n@gmail.com> 1637049886 +0900	commit: [Modify]修正
+0fec6470da7fb7c4e9f5483ca28cefd220124a2b 28743c554b7f9a2a22d88458c2b0371609930b28 takumifunayama <mt.koala01n@gmail.com> 1637050090 +0900	commit: [Modify]ファイル名変更
+28743c554b7f9a2a22d88458c2b0371609930b28 1b9d07f4006fdd7f6ae3d0a6df2659c6c5a96f53 takumifunayama <mt.koala01n@gmail.com> 1637050112 +0900	commit: [Modify]ファイル名&クラス名変更
+1b9d07f4006fdd7f6ae3d0a6df2659c6c5a96f53 0c68b8ee2394ee56a6a8ce6a527e72ccb809f1c5 takumifunayama <mt.koala01n@gmail.com> 1637051296 +0900	commit: [Add]日本語対応

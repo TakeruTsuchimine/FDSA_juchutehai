@@ -107,9 +107,6 @@ class PCMST_0601 extends Controller
                     // 作業担当者候補CD
                     $sagyouTantoushaKouhoCd = $request->dataSagyouTantoushaKouhoCd;
 
-                    // 作業治具候補CD
-                    $sagyouJiguKouhoCd = $request->dataSagyouJiguKouhoCd;
-
                     // 加工先候補CD
                     $kakousakiKouhoCd = $request->dataKakousakiKouhoCd;
 
@@ -120,16 +117,16 @@ class PCMST_0601 extends Controller
                     $kouteiDandoriTanka = $request->dataKouteiDandoriTanka;
 
                     // 工程区分
-                    $kouteiKbn = $request->dataKouteiKbn;
+                    $kouteiKbn = empty((int)$request->dataKouteiKbn) ? 0 : (int)$request->dataKouteiKbn;
 
                     // 初回のみ有効区分
-                    $shokaiKbn = $request->dataShokaiKbn;
+                    $shokaiKbn = empty((int)$request->dataShokaiKbn) ? 0 : (int)$request->dataShokaiKbn;
 
                     // 報告区分
-                    $houkokuKbn = $request->dataHoukokuKbn;
+                    $houkokuKbn = empty((int)$request->dataHoukokuKbn) ? 0 : (int)$request->dataHoukokuKbn;
 
                     // 図面配布
-                    $zumenHaifuKbn = $request->dataZumenHaifuKbn;
+                    $zumenHaifuKbn = empty((int)$request->dataZumenHaifuKbn) ? 0 : (int)$request->dataZumenHaifuKbn;
 
                     // 事業部CD
                     $jigyoubuCd = $request->dataJigyoubuCd;
@@ -146,21 +143,6 @@ class PCMST_0601 extends Controller
                         $resultFlg = false;
                     }
 
-                    // 部署CD
-                    $bushoCd = $request->dataBushoCd;
-                    // POSTデータチェックエラー
-                    if (is_null($bushoCd) || $bushoCd === '') {
-                        $resultMsg .= '「' . __('busho_cd') . '」' . __('が正常に送信されていません。') . '<br>';
-                        $resultFlg = false;
-                    }
-                    // コードが存在しない場合はエラー
-                    $result = $common->GetCdCount('busho_master', 'busho_cd', $bushoCd);
-                    if ($result < 1) {
-                        $resultMsg .= __('登録されていない') . '「' . __('busho_cd') . '」' . __('です。') . '<br>';
-                        $resultVal[] = 'dataBushoCd';
-                        $resultFlg = false;
-                    }
-
                     if (!$resultFlg) throw new Exception($resultMsg);
 
                     // 有効期間終了の設定
@@ -168,13 +150,11 @@ class PCMST_0601 extends Controller
                     // バインドの設定
                     $SQLBind = array();
                     $SQLBind[] = array('jigyoubu_cd', $jigyoubuCd, TYPE_STR);
-                    $SQLBind[] = array('busho_cd', $bushoCd, TYPE_STR);
                     $SQLBind[] = array('koutei_cd', $kouteiCd, TYPE_STR);
                     $SQLBind[] = array('koutei_name', $kouteiName, TYPE_STR);
                     $SQLBind[] = array('koutei_ryaku_name', $kouteiRyakuName, TYPE_STR);
                     $SQLBind[] = array('sagyou_kikai_kouho_cd', $sagyouKikaiKouhoCd, TYPE_STR);
                     $SQLBind[] = array('sagyou_tantousha_kouho_cd', $sagyouTantoushaKouhoCd, TYPE_STR);
-                    $SQLBind[] = array('sagyou_jigu_kouho_cd', $sagyouJiguKouhoCd, TYPE_STR);
                     $SQLBind[] = array('kakousaki_kouho_cd', $kakousakiKouhoCd, TYPE_STR);
                     $SQLBind[] = array('koutei_tanka', $kouteiTanka, TYPE_INT);
                     $SQLBind[] = array('koutei_dandori_tanka', $kouteiDandoriTanka, TYPE_INT);

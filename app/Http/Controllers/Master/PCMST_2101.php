@@ -11,6 +11,39 @@ use Exception;
 
 class PCMST_2101 extends Controller
 {
+    /**
+     * キーになるコードのレコードの数を取得する
+     * @param string $tableName　対象のデータテーブル名
+     * @param string $cdColumn　 対象CD列名
+     * @param string $cdValue  　検査対象のCD値
+     * @param string $date     　対象日（省略可）
+     *
+     * @return int 取得件数
+     */
+    function GetLevelCount($tableName, $levelColumn, $levelValue, $date = ''): int
+    {
+        // 対象日が無い場合は今日の日付を設定
+        if (empty($date)) $date = date("Y/m/d");
+
+        $query = new class_Database();
+        // SQLテキストの設定
+        $SQLText  = ' select count(*) ';
+        $SQLText .= ' from ' . $tableName;
+        $SQLText .= " where  sakujo_dt is null
+                      and    :today >= yukoukikan_start_date
+                      and    :today <= case when yukoukikan_end_date is null
+                                            then '2199-12-31' else yukoukikan_end_date end ";
+        $SQLText .= ' and ' . $levelColumn . ' = :level';
+        // クエリの設定
+        $query->StartConnect();
+        $query->SetQuery($SQLText, SQL_SELECT);
+        // バインド値のセット
+        $query->SetBindValue(":level", $levelValue, TYPE_INT);
+        $query->SetBindValue(":today",  $date, TYPE_DATE);
+        // クエリの実行
+        $result = $query->ExecuteSelect();
+        return $result[0][0];
+    }
     public function index(Request $request)
     {
         // 処理成功フラグ
@@ -47,7 +80,15 @@ class PCMST_2101 extends Controller
             $locationCd = $request->dataLocationCd;
             // POSTデータチェックエラー
             if (is_null($locationCd) || $locationCd === '') {
-                $resultMsg .= '「' . __('location cd') . '」' . __('が正常に送信されていません。') . '\n';
+                $resultMsg .= '「' . __('location_cd') . '」' . __('が正常に送信されていません。') . '\n';
+                $resultFlg = false;
+            }
+
+            // 階層レベル
+            $structureLevel = $request->dataStructureLevel;
+            // POSTデータチェックエラー
+            if (is_null($structureLevel)) {
+                $resultMsg .= '「' . __('structure_level') . '」' . __('が正常に送信されていません。') . '\n';
                 $resultFlg = false;
             }
 
@@ -95,14 +136,22 @@ class PCMST_2101 extends Controller
                         $resultFlg = false;
                     }
 
+                    // 階層レベルは新規登録の際、既に存在する階層レベルの場合はエラー
+                    $result = $common->GetCdCount($tableName, 'structure_level', $structureLevel);
+                    if ($result > 0 && $SQLType === SQL_INSERT) {
+                        $resultMsg .= __('既に登録されている') . '「' . __('structure_level') . '」' . __('です。') . '<br>';
+                        $resultVal[] = 'dataStructureLevel';
+                        $resultFlg = false;
+                    }
+
                     // 置場・棚番名
                     $locationName = $request->dataLocationName;
 
                     // 棚番親置場CD
-                    $oyaLocationCd = $request->dataOyaLocationCd;
+                    $locationOyaCd = $request->dataLocationOyaCd;
 
                     // 階層レベル
-                    $structureLevel = $request->dataStructureLevel;
+                    $structureLevel = empty((int)$request->dataStructureLevel) ? 0 : (int)$request->dataStructureLevel;
 
                     // 事業部CD
                     $jigyoubuCd = $request->dataJigyoubuCd;
@@ -128,7 +177,7 @@ class PCMST_2101 extends Controller
                     $SQLBind[] = array('jigyoubu_cd', $jigyoubuCd, TYPE_STR);
                     $SQLBind[] = array('location_cd', $locationCd, TYPE_STR);
                     $SQLBind[] = array('location_name', $locationName, TYPE_STR);
-                    $SQLBind[] = array('oya_location_cd', $oyaLocationCd, TYPE_STR);
+                    $SQLBind[] = array('location_oya_cd', $locationOyaCd, TYPE_STR);
                     $SQLBind[] = array('structure_level', $structureLevel, TYPE_INT);
                     // データ処理開始
                     $master->InsertMasterData($SQLBind, $locationCd, $yukoukikanStartDate, $yukoukikanEndDate, $loginId, $SQLType);

@@ -1,4 +1,4 @@
-{{-- PHP処理 --}}
+<!-- PHP処理 -->
 <?php
     // 階層レベル
     define("STRUCTURE_LEVEL", array( '',
@@ -11,52 +11,43 @@
     $kensakuHight = '140px';
 ?>
 
-{{-- 共通レイアウト呼び出し --}}
-{{--「base_master.blede.php」・・・マスタ画面の共通テンプレートデザイン --}}
+<!-- 共通レイアウト呼び出し -->
+<!--「base_master.blede.php」・・・マスタ画面の共通テンプレートデザイン -->
 @extends('templete.header.master.base_master')
 
-{{-- 「検索フォーム」 --}}
+<!-- 「検索フォーム」 -->
 @section('kensaku')
-{{-- 検索フォーム全体 --}}
+<!-- 検索フォーム全体 -->
 <form id="frmKensaku" name="frmKensaku" class="flex-box" style="height:{{ $kensakuHight }};">
-    {{-- 一列目 --}}
+    <!-- 一列目 -->
     <div class="form-column">
-        {{-- 「置場・棚番CD」 --}}
+        <!-- 「事業部CD」 -->
+        <label>
+            <span style="width:6.5em;">{{__('jigyoubu_cd')}}</span>
+            <span class="icon-field"> <!-- アイコンボタンを設置する入力項目は、スタイルクラス「icon-field」を宣言 -->
+                <input name="dataJigyoubuCd" class="form-control" type="text" maxlength="6" autocomplete="off"
+                    style="width:8em;">
+                <!-- 検索アイコンは、スタイルクラス「search-btn」を宣言 -->
+                <i class="fas fa-search search-btn"></i>
+            </span>
+            <!-- フォーカス時のイベントを「onfocus="blur();"」に設定してフォーカス対象を無効にする -->
+            <input name="dataJigyoubuName" class="form-control" type="text" style="width:22em;" onfocus="blur();"
+                readonly>
+        </label>
+        <!-- 「置場・棚番CD」 -->
         <label>
             <span style="width:6.5em;">{{__('location_cd')}}</span>
             <input name="dataLocationCd" class="form-control" type="text" maxlength="20" autocomplete="off"
                 style="width:8em;">
         </label>
-        {{-- 「置場・棚番名」 --}}
+        <!-- 「置場・棚番名」 -->
         <label>
             <span style="width:6.5em;">{{__('location_name')}}</span>
             <input name="dataLocationName" class="form-control" type="text" maxlength="30" autocomplete="off"
                 style="width:22em;">
         </label>
-        {{-- 「棚番親置場CD」 --}}
-        <label>
-            <span style="width:6.5em;">{{__('oya_location_cd')}}</span>
-            <input name="dataOyaLocationCd" class="form-control" type="text" maxlength="20" autocomplete="off"
-                style="width:8em;">
-        </label>
     </div>
-    {{-- 二列目 --}}
-    <div class="form-column">
-        {{-- 「事業部CD」 --}}
-        <label>
-            <span style="width:4.5em;">{{__('jigyoubu_cd')}}</span>
-            <span class="icon-field"> {{-- アイコンボタンを設置する入力項目は、スタイルクラス「icon-field」を宣言 --}}
-                <input name="dataJigyoubuCd" class="form-control" type="text" maxlength="6" autocomplete="off"
-                    style="width:8em;">
-                {{-- 検索アイコンは、スタイルクラス「search-btn」を宣言 --}}
-                <i class="fas fa-search search-btn"></i>
-            </span>
-            {{-- フォーカス時のイベントを「onfocus="blur();"」に設定してフォーカス対象を無効にする --}}
-            <input name="dataJigyoubuName" class="form-control" type="text" style="width:22em;" onfocus="blur();"
-                readonly>
-        </label>
-    </div>
-    {{-- 表示件数 --}}
+    <!-- 表示件数 -->
     <div class="flex-box flex-end item-end" style="width:100%;">
         <div class="base-color-front" style="color:black;">
             <span id="zenkenCnt" style="margin: 0 10px;"></span>{{__('件')}}{{__('を表示')}}
@@ -65,21 +56,37 @@
 </form>
 @endsection
 
-{{-- 「入力ダイアログ」 --}}
+<!-- 「入力ダイアログ」 -->
 @section('nyuryoku')
-{{-- 入力フォーム全体 --}}
+<!-- 入力フォーム全体 -->
 <div class="flex-box flex-column" style="padding:5px 10px;">
     <div class="form-column">
-        {{-- 「置場・棚番CD」 --}}
+        <!-- 「事業部CD」 -->
+        <label>
+            <span style="width:6.5em;">{{__('jigyoubu_cd')}}</span>
+            <span class="icon-field"> <!-- アイコンボタンを設置する入力項目は、スタイルクラス「icon-field」を宣言 -->
+                <!-- コード検査を行う項目は、スタイルクラス「code-check」を宣言 -->
+                <input name="dataJigyoubuCd" class="form-control code-check" type="text" maxlength="6" autocomplete="off"
+                    style="width:8em;" pattern="^([a-zA-Z0-9]{0,6})$" title="{{__('半角英数字6文字以内で入力してください')}}" required>
+                <!-- 検索アイコンは、スタイルクラス「search-btn」を宣言 -->
+                <i class="fas fa-search search-btn"></i>
+            </span>
+            <!-- フォーカス時のイベントを「onfocus="blur();"」に設定してフォーカス対象を無効にする -->
+            <input name="dataJigyoubuName" class="form-control" type="text" style="width:12em;" onfocus="blur();"
+                readonly>
+        </label>
+    </div>
+    <div class="form-column">
+        <!-- 「置場・棚番CD」 -->
         <label>
             <span style="width:6.5em;">{{__('location_cd')}}</span>
-            {{-- コード検査を行う項目は、スタイルクラス「code-check」を宣言 --}}
-            <input name="dataLocationCd" class="form-control code-check" type="text" maxlength="10" autocomplete="off"
+            <!-- コード検査を行う項目は、スタイルクラス「code-check」を宣言 -->
+            <input name="dataLocationCd" class="form-control code-check" type="text" maxlength="20" autocomplete="off"
                 style="width:8em;" pattern="^([a-zA-Z0-9]{0,20})$" title="{{ __('半角英数字20文字以内で入力してください') }}" required>
         </label>
     </div>
     <div class="form-column">
-        {{-- 「置場・棚番名」 --}}
+        <!-- 「置場・棚番名」 -->
         <label>
             <span style="width:6.5em;">{{__('location_name')}}</span>
             <input name="dataLocationName" class="form-control" type="text" maxlength="30" autocomplete="off"
@@ -87,136 +94,125 @@
         </label>
     </div>
     <div class="form-column">
-        {{-- 「棚番親置場CD」 --}}
-        <label>
-            <span style="width:6.5em;">{{__('oya_location_cd')}}</span>
-            {{-- コード検査を行う項目は、スタイルクラス「code-check」を宣言 --}}
-            <input name="dataOyaLocationCd" class="form-control code-check" type="text" maxlength="10" autocomplete="off"
-                style="width:8em;" pattern="^([a-zA-Z0-9]{0,20})$" title="{{ __('半角英数字20文字以内で入力してください') }}" required>
-        </label>
-    </div>
-    <div class="form-column">
-        {{-- 「事業部CD」 --}}
-        <label>
-            <span style="width:6.5em;">{{__('jigyoubu_cd')}}</span>
-            <span class="icon-field"> {{-- アイコンボタンを設置する入力項目は、スタイルクラス「icon-field」を宣言 --}}
-                {{-- コード検査を行う項目は、スタイルクラス「code-check」を宣言 --}}
-                <input name="dataJigyoubuCd" class="form-control code-check" type="text" maxlength="6" autocomplete="off"
-                    style="width:8em;" pattern="^([a-zA-Z0-9]{0,6})$" title="{{__('半角英数字6文字以内で入力してください')}}" required>
-                {{-- 検索アイコンは、スタイルクラス「search-btn」を宣言 --}}
-                <i class="fas fa-search search-btn"></i>
-            </span>
-            {{-- フォーカス時のイベントを「onfocus="blur();"」に設定してフォーカス対象を無効にする --}}
-            <input name="dataJigyoubuName" class="form-control" type="text" style="width:12em;" onfocus="blur();"
-                readonly>
-        </label>
-    </div>
-    <div class="form-column">
-        {{-- 「階層レベル」 --}}
+        <!-- 「階層レベル」 -->
         <label>
             <span style="width:6.5em;">{{__('structure_level')}}</span>
-            {{-- 「階層レベル」コンボボックス本体 --}}
+            <!-- 「階層レベル」コンボボックス本体 -->
             <div id="cmbStructureLevel" style="width:8em; margin-left:5px;"></div>
-            {{-- 「階層レベル」フォーム送信データ --}}
+            <!-- 「階層レベル」フォーム送信データ -->
             <input name="dataStructureLevel" type="hidden">
         </label>
     </div>
     <div class="form-column">
-        {{-- 「有効期間（自）」 --}}
+        <!-- 「棚番親置場CD」 -->
+        <label>
+            <span style="width:6.9em;">{{__('location_oya_cd')}}</span>
+            <!-- コード検査を行う項目は、スタイルクラス「code-check」を宣言 -->
+            <input name="dataLocationOyaCd" class="form-control code-check" type="text" maxlength="20" autocomplete="off"
+                style="width:8em;" pattern="^([a-zA-Z0-9]{0,20})$" title="{{ __('半角英数字20文字以内で入力してください') }}" disabled>
+        </label>
+    </div>
+    <div class="form-column">
+        <!-- 「有効期間（自）」 -->
         <label>
             <span style="width:7.3em;">{{__('yukoukikan_start_date')}}</span>
             <input id="dataStartDate" name="dataStartDate" type="hidden">
         </label>
     </div>
     <div class="form-column">
-        {{-- 「登録日」 --}}
+        <!-- 「登録日」 -->
         <label>
             <span style="width:10em;">{{__('touroku_dt')}}</span>
             <input name="dataTourokuDt" class="form-control-plaintext" type="text" readonly>
         </label>
     </div>
     <div class="form-column">
-        {{-- 「更新日」 --}}
+        <!-- 「更新日」 -->
         <label>
             <span style="width:10em;">{{__('koushin_dt')}}</span>
             <input name="dataKoushinDt" class="form-control-plaintext" type="text" readonly>
         </label>
     </div>
 </div>
-{{-- 内部入力値 --}}
-{{-- 「処理種別」
-　※入力ダイアログの操作、新規・修正・削除のどの処理で開いたかを判別 --}}
+<!-- 内部入力値 -->
+<!-- 「処理種別」
+　※入力ダイアログの操作、新規・修正・削除のどの処理で開いたかを判別 -->
 <input id="dataSQLType" name="dataSQLType" type="hidden">
-{{-- 「ログインID」 --}}
+<!-- 「ログインID」 -->
 <input name="dataLoginId" type="hidden" value="{{ $loginId }}">
-{{-- 「レコードID」 --}}
+<!-- 「レコードID」 -->
 <input name="dataId" type="hidden">
 @endsection
 
-{{-- javascript --}}
+<!-- javascript -->
 @section('javascript')
 <script>
-    {{-- -------------------- --}}
-    {{-- wijmoコントロール宣言 --}}
-    {{-- -------------------- --}}
+    /* -------------------- */
+    /* wijmoコントロール宣言 */
+    /* -------------------- */
 
-    {{-- 階層レベル選択値 --}}
+    /* 階層レベル選択値 */
     var structureLevel = [];
-    {{-- 階層レベルデータ登録値 --}}
+    /* 階層レベルデータ登録値 */
     var structureLevelValue = [];
-    {{-- 階層レベルの元データに入力がある場合は選択値として格納 --}}
+    /* 階層レベルの元データに入力がある場合は選択値として格納 */
     @for($i = 0;$i < count(STRUCTURE_LEVEL);$i++)
         @if(STRUCTURE_LEVEL[$i] !== '')
-            structureLevel.push('{{ STRUCTURE_LEVEL[$i] }}');
+            structureLevel.push('{{ $i }}:{{ STRUCTURE_LEVEL[$i] }}');
             structureLevelValue.push({{ $i }});
         @endif
     @endfor
-    {{-- コンボボックス宣言 --}}
+    /* コンボボックス宣言 */
     var cmbStructureLevel = new wijmo.input.ComboBox('#cmbStructureLevel', { itemsSource: structureLevel });
-    {{-- カレンダー宣言 --}}
-    {{-- 有効期間（自） --}}
+    /* カレンダー宣言 */
+    /* 有効期間（自） */
     var dateStart = new wijmo.input.InputDate('#dataStartDate', { isRequired: false });
 
-    {{-- ------- --}}
-    {{-- 初期処理 --}}
-    {{-- ------- --}}
+    /* ------- */
+    /* 初期処理 */
+    /* ------- */
 
-    {{-- ページ初期処理
-         ※ページが読み込まれた際に一番初めに処理される関数 --}}
+    /* ページ初期処理
+         ※ページが読み込まれた際に一番初めに処理される関数 */
     window.onload = function()
     {
-        {{-- 右クリック時の操作メニュー宣言 ※common_function.js参照 --}}
+        /* 右クリック時の操作メニュー宣言 ※common_function.js参照 */
         SetContextMenu();
-        {{-- ファンクションキーの操作宣言 ※common_function.js参照 --}}
+        /* ファンクションキーの操作宣言 ※common_function.js参照 */
         SetFncKey(null);
-        {{-- 入力ダイアログ表示イベント登録 ※common_function.js参照 --}}
+        /* 入力ダイアログ表示イベント登録 ※common_function.js参照 */
         SetNyuryokuData(fncNyuryokuData);
-        {{-- 「表示」ボタンイベント登録 ※common_function.js参照 --}}
+        /* 「表示」ボタンイベント登録 ※common_function.js参照 */
         SetBtnHyouji(fncShowDataGrid);
-        {{-- 「CSV出力」ボタンイベント登録 ※common_function.js参照 --}}
-        SetBtnCSV(fncExportCSV);
+        /* 「Excel出力」ボタンイベント登録 ※common_function.js参照 */
+        SetBtnExcel(fncExportExcel);
 
-        {{-- グリッド初期処理--}}
+        /* グリッド初期処理*/
         InitGrid();
 
-        {{-- グリッドデータの表示 --}}
+        /* ボタン制御更新 */
+        SetEnableButton(0);
+        /* 件数更新 */
+        $("#zenkenCnt").html(0);
+
+        /* グリッドデータの表示 */
         $('#btnHyouji').click();
     }
-    {{-- グリッド共有変数 --}}
+    /* グリッド共有変数 */
     var gridMaster;
-    {{-- 選択された行
-         ※MultiRowでの行選択処理のために必要（FlexGridでは不要） --}}
+    /* 選択された行
+         ※MultiRowでの行選択処理のために必要（FlexGridでは不要） */
     var selectedRows = 0;
-    {{-- グリッド初期処理--}}
+    /* グリッド初期処理*/
     function InitGrid()
     {
-        {{-- MultiRowのレイアウト設定 --}}
+        /* MultiRowのレイアウト設定 */
         let columns = [
             {
-                {{-- 1列目 --}}
+                /* 1列目 */
                 cells: [
                     {
-                        {{-- 「置場・棚番CD」 --}}
+                        /* 「置場・棚番CD」 */
                         binding: 'dataLocationCd',
                         header: "{{ __('location_cd') }}",
                         width: '1*'
@@ -224,321 +220,377 @@
                 ]
             },
             {
-                {{-- 2列目 --}}
+                /* 2列目 */
                 cells: [
-                    {{-- 1行目 --}}
                     {
-                        {{-- 「棚場親置場CD」 --}}
-                        binding: 'dataOyaLocationCd',
-                        header: "{{ __('oya_location_cd') }}",
-                        width: '1*'
-                    },
-                    {{-- 2行目 --}}
-                    {
-                        {{-- 「置場・棚番名」 --}}
+                        /* 「置場・棚番名」 */
                         binding: 'dataLocationName',
-                        header: "{{ __('location_name') }}"
+                        header: "{{ __('location_name') }}",
+                        width: '1.3*'
                     }
                 ]
             },
             {
-                {{-- 3列目 --}}
+                /* 3列目 */
                 cells: [
-                    {{-- 1行目 --}}
+                    /* 1行目 */
                     {
-                        {{-- 「事業部CD」 --}}
+                        /* 「事業部CD」 */
                         binding: 'dataJigyoubuCd',
                         header: "{{ __('jigyoubu_cd') }}",
-                        width: '1*'
+                        width: '1.2*'
                     },
-                    {{-- 2行目 --}}
+                    /* 2行目 */
                     {
-                        {{-- 「事業部名」 --}}
+                        /* 「事業部名」 */
                         binding: 'dataJigyoubuName',
                         header: "{{ __('jigyoubu_name') }}"
                     }
                 ]
             },
             {
-                {{-- 4列目 --}}
+                /* 4列目 */
                 cells: [
+                    /* 1行目 */
                     {
-                        {{-- 「有効期間（自）」 --}}
-                        binding: 'dataStartDate',
-                        header: "{{ __('yukoukikan_start_date') }}",
-                        width: '0.7*'
+                        /* 「階層レベル」 */
+                        binding: 'dataStructureLevel',
+                        header: "{{ __('structure_level') }}",
+                        width: '1.3*'
+                    },
+                    /* 2行目 */
+                    {
+                        /* 「棚番親置場」 */
+                        binding: 'dataLocationOyaCd',
+                        header: "{{ __('location_oya_cd') }}"
                     }
                 ]
             },
             {
-                {{-- 5列目 --}}
+                /* 5列目 */
                 cells: [
                     {
-                        {{-- 「有効期間（至）」 --}}
+                        /* 「有効期間（自）」 */
+                        binding: 'dataStartDate',
+                        header: "{{ __('yukoukikan_start_date') }}",
+                        width: '1.3*'
+                    },
+                    {
+                        /* 「有効期間（至）」 */
                         binding: 'dataEndDate',
-                        header: "{{ __('yukoukikan_end_date') }}",
-                        width: '0.7*'
+                        header: "{{ __('yukoukikan_end_date') }}"
+                    }
+                ]
+            },
+            {
+                /* 6列目 */
+                cells: [
+                    {
+                        /* 「登録日時」 */
+                        binding: 'dataTourokuDt',
+                        header: "{{ __('touroku_dt') }}",
+                        width: '1.3*'
+                    },
+                    {
+                        /* 「更新日時」 */
+                        binding: 'dataKoushinDt',
+                        header: "{{ __('koushin_dt') }}"
+                    }
+                ]
+            },
+            {
+                /* 7列目 */
+                cells: [
+                    {
+                        /* 「登録者名」 */
+                        binding: 'dataTourokushaName',
+                        header: "{{ __('tourokusha_name') }}",
+                        width: '1.5*'
+                    },
+                    {
+                        /* 「更新者名」 */
+                        binding: 'dataKoushinshaName',
+                        header: "{{ __('koushinsha_name') }}"
                     }
                 ]
             }
         ];
-        {{-- グリッドの設定 --}}
+        /* グリッドの設定 */
         let gridOption = {
-            {{-- レイアウト設定 ※MultiRow専用 --}}
+            /* レイアウト設定 ※MultiRow専用 */
             layoutDefinition: columns,
-            {{-- 選択スタイル（セル単位） --}}
+            /* 選択スタイル（セル単位） */
             selectionMode: wijmo.grid.SelectionMode.Cell,
-            {{-- セル編集（無効） --}}
+            /* セル編集（無効） */
             isReadOnly: true,
-            {{-- デフォルト行スタイル（0行ごとに色付け） --}}
+            /* デフォルト行スタイル（0行ごとに色付け） */
             alternatingRowStep: 0,
-            {{-- グリッド上でのEnterキーイベント（無効） --}}
+            /* グリッド上でのEnterキーイベント（無効） */
             keyActionEnter: wijmo.grid.KeyAction.None,
-            {{-- セル読み込み時のイベント --}}
+            /* セル読み込み時のイベント */
             loadedRows: function (s, e)
             {
-                {{-- 任意の色でセルを色付け
+                /* 任意の色でセルを色付け
                      ※rowPerItemでMultiRowの1レコード当たりの行数を取得（今回はrowPerItem = 2）
-                     ※common_function.js参照 --}}
+                     ※common_function.js参照 */
                 LoadGridRows(s, gridMaster.rowsPerItem);
             }
         }
-        {{-- グリッド宣言 --}}
+        /* グリッド宣言 */
         gridMaster = new wijmo.grid.multirow.MultiRow('#gridMaster', gridOption);
 
-        {{-- グリッド関連のイベント登録 --}}
-        {{-- グリッドの親要素 --}}
+        /* ヘッダー左寄せ処理 */
+        gridMaster.itemFormatter = function(panel, r, c, cell)
+        {
+            if(panel.cellType == wijmo.grid.CellType.Cell || panel.cellType == wijmo.grid.CellType.ColumnHeader)
+            {
+                cell.style.textAlign = 'left';
+            }
+        }
+
+        /* グリッド関連のイベント登録 */
+        /* グリッドの親要素 */
         let host = gridMaster.hostElement;
-        {{-- グリッドの「左クリック」イベント --}}
+        /* グリッドの「左クリック」イベント */
         gridMaster.addEventListener(host, 'click', function (e)
         {
-            {{-- グリッドに選択する行が無い場合は処理をスキップ --}}
+            /* グリッドに選択する行が無い場合は処理をスキップ */
             if(gridMaster.itemsSource.length < 1) return;
-            {{-- 選択した行番号を格納 --}}
+            /* 選択した行番号を格納 */
             selectedRows = SetSelectedMultiRow(gridMaster, selectedRows);
-            {{-- 選択した行のデータIDを格納 --}}
+            /* 選択した行のデータIDを格納 */
             SetSelectedRowId(gridMaster.collectionView.currentItem['dataId']);
         });
 
-        {{-- グリッドの「右クリック」イベント --}}
+        /* グリッドの「右クリック」イベント */
         gridMaster.addEventListener(host, 'contextmenu', function (e)
         {
-            {{-- セル上での右クリックメニュー表示 ※common_function.js参照 --}}
+            /* セル上での右クリックメニュー表示 ※common_function.js参照 */
             SetGridContextMenu(gridMaster, e);
-            {{-- グリッドに選択する行が無い場合は処理をスキップ --}}
+            /* グリッドに選択する行が無い場合は処理をスキップ */
             if(gridMaster.itemsSource.length < 1) return;
-            {{-- クリックした位置を選択 --}}
+            /* クリックした位置を選択 */
             gridMaster.select(new wijmo.grid.CellRange(gridMaster.hitTest(e).row, 0), true);
-            {{-- 選択した行番号を格納 --}}
+            /* 選択した行番号を格納 */
             selectedRows = SetSelectedMultiRow(gridMaster, selectedRows);
-            {{-- 選択した行のデータIDを格納 --}}
+            /* 選択した行のデータIDを格納 */
             SetSelectedRowId(gridMaster.collectionView.currentItem['dataId']);
         });
 
-        {{-- グリッドの「ダブルクリック」イベント --}}
+        /* グリッドの「ダブルクリック」イベント */
         gridMaster.addEventListener(host, 'dblclick', function (e)
         {
-            {{-- 選択したセルがヘッダー要素でない場合は「修正」ボタンと同じ処理 --}}
+            /* 選択したセルがヘッダー要素でない場合は「修正」ボタンと同じ処理 */
             if(gridMaster.hitTest(e).cellType == wijmo.grid.CellType.Cell) $('#btnShusei').click();
         });
 
-        {{-- グリッドの「キーボード」イベント --}}
+        /* グリッドの「キーボード」イベント */
         gridMaster.addEventListener(host, 'keydown', function (e)
         {
-            {{-- 「←・↑・→・↓キー」はクリック時と同じ処理 --}}
+            /* 「←・↑・→・↓キー」はクリック時と同じ処理 */
             if(e.keyCode >= KEY_LEFT && e.keyCode <= KEY_DOWN)
             {
-                {{-- グリッドに選択する行が無い場合は処理をスキップ --}}
+                /* グリッドに選択する行が無い場合は処理をスキップ */
                 if(gridMaster.itemsSource.length < 1) return;
-                {{-- 選択した行番号を格納 --}}
+                /* 選択した行番号を格納 */
                 selectedRows = SetSelectedMultiRow(gridMaster, selectedRows);
-                {{-- 選択した行のデータIDを格納 --}}
+                /* 選択した行のデータIDを格納 */
                 SetSelectedRowId(gridMaster.collectionView.currentItem['dataId']);
-                {{-- キーボードイベント二重起動防止 --}}
+                /* キーボードイベント二重起動防止 */
                 windowKeybordFlg = false;
             }
-            {{-- 「Enterキー」は「修正」ボタンと同じ処理 --}}
+            /* 「Enterキー」は「修正」ボタンと同じ処理 */
             if(e.keyCode == KEY_ENTER)
             {
                 $('#btnShusei').click();
-                {{-- キーボードイベント二重起動防止 --}}
+                /* キーボードイベント二重起動防止 */
                 windowKeybordFlg = false;
             }
         });
     }
 
-    {{-- --------------------------- --}}
-    {{-- ボタンイベント登録用の関数変数 --}}
-    {{-- --------------------------- --}}
+    /* --------------------------- */
+    /* ボタンイベント登録用の関数変数 */
+    /* --------------------------- */
 
-    {{-- 「表示」ボタンイベント --}}
+    /* 「表示」ボタンイベント */
     var fncShowDataGrid = function()
     {
-        {{-- 検索フォーム要素 --}}
+        /* 検索フォーム要素 */
         let kensakuData = document.forms['frmKensaku'].elements;
-        {{-- POST送信用オブジェクト配列 --}}
+        /* POST送信用オブジェクト配列 */
         let soushinData = {};
-        {{-- フォーム要素から送信データを格納 --}}
+        /* フォーム要素から送信データを格納 */
         for(var i = 0; i< kensakuData.length; i++){
-            {{-- フォーム要素のnameが宣言されている要素のみ処理 --}}
+            /* フォーム要素のnameが宣言されている要素のみ処理 */
             if(kensakuData[i].name != ''){
-                {{-- フォーム要素のnameを配列のキーしてPOSTデータの値を作成する --}}
-                {{-- 検索値の末尾に検索条件キーを付与してLIKE検索をできるようにする ※LIKE_VALUE_BOTHは部分一致検索 --}}
+                /* フォーム要素のnameを配列のキーしてPOSTデータの値を作成する */
+                /* 検索値の末尾に検索条件キーを付与してLIKE検索をできるようにする ※LIKE_VALUE_BOTHは部分一致検索 */
                 soushinData[kensakuData[i].name] = (kensakuData[i].value != '') ? (kensakuData[i].value + LIKE_VALUE_BOTH) : '';
             }
         }
-        {{-- 「データ読込中」表示 --}}
+        /* 「データ読込中」表示 */
         ShowPopupDlg("{{ __('データ読込中') }}");
-        {{-- グリッドのデータ受信 --}}
+        /* グリッドのデータ受信 */
         AjaxData("{{ url('/master/2100') }}", soushinData, fncJushinGridData);
-        {{-- 検索件数の取得フラグの送信データを追加 --}}
-        soushinData["dataCntFlg"] = true;
-        {{-- 検索件数のデータ受信 --}}
-        AjaxData("{{ url('/master/2100') }}", soushinData, fncJushinDataCnt);
     }
-    {{-- 「CSV出力」ボタンイベント --}}
-    var fncExportCSV = function()
+    /* 「Excel出力」ボタンイベント */
+    var fncExportExcel = function()
     {
-        {{-- CSV出力用グリッドのレイアウト設定 --}}
+        /* Excel出力用グリッドのレイアウト設定 */
         let columns = [{ binding: 'dataId',   header: "{{__('id') }}" },
                        { binding: 'dataLocationCd',   header: "{{__('location_cd')}}" },
                        { binding: 'dataLocationName',   header: "{{__('location_name')}}" },
-                       { binding: 'dataOyaLocationCd',   header: "{{__('oya_location_cd')}}" },
+                       { binding: 'dataStructureLevel',   header: "{{__('structure_level')}}" },
+                       { binding: 'dataLocationOyaCd',   header: "{{__('location_oya_cd')}}" },
                        { binding: 'dataJigyoubuCd',   header: "{{__('jigyoubu_cd')}}" },
+                       { binding: 'dataJigyoubuName',   header: "{{__('jigyoubu_name')}}" },
                        { binding: 'dataStartDate',          header: "{{__('yukoukikan_start_date')}}"},
-                       { binding: 'dataEndDate',            header: "{{__('yukoukikan_end_date')}}" }];
-        {{-- 現在のグリッドの並び替え条件取得 --}}
+                       { binding: 'dataEndDate',            header: "{{__('yukoukikan_end_date')}}" },
+                       { binding: 'dataTourokuDt',            header: "{{__('touroku_dt')}}" },
+                       { binding: 'dataTourokushaName',            header: "{{__('tourokusha_name')}}" },
+                       { binding: 'dataKoushinDt',            header: "{{__('koushin_dt')}}" },
+                       { binding: 'dataKoushinshaName',            header: "{{__('koushinsha_name')}}" }];
+        /* 現在のグリッドの並び替え条件取得 */
         let sortState = gridMaster.collectionView.sortDescriptions.map(
             function (sd)
             {
-                {{-- 並び替え条件をオブジェクト配列として返す --}}
+                /* 並び替え条件をオブジェクト配列として返す */
                 return { property: sd.property, ascending: sd.ascending }
             }
         );
-        {{-- CSV出力時の並び替え条件を設定 --}}
+        /* Excel出力時の並び替え条件を設定 */
         let sortDesc = new wijmo.collections.SortDescription(sortState[0].property, sortState[0].ascending);
-        {{-- CSVファイル作成
+        /* Excelファイル作成
              ※ファイル名は「ページタイトル+yyyymmddhhMMss（年月日時分秒）+.csv」
-             ※common_function.js参照 --}}
-        ExportCSVFile(gridMaster.itemsSource, columns, sortDesc, '{{ $pageTitle }}'+ getNowDateTime() +'.csv');
+             ※common_function.js参照 */
+        ExportExcelFile(gridMaster.itemsSource, columns, sortDesc, '{{ $pageTitle }}'+ getNowDateTime() +'.csv');
     }
-    {{-- 「新規・参照新規・修正・削除」ボタンイベント
+    /* 「新規・参照新規・修正・削除」ボタンイベント
          ※mode → 入力ダイアログの操作、新規・修正・削除のどの処理で開いたかを判別する処理種別
-         　copy → 参照新規や修正などで選択行のレコード情報を初期入力させるかの判定 --}}
+         　copy → 参照新規や修正などで選択行のレコード情報を初期入力させるかの判定 */
     var fncNyuryokuData = function(mode, copy)
     {
-        {{-- 入力フォーム要素 --}}
+        /* 入力フォーム要素 */
         let nyuryokuData = document.forms['frmNyuryoku'].elements;
-        {{-- 選択行のグリッドデータ --}}
+        /* 選択行のグリッドデータ */
         let data = gridMaster.collectionView.currentItem;
-        {{-- 「新規」処理フラグ --}}
+        /* 「新規」処理フラグ */
         let insertFlg = (mode == MODE_INSERT);
 
-        {{-- 「処理種別」 --}}
+        /* 「処理種別」 */
         nyuryokuData['dataSQLType'].value = mode;
-        {{-- 「置場・棚番CD」 --}}
+        /* 「置場・棚番CD」 */
         nyuryokuData['dataLocationCd'].value = (copy && !insertFlg) ? data['dataLocationCd'] : '';
         nyuryokuData['dataLocationCd'].disabled = !insertFlg;
-        {{-- 「事業部CD」 --}}
+        /* 「事業部CD」 */
         nyuryokuData['dataJigyoubuCd'].value = copy ? data['dataJigyoubuCd'] : '';
-        {{-- 「階層レベル」 --}}
+        /* 「事業部名」 */
+        nyuryokuData['dataJigyoubuName'].value = copy ? data['dataJigyoubuName'] : '';
+        /* 「階層レベル」 */
         cmbStructureLevel.selectedIndex = (copy && !insertFlg) ? structureLevelValue.indexOf(data['dataStructureLevel']) : 0;
-        {{-- 「置場・棚番名」 --}}
+        /* 「置場・棚番名」 */
         nyuryokuData['dataLocationName'].value = copy ? data['dataLocationName'] : '';
-        {{-- 「棚番親置場CD」 --}}
-        nyuryokuData['dataOyaLocationCd'].value = (copy && !insertFlg) ? data['dataOyaLocationCd'] : '';
-        {{-- 「有効期間（自）」 --}}
+        /* 「棚番親置場CD」 */
+        nyuryokuData['dataLocationOyaCd'].value = (copy && !insertFlg) ? data['dataLocationOyaCd'] : '';
+        /* 「有効期間（自）」 */
         dateStart.value = !insertFlg ? data['dataStartDate'] : getNowDate();
-        {{-- 「登録日時」 --}}
+        /* 「登録日時」 */
         nyuryokuData['dataTourokuDt'].value = !insertFlg ? data['dataTourokuDt'] : '';
-        {{-- 「更新日時」 --}}
+        /* 「更新日時」 */
         nyuryokuData['dataKoushinDt'].value = !insertFlg ? data['dataKoushinDt'] : '';
 
-        {{-- ボタンのキャプション --}}
+        /* ボタンのキャプション */
         let btnCaption = ["{{ __('登録') }}","{{ __('更新') }}","{{ __('削除') }}"];
         nyuryokuData['btnKettei'].value = "{{__('F9')}}" + btnCaption[mode - 1];
 
-        {{-- 「削除」処理フラグ
-             ※削除処理時は入力機能を制限して閲覧のみにする --}}
+        /* 「削除」処理フラグ
+             ※削除処理時は入力機能を制限して閲覧のみにする */
         let deleteFlg = (mode == MODE_DELETE);
-        {{-- レコードID ※削除時のみ必要 --}}
+        /* レコードID ※削除時のみ必要 */
         nyuryokuData['dataId'].value = deleteFlg ? data['dataId'] : '';
-        {{-- 検索ボタン ※削除時のみ制限 --}}
+        /* 検索ボタン ※削除時のみ制限 */
         nyuryokuData['btnSanshou'].disabled = deleteFlg;
-        nyuryokuData['dataLocationName'].disabled = deleteFlg; {{-- 「置場・棚番名」 --}}
-        nyuryokuData['dataOyaLocationCd'].disabled = deleteFlg;  {{-- 「棚番親置場CD」 --}}
-        nyuryokuData['dataJigyoubuCd'].disabled = deleteFlg; {{-- 「事業部CD」 --}}
-        cmbStructureLevel.isDisabled = deleteFlg; {{-- 「階層レベル」 --}}
-        dateStart.isDisabled = deleteFlg;    {{-- 「有効期間（自）」 --}}
+        nyuryokuData['dataLocationName'].disabled = deleteFlg; /* 「置場・棚番名」 */
+        nyuryokuData['dataLocationOyaCd'].disabled = true;  /* 「棚番親置場CD」 */
+        nyuryokuData['dataJigyoubuCd'].disabled = deleteFlg; /* 「事業部CD」 */
+        cmbStructureLevel.selectedIndexChanged.addHandler(function(sender,e)
+        {
+            if(sender.selectedValue == structureLevel[2])
+            {
+                nyuryokuData['dataOyaLocationCd'].disabled = false;
+            }
+            else{
+                nyuryokuData['dataLocationOyaCd'].disabled = true;
+                nyuryokuData['dataLocationOyaCd'].value = null;
+            }
+        })
+        cmbStructureLevel.isDisabled = deleteFlg; /* 「階層レベル」 */
+        dateStart.isDisabled = deleteFlg;    /* 「有効期間（自）」 */
 
-        {{-- 入力フォームのスタイル初期化 ※common_function.js参照　--}}
+        /* 入力フォームのスタイル初期化 ※common_function.js参照　*/
         InitFormStyle();
     }
 
-    {{-- ----------------------------- --}}
-    {{-- 非同期処理呼び出し養用の関数変数 --}}
-    {{-- ----------------------------- --}}
-    {{-- ※data → 非同期通信で受信したjsonデータ配列
-         　errorFlg → 非同期通信先のエラー処理判定 --}}
+    /* ----------------------------- */
+    /* 非同期処理呼び出し養用の関数変数 */
+    /* ----------------------------- */
+    /* ※data → 非同期通信で受信したjsonデータ配列
+         　errorFlg → 非同期通信先のエラー処理判定 */
 
-    {{-- データグリッド更新 --}}
+    /* データグリッド更新 */
     var fncJushinGridData = function(data, errorFlg)
     {
-        {{-- 「データ更新中」非表示 --}}
+        /* 「データ更新中」非表示 */
         ClosePopupDlg();
-        {{-- データエラー判定 ※common_function.js参照 --}}
+        /* データエラー判定 ※common_function.js参照 */
         if(IsAjaxDataError(data, errorFlg)) return;
-        {{-- グリッドデータ反映＆並び順と選択位置保持 ※common_function.js参照 --}}
+        /* ボタン制御更新 */
+        SetEnableButton(data[1].length);
+        /* 件数更新 */
+        $("#zenkenCnt").html(data[1].length);
+        /* グリッドデータ反映＆並び順と選択位置保持 ※common_function.js参照 */
         selectedRows = SortMultiRowData(gridMaster, data[1], 'dataLocationCd');
     }
 
-    {{-- 検索件数更新 --}}
-    var fncJushinDataCnt = function(data, errorFlg)
-    {
-        {{-- データエラー判定 ※common_function.js参照 --}}
-        if(IsAjaxDataError(data, errorFlg)) return;
-        {{-- 件数更新 --}}
-        $("#zenkenCnt").html(data[1]);
-    }
-
-    {{-- DBデータ更新 --}}
+    /* DBデータ更新 */
     var fncUpdateData = function(data, errorFlg)
     {
-        {{-- 「データ更新中」非表示 --}}
+        /* 「データ更新中」非表示 */
         ClosePopupDlg();
-        {{-- データエラー判定 ※common_function.js参照 --}}
+        /* データエラー判定 ※common_function.js参照 */
         if(!IsAjaxDataError(data, errorFlg))
         {
-            {{-- 「データ更新完了」表示 --}}
+            /* 「データ更新完了」表示 */
             ShowAlertDlg('データ更新完了');
-            {{-- 選択行のデータIDを保持 ※common_function.js参照 --}}
+            /* 選択行のデータIDを保持 ※common_function.js参照 */
             SetSelectedRowId(data[2][0]);
-            {{-- 入力ダイアログを閉じる --}}
+            /* 入力ダイアログを閉じる */
             CloseNyuryokuDlg();
-            {{-- グリッドデータの表示 --}}
+            /* グリッドデータの表示 */
             $('#btnHyouji').click();
         }
         else
         {
-            {{-- エラー時処理 --}}
-            {{-- データ判定対象要素 --}}
+            /* エラー時処理 */
+            /* データ判定対象要素 */
             let targetElement = data[2];
-            {{-- 対象要素のCSSテキスト --}}
+            /* 対象要素のCSSテキスト */
             let classText = '';
-            {{-- 対象要素のCSSテキストを書き換える
-                 ※コード検査を行う項目は、スタイルクラス「code-check」が宣言されている --}}
+            /* 対象要素のCSSテキストを書き換える
+                 ※コード検査を行う項目は、スタイルクラス「code-check」が宣言されている */
             for(let i=0; i<$('.code-check').length; i++)
             {
-                {{-- 対象要素のCSSテキストを取得 --}}
+                /* 対象要素のCSSテキストを取得 */
                 classText = $('.code-check')[i].className;
-                {{-- 既にエラー表示の対象要素をリセット --}}
+                /* 既にエラー表示の対象要素をリセット */
                 $('.code-check')[i].className = classText.replace('code-check-error', '');
                 for(let j=0;j<targetElement.length;j++)
                 {
-                    {{-- 対象要素であるか判定 --}}
+                    /* 対象要素であるか判定 */
                     if($('.code-check')[i].name == targetElement[j])
                     {
-                        {{-- エラー判定の対象要素のスタイルクラスに「code-check-error」を付与して強調表示（赤枠） --}}
+                        /* エラー判定の対象要素のスタイルクラスに「code-check-error」を付与して強調表示（赤枠） */
                         $('.code-check')[i].className = classText + ' code-check-error';
                     }
                 }
@@ -546,159 +598,141 @@
         }
     }
 
-    {{-- ------------------------ --}}
-    {{-- その他入力コントロール処理 --}}
-    {{-- ------------------------ --}}
+    /* ------------------------ */
+    /* その他入力コントロール処理 */
+    /* ------------------------ */
 
-    {{-- 入力ダイアログ　「決定」ボタン　クリック処理 --}}
+    /* 入力ダイアログ　「決定」ボタン　クリック処理 */
     $('#frmNyuryoku').submit(function(event)
     {
-        {{-- 関数内関数 --}}
-        {{-- 編集ダイアログ入力値変更判定 --}}
+        /* 関数内関数 */
+        /* 編集ダイアログ入力値変更判定 */
         function IsChangeNyuryokuData(nyuryokuData)
         {
-            {{-- 選択行のグリッドデータ --}}
+            /* 選択行のグリッドデータ */
             let data = gridMaster.collectionView.currentItem;
-            {{-- 更新処理以外の処理の場合は判定せずにtrue --}}
+            /* 更新処理以外の処理の場合は判定せずにtrue */
             if(nyuryokuData['dataSQLType'].value != MODE_UPDATE) return true;
-            {{-- 「事業部CD」 --}}
+            /* 「事業部CD」 */
             if(nyuryokuData['dataJigyoubuCd'].value != data['dataJigyoubuCd']) return true;
-            {{-- 「階層レベル」 --}}
+            /* 「階層レベル」 */
             if(structureLevelValue[cmbStructureLevel.selectedIndex] != data['dataStructureLevel']) return true;
-            {{-- 「置場・棚番CD」 --}}
+            /* 「置場・棚番CD」 */
             if(nyuryokuData['dataLocationCd'].value != data['dataLocationCd']) return true;
-            {{-- 「置場・棚番名」 --}}
+            /* 「置場・棚番名」 */
             if(nyuryokuData['dataLocationName'].value != data['dataLocationName']) return true;
-            {{-- 「棚番親置場CD」 --}}
-            if(nyuryokuData['dataOyaLocationCd'].value != data['dataOyaLocationCd']) return true;
+            /* 「棚番親置場CD」 */
+            if((nyuryokuData['dataLocationOyaCd'].value != data['dataLocationOyaCd']) &&
+              !(nyuryokuData['dataLocationOyaCd'].value == '' && data['dataLocationOyaCd'] == null)) return true;
+            /* 「有効期間（自）」 */
+            if(nyuryokuData['dataStartDate'].value != data['dataStartDate']) return true;
 
-            {{-- 上記項目に変更が無い場合はfalse --}}
+            /* 上記項目に変更が無い場合はfalse */
             return false;
         }
 
-        {{-- HTMLでの送信をキャンセル --}}
+        /* HTMLでの送信をキャンセル */
         event.preventDefault();
-        {{-- 入力フォーム要素 --}}
+        /* 入力フォーム要素 */
         let nyuryokuData = document.forms['frmNyuryoku'].elements;
-        {{-- 「データチェック中」表示 --}}
+        /* 「データチェック中」表示 */
         ShowPopupDlg("{{ __('データチェック中') }}");
 
-        {{-- データ更新判定
-             ※修正処理の際、変更箇所が無い場合は更新処理をしない --}}
+        /* データ更新判定
+             ※修正処理の際、変更箇所が無い場合は更新処理をしない */
         if(!IsChangeNyuryokuData(nyuryokuData))
         {
-            {{-- エラーメッセージ表示 --}}
+            /* エラーメッセージ表示 */
             ShowAlertDlg("{{__('更新されたデータがありません')}}");
-            {{-- 「データチェック中」非表示 --}}
+            /* 「データチェック中」非表示 */
             ClosePopupDlg();
             return;
         }
-        {{-- 階層レベルのコンボボックスの値取得 --}}
+        /* 階層レベルのコンボボックスの値取得 */
         nyuryokuData['dataStructureLevel'].value = structureLevelValue[cmbStructureLevel.selectedIndex];
-        {{-- POST送信用オブジェクト配列 --}}
+        /* POST送信用オブジェクト配列 */
         let soushinData = {};
-        {{-- フォーム要素から送信データを格納 --}}
+        /* フォーム要素から送信データを格納 */
         for(var i = 0; i< nyuryokuData.length; i++){
-            {{-- フォーム要素のnameが宣言されている要素のみ処理 --}}
+            /* フォーム要素のnameが宣言されている要素のみ処理 */
             if(nyuryokuData[i].name != ''){
-                {{-- フォーム要素のnameを配列のキーしてPOSTデータの値を作成する --}}
+                /* フォーム要素のnameを配列のキーしてPOSTデータの値を作成する */
                 soushinData[nyuryokuData[i].name] = nyuryokuData[i].value;
             }
         }
-        {{-- 「データチェック中」非表示 --}}
+        /* 「データチェック中」非表示 */
         ClosePopupDlg();
-        {{-- 削除処理時、確認ダイアログを表示 --}}
+        /* 削除処理時、確認ダイアログを表示 */
         if(nyuryokuData['dataSQLType'].value == MODE_DELETE)
         {
-            {{-- 確認ダイアログを経由して処理 --}}
+            /* 確認ダイアログを経由して処理 */
             ShowConfirmDlg("このレコードを削除しますか？",
-            {{-- OKボタンを押したときの処理 --}}
+            /* OKボタンを押したときの処理 */
             function()
             {
-                {{-- 「データ更新中」表示 --}}
+                /* 「データ更新中」表示 */
                 ShowPopupDlg("{{__('データ更新中')}}");
-                {{-- 非同期データ更新開始 --}}
+                /* 非同期データ更新開始 */
                 AjaxData("{{ url('/master/2101') }}", soushinData, fncUpdateData);
             }, null);
         }
         else
         {
-            {{-- 「データ更新中」表示 --}}
+            /* 「データ更新中」表示 */
             ShowPopupDlg("{{__('データ更新中')}}");
-            {{-- 非同期データ更新開始 --}}
+            /* 非同期データ更新開始 */
             AjaxData("{{ url('/master/2101') }}", soushinData, fncUpdateData);
         }
     });
 
-    {{-- テキスト変更時に連動するテキスト要素のリセット処理 --}}
+    /* テキスト変更時に連動するテキスト要素のリセット処理 */
     $('input[type="text"]').change(function() {
-        {{-- 連動テキスト要素のある要素を判別 --}}
+        /* 連動テキスト要素のある要素を判別 */
         switch($(this)[0].name)
         {
-            {{-- 事業部CD --}}
+            /* 事業部CD */
             case 'dataJigyoubuCd': break;
-            {{-- 拠点CD --}}
-            case 'dataKyotenCd': break;
-            {{-- 部署CD --}}
-            case 'dataBushoCd': break;
-            {{-- メニューグループCD --}}
-            case 'dataMenuGroupCd': break;
-            {{-- 該当しない場合は処理終了 --}}
+            /* 該当しない場合は処理終了 */
             default: return;
             break;
         }
         let targetElement = $(this).parent().next("input")[0];
-        {{-- 連動テキスト要素が存在し、かつテキストの変更不可の要素である場合は処理 --}}
+        /* 連動テキスト要素が存在し、かつテキストの変更不可の要素である場合は処理 */
         if(targetElement && targetElement.readOnly) targetElement.value = '';
     });
 
-    {{-- クリックされた直近の要素（コード系） --}}
+    /* クリックされた直近の要素（コード系） */
     var currentCdElement = null;
-    {{-- クリックされた直近の要素（名前系） --}}
+    /* クリックされた直近の要素（名前系） */
     var currentNameElement = null;
 
-    {{-- テキスト要素にフォーカスを当てた時の処理 --}}
+    /* テキスト要素にフォーカスを当てた時の処理 */
     $('input[type="text"]').on("focusin", function(e) {
-        {{-- フォーカスした要素を格納（コード系） --}}
+        /* フォーカスした要素を格納（コード系） */
         currentCdElement = $(':focus')[0];
-        {{-- フォーカスした要素の親要素の次にある要素を格納（名前系） --}}
+        /* フォーカスした要素の親要素の次にある要素を格納（名前系） */
         currentNameElement = $(this).parent().next("input")[0];
     });
-    {{-- 「参照」ボタンアイコン　クリック処理 --}}
+    /* 「参照」ボタンアイコン　クリック処理 */
     $('.search-btn').click(function() {
-        {{-- フォーカスした要素の前の要素を格納（コード系） --}}
+        /* フォーカスした要素の前の要素を格納（コード系） */
         currentCdElement = $(this).prev("input")[0];
-        {{-- フォーカスした要素の親要素の次にある要素を格納（名前系） --}}
+        /* フォーカスした要素の親要素の次にある要素を格納（名前系） */
         currentNameElement = $(this).parent().next("input")[0];
-        {{-- 参照ボタン処理を実行 --}}
+        /* 参照ボタン処理を実行 */
         $('.btnSanshou').click();
     });
-    {{-- 「参照」ボタン　クリック処理 --}}
+    /* 「参照」ボタン　クリック処理 */
     $('.btnSanshou').click(function() {
-        {{-- 処理種別が「削除」の場合は処理をスキップ --}}
+        /* 処理種別が「削除」の場合は処理をスキップ */
         if(currentCdElement.disabled) return;
-        {{-- 選択対象の名前を判別 --}}
+        /* 選択対象の名前を判別 */
         switch(currentCdElement.name)
         {
-            {{-- 事業部CD --}}
+            /* 事業部CD */
             case 'dataJigyoubuCd':
             ShowSentakuDlg("{{ __('jigyoubu_cd') }}", "{{ __('jigyoubu_name') }}",
                            currentCdElement, currentNameElement, "{{ url('/inquiry/0100') }}");
-            break;
-            {{-- 拠点CD --}}
-            case 'dataKyotenCd':
-            ShowSentakuDlg("{{ __('kyoten_cd') }}", "{{ __('kyoten_name') }}",
-                           currentCdElement, currentNameElement, "{{ url('/inquiry/0200') }}");
-            break;
-            {{-- 部署CD --}}
-            case 'dataBushoCd':
-            ShowSentakuDlg("{{ __('busho_cd') }}", "{{ __('busho_name') }}",
-                           currentCdElement, currentNameElement, "{{ url('/inquiry/0300') }}");
-            break;
-            {{-- メニューグループCD --}}
-            case 'dataMenuGroupCd':
-            ShowSentakuDlg("{{ __('menu_group_cd') }}", "{{ __('menu_group_name') }}",
-                           currentCdElement, currentNameElement, "{{ url('/inquiry/6100') }}");
             break;
         }
     });

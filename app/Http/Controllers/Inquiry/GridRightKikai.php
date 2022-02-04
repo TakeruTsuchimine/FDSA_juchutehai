@@ -18,8 +18,7 @@ class GridRightKikai extends Controller
         // データベース接続宣言
         $query = new class_Database();
 
-        try
-        {
+        try {
             ///////////////////
             //   SQL文作成   //
             ///////////////////
@@ -29,52 +28,52 @@ class GridRightKikai extends Controller
             k.id
             ,k.jigyoubu_cd
             ,j.jigyoubu_name
-            ,k.waritsukekouho_cd
-            ,k.sub_seq
-            ,k.waritsukekouho_name
+            ,k.waritsuke_kouho_cd
+            ,k.sub_seqno
+            ,k.waritsuke_kouho_name
             ,k.setsumeibun
-            ,z.kikai_cd
+            ,ki.kikai_cd
             ,k.kakou_nouryoku
             ,k.kakou_nouryoku_keisu
-            ,z.kikai_name
-            ,z.busho_cd
+            ,ki.kikai_name
+            ,ki.busho_cd
             ,to_char(k.touroku_dt, 'yyyy/mm/dd hh24:mi:ss') touroku_dt
             ,to_char(k.koushin_dt, 'yyyy/mm/dd hh24:mi:ss') koushin_dt
             ,to_char(k.yukoukikan_start_date, 'yyyy/mm/dd') yukoukikan_start_date
             ,to_char(k.yukoukikan_end_date, 'yyyy/mm/dd') yukoukikan_end_date
-            from   kikai_kouho_master k 
+            from   kikai_kouho_master k
             left join ( select jigyoubu_cd
                               ,jigyoubu_name 
                         from   jigyoubu_master 
-                        where  sakujo_date is null
+                        where  sakujo_dt is null
                         and    :today >= yukoukikan_start_date
                         and    :today <= case when yukoukikan_end_date is null
                                               then '2199-12-31'
                                               else yukoukikan_end_date end ) j
-              on k.jigyoubu_cd = j.jigyoubu_cd  
-            left join ( select kikai_cd 
+              on k.jigyoubu_cd = j.jigyoubu_cd
+            left join ( select kikai_cd
                               ,kikai_name
                               ,busho_cd
                         from   kikai_master
-                        where  sakujo_date is null
+                        where  sakujo_dt is null
                         and    :today >= yukoukikan_start_date
                         and    :today <= case when yukoukikan_end_date is null
                                               then '2199-12-31'
-                                              else yukoukikan_end_date end ) z
-              on k.kikai_cd = z.kikai_cd 
+                                              else yukoukikan_end_date end ) ki
+              on k.kikai_cd = ki.kikai_cd
             ";
 
-            //,count(s.waritsukekouho_cd)
+            //,count(s.waritsuke_kouho_cd)
 
             // SQL条件項目
             $SQLBodyText = "
-            where  k.sakujo_date is null
+            where  k.sakujo_dt is null
             and    k.yukoukikan_end_date >= :today 
             ";
 
             // SQL並び順
             $SQLTailText = "
-            order by k.waritsukekouho_cd,k.sub_seq asc";
+            order by k.waritsuke_kouho_cd,k.sub_seqno asc";
 
             // SQLバインド値
             $SQLBind = array();
@@ -83,28 +82,27 @@ class GridRightKikai extends Controller
             // POSTデータ受信 //
             ///////////////////
             // 担当割付候補CD
-            if(isset($_POST['dataWaritsukekouhoCd']))
-            {
-                if($_POST['dataWaritsukekouhoCd'] !== '')
-                {
+            if (isset($_POST['dataWaritsukeKouhoCd'])) {
+                if ($_POST['dataWaritsukeKouhoCd'] !== '') {
                     // SQL条件文追加
-                    $SQLBodyText .= " and k.waritsukekouho_cd = :wc ";
+                    $SQLBodyText .= " and g.waritsuke_kouho_cd = :wc ";
                     // バインドの設定
-                    $SQLBind[] = array('wc', $_POST['dataWaritsukekouhoCd'], TYPE_STR);
+                    $SQLBind[] = array('wc', $_POST['dataWaritsukeKouhoCd'], TYPE_STR);
                 }
             }
             // 担当割付候補CD
-            if(isset($_POST['dataWaritsukekouhoName']))
-            {
-                if($_POST['dataWaritsukekouhoName'] !== '')
-                {
+            if (isset($_POST['dataWaritsukeKouhoName'])) {
+                if ($_POST['dataWaritsukeKouhoName'] !== '') {
                     // SQL条件文追加
-                    $SQLBodyText .= " and k.waritsukekouho_name = :wn ";
+                    $SQLBodyText .= " and g.waritsuke_kouho_name = :wn ";
                     // バインドの設定
-                    $SQLBind[] = array('wn', $_POST['dataWaritsukekouhoName'], TYPE_STR);
+                    $SQLBind[] = array('wn', $_POST['dataWaritsukeKouhoName'], TYPE_STR);
                 }
             }
-
+            
+            if(isset($_POST['dataSQLtype'])){
+                $sqlType = $_POST['dataSQLtype'];
+            }
 
             ///////////////////
             // 送信データ作成 //
@@ -112,14 +110,14 @@ class GridRightKikai extends Controller
             //現在年月日
             $nowDate = date("Y-m-d");
             // クエリの設定
-            $SQLText = ($SQLHeadText.$SQLBodyText.$SQLTailText);
-            $query -> StartConnect();
-            $query -> SetQuery($SQLText, SQL_SELECT);
+            $SQLText = ($SQLHeadText . $SQLBodyText . $SQLTailText);
+            $query->StartConnect();
+            $query->SetQuery($SQLText, SQL_SELECT);
             // バインド値のセット
-            $query -> SetBindArray($SQLBind);
-            $query -> SetBindValue("today" , $nowDate, TYPE_DATE);
+            $query->SetBindArray($SQLBind);
+            $query->SetBindValue("today", $nowDate, TYPE_DATE);
             // クエリの実行
-            $result = $query -> ExecuteSelect();
+            $result = $query->ExecuteSelect();
 
                 ///////////////////
                 // データ取得のみ //
@@ -127,49 +125,45 @@ class GridRightKikai extends Controller
                 $data = array();
                 // 配列番号
                 $index = 0;
-                
+
                 // 結果データの格納
                 foreach($result as $value){
-
                     // JSONオブジェクト用に配列に名前を付けてデータ格納
-                    $dataArray = array();
-                    $dataArray = $dataArray + array( 'dataId'            => $value['id'] );
-                    $dataArray = $dataArray + array( 'dataJigyoubuCd'    => $value['jigyoubu_cd'] );
-                    $dataArray = $dataArray + array( 'dataJigyoubuName'    => $value['jigyoubu_name'] );
-                    $dataArray = $dataArray + array( 'dataWaritsukekouhoCd'  => $value['waritsukekouho_cd'] );
-                    $dataArray = $dataArray + array( 'dataSubNo'       => $value['sub_seq'] );
-                    $dataArray = $dataArray + array( 'dataWaritsukekouhoName'     => $value['waritsukekouho_name'] );
-                    $dataArray = $dataArray + array( 'dataSetsumeibun'   => $value['setsumeibun'] );
-                    $dataArray = $dataArray + array( 'dataKikaiCd'   => $value['kikai_cd'] );
-                    $dataArray = $dataArray + array( 'dataKikaiName'   => $value['kikai_name'] );
-                    $dataArray = $dataArray + array( 'dataKakouSkill'    => $value['kakou_nouryoku'] );
-                    $dataArray = $dataArray + array( 'dataKakounouryoku_keisu'     => $value['kakou_nouryoku_keisu'] );
-                    $dataArray = $dataArray + array( 'dataStartDate'     => $value['yukoukikan_start_date'] );
-                    $dataArray = $dataArray + array( 'dataEndDate'       => $value['yukoukikan_end_date'] );
-                    $dataArray = $dataArray + array( 'dataTourokuDt'     => $value['touroku_dt'] );
-                    $dataArray = $dataArray + array( 'dataKoushinDt'     => $value['koushin_dt'] );
-                    $dataArray = $dataArray + array( 'dataBumonCd'  => $value['busho_cd'] );
-                    $dataArray = $dataArray + array( 'dataIndex'        => $index );
+                    $dataArray = array(
+                     'dataId'            => $value['id'] ,
+                     'dataJigyoubuCd'    => $value['jigyoubu_cd'] ,
+                     'dataJigyoubuName'    => $value['jigyoubu_name'] ,
+                     'dataWaritsukeKouhoCd'  => $value['waritsuke_kouho_cd'] ,
+                     'dataSubNo'       => $value['sub_seqno'] ,
+                     'dataWaritsukeKouhoName'     => $value['waritsuke_kouho_name'] ,
+                     'dataSetsumeibun'   => $value['setsumeibun'] ,
+                     'dataKikaiCd'   => $value['kikai_cd'] ,
+                     'dataKikaiName'   => $value['kikai_name'] ,
+                     'dataKakouSkill'    => $value['kakou_nouryoku'] ,
+                     'dataKakouNouryokuKeisu'     => $value['kakou_nouryoku_keisu'] ,
+                     'dataStartDate'     => $value['yukoukikan_start_date'] ,
+                     'dataEndDate'       => $value['yukoukikan_end_date'] ,
+                     'dataTourokuDt'     => $value['touroku_dt'] ,
+                     'dataKoushinDt'     => $value['koushin_dt'] ,
+                     'dataBushoCd'  => $value['busho_cd'] ,
+                     'dataIndex'        => $index
+                    );
                     // 1行ずつデータ配列をグリッドデータ用配列に格納
                     $data[] = $dataArray;
                     // 配列番号を進める
                     $index = $index + 1;
                 }
-            
-        }
-        catch ( \Throwable $e )
-        {
+        } catch (\Throwable $e) {
             $resultFlg = false;
-            $data = $e -> getMessage().' File：'.$e -> getFile().' Line：'.$e -> getLine();
-        }
-        finally
-        {
-            $query -> CloseQuery();
+            $data = $e->getMessage() . ' File：' . $e->getFile() . ' Line：' . $e->getLine();
+        } finally {
+            $query->CloseQuery();
         }
         // 処理結果送信
         $resultData = array();
         $resultData[] = $resultFlg;
         $resultData[] = mb_convert_encoding($data, 'UTF-8', 'UTF-8');
+        $resultData[] = $sqlType;
         return $resultData;
     }
 }

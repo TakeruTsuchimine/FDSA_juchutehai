@@ -24,6 +24,10 @@ class PCJUI_3800 extends Controller
             // SQL選択項目
             $SQLHeadText = "
             select j.id
+                  ,j.jigyoubu_cd
+                  ,ji.jigyoubu_name
+                  ,j.job_cd
+                  ,jo.job_name
                   ,j.juchu_no
                   ,to_char(j.juchu_date, 'yyyy/mm/dd') juchu_date
                   ,j.tokuisaki_cd
@@ -31,6 +35,7 @@ class PCJUI_3800 extends Controller
                   ,j.eigyou_tantousha_cd
                   ,et.tantousha_name eigyou_tantousha_name
                   ,j.assistant_cd
+                  ,ji.jigyoubu_oya_kbn
                   ,at.tantousha_name assistant_name
                   ,j.nounyusaki_cd
                   ,n.nounyusaki_name1 nounyusaki_name
@@ -43,6 +48,7 @@ class PCJUI_3800 extends Controller
                   ,to_char(j.shukka_date, 'yyyy/mm/dd') shukka_date
                   ,j.tani_cd
                   ,bt.bunrui_name tani_name
+                  ,j.tehai_qty 
                   ,j.juchu_qty
                   ,j.juchu_tanka
                   ,j.juchu_kin
@@ -51,53 +57,62 @@ class PCJUI_3800 extends Controller
                   ,j.juchu_kbn
                   ,bj.bunrui_name juchu_kbn_name
                   ,j.haisoubin_cd
+                  ,j.matome_kbn
+                  ,j.seizou_shiji_no
                   ,bh.bunrui_name haisoubin_name
-                  ,j.notes1
-                  ,j.notes2
-                  ,j.notes3
                   ,to_char(j.touroku_dt, 'yyyy/mm/dd hh24:mi:ss') touroku_dt
                   ,to_char(j.koushin_dt, 'yyyy/mm/dd hh24:mi:ss') koushin_dt
-                  ,to_char(j.yukoukikan_start_date, 'yyyy/mm/dd') yukoukikan_start_date
-                  ,to_char(j.yukoukikan_end_date, 'yyyy/mm/dd') yukoukikan_end_date
-            from   juchu_data j 
+                  ,to_char(j.yukoukikan_start_date, 'yyyy/mm/dd hh24:mi:ss') yukoukikan_start_date
+                  ,to_char(j.yukoukikan_end_date, 'yyyy/mm/dd hh24:mi:ss') yukoukikan_end_date
+            from   juchu_data j
+            left join ( select * from jigyoubu_master ) ji
+                   on j.jigyoubu_cd = ji.jigyoubu_cd
+                  and ji.sakujo_dt is null
+                  and j.juchu_date >= ji.yukoukikan_start_date
+                  and j.juchu_date <= case when ji.yukoukikan_end_date is null
+                                           then '2199-12-31'
+                                           else ji.yukoukikan_end_date end
+            left join ( select * from job_master ) jo
+                   on j.job_cd = jo.job_cd
+                  and jo.sakujo_dt is null
             left join ( select * from tokuisaki_master ) t
                    on j.tokuisaki_cd = t.tokuisaki_cd
-                  and t.sakujo_date is null
+                  and t.sakujo_dt is null
                   and j.juchu_date >= t.yukoukikan_start_date
                   and j.juchu_date <= case when t.yukoukikan_end_date is null
                                            then '2199-12-31'
                                            else t.yukoukikan_end_date end
             left join ( select * from tantousha_master ) et
                    on j.eigyou_tantousha_cd = et.tantousha_cd
-                  and et.sakujo_date is null
+                  and et.sakujo_dt is null
                   and j.juchu_date >= et.yukoukikan_start_date
                   and j.juchu_date <= case when et.yukoukikan_end_date is null
                                            then '2199-12-31'
                                            else et.yukoukikan_end_date end
             left join ( select * from tantousha_master ) at
                    on j.assistant_cd = at.tantousha_cd
-                  and at.sakujo_date is null
+                  and at.sakujo_dt is null
                   and j.juchu_date >= at.yukoukikan_start_date
                   and j.juchu_date <= case when at.yukoukikan_end_date is null
                                            then '2199-12-31'
                                            else at.yukoukikan_end_date end
             left join ( select * from tokui_nounyusaki_master ) n
                    on j.nounyusaki_cd = n.nounyusaki_cd
-                  and n.sakujo_date is null
+                  and n.sakujo_dt is null
                   and j.juchu_date >= n.yukoukikan_start_date
                   and j.juchu_date <= case when n.yukoukikan_end_date is null
                                            then '2199-12-31'
                                            else n.yukoukikan_end_date end
             left join ( select * from hinmoku_master ) h
                    on j.hinmoku_cd = h.hinmoku_cd
-                  and h.sakujo_date is null
+                  and h.sakujo_dt is null
                   and j.juchu_date >= h.yukoukikan_start_date
                   and j.juchu_date <= case when h.yukoukikan_end_date is null
                                            then '2199-12-31'
                                            else h.yukoukikan_end_date end
             left join ( select * from kaisou_bunrui_master ) bj
                    on j.juchu_kbn = bj.bunrui_cd
-                  and bj.sakujo_date is null
+                  and bj.sakujo_dt is null
                   and j.juchu_date >= bj.yukoukikan_start_date
                   and j.juchu_date <= case when bj.yukoukikan_end_date is null
                                            then '2199-12-31'
@@ -105,7 +120,7 @@ class PCJUI_3800 extends Controller
                   and bj.bunrui_category_cd = 'JUCHUKBN'
             left join ( select * from kaisou_bunrui_master ) bt
                    on j.tani_cd = bt.bunrui_cd
-                  and bt.sakujo_date is null
+                  and bt.sakujo_dt is null
                   and j.juchu_date >= bt.yukoukikan_start_date
                   and j.juchu_date <= case when bt.yukoukikan_end_date is null
                                            then '2199-12-31'
@@ -113,7 +128,7 @@ class PCJUI_3800 extends Controller
                   and bt.bunrui_category_cd = 'TANI'
             left join ( select * from kaisou_bunrui_master ) bh
                    on j.haisoubin_cd = bh.bunrui_cd
-                  and bh.sakujo_date is null
+                  and bh.sakujo_dt is null
                   and j.juchu_date >= bh.yukoukikan_start_date
                   and j.juchu_date <= case when bh.yukoukikan_end_date is null
                                            then '2199-12-31'
@@ -122,10 +137,11 @@ class PCJUI_3800 extends Controller
 
             // SQL条件項目
             $SQLBodyText = "
-            where  j.sakujo_date is null
+            where  j.sakujo_dt is null
             and    :today <= case when j.yukoukikan_end_date is null
                                   then '2199-12-31'
-                                  else j.yukoukikan_end_date end ";
+                                  else j.yukoukikan_end_date end 
+            ";
 
             // SQL並び順
             $SQLTailText = "
@@ -198,7 +214,7 @@ class PCJUI_3800 extends Controller
                 $SQLBind[] = array('chumon_no', $query->GetLikeValue($request->dataChumonNo), TYPE_STR);
             }
 
-            // 得意先CD    
+            // 得意先CD
             if (!is_null($request->dataTokuisakiCd)) {
                 // SQL条件文追加
                 $SQLBodyText .= " and j.tokuisaki_cd ilike :tokuisaki_cd ";
@@ -220,7 +236,7 @@ class PCJUI_3800 extends Controller
                 $SQLBodyText .= " and ( select hinmoku_name1
                                         from   hinmoku_master hn
                                         where  j.hinmoku_cd = hn.hinmoku_cd
-                                        and    hn.sakujo_date is null
+                                        and    hn.sakujo_dt is null
                                         and    j.juchu_date >= hn.yukoukikan_start_date
                                         and    j.juchu_date <= case when hn.yukoukikan_end_date is null
                                                                     then '2199-12-31'
@@ -233,7 +249,7 @@ class PCJUI_3800 extends Controller
             $cntFlg = false;
             if (!is_null($request->dataCntFlg)) $cntFlg = (bool)$request->dataCntFlg;
 
-            ///////////////////    
+            ///////////////////
             // 送信データ作成 //
             ///////////////////
             //現在年月日
@@ -258,52 +274,53 @@ class PCJUI_3800 extends Controller
                 // データ取得のみ //
                 ///////////////////
                 $data = array();
-                // 配列番号
-                $index = 0;
                 // 結果データの格納
                 foreach ($result as $value) {
                     // JSONオブジェクト用に配列に名前を付けてデータ格納
-                    $dataArray = array();
-                    $dataArray = $dataArray + array('dataId' => $value['id']);
-                    $dataArray = $dataArray + array('dataJuchuNo' => $value['juchu_no']);
-                    $dataArray = $dataArray + array('dataJuchuDate' => $value['juchu_date']);
-                    $dataArray = $dataArray + array('dataTokuisakiCd' => $value['tokuisaki_cd']);
-                    $dataArray = $dataArray + array('dataTokuisakiName' => $value['tokuisaki_name']);
-                    $dataArray = $dataArray + array('dataEigyouCd' => $value['eigyou_tantousha_cd']);
-                    $dataArray = $dataArray + array('dataEigyouName' => $value['eigyou_tantousha_name']);
-                    $dataArray = $dataArray + array('dataAssistantCd' => $value['assistant_cd']);
-                    $dataArray = $dataArray + array('dataAssistantName' => $value['assistant_name']);
-                    $dataArray = $dataArray + array('dataNounyusakiCd' => $value['nounyusaki_cd']);
-                    $dataArray = $dataArray + array('dataNounyusakiName' => $value['nounyusaki_name']);
-                    $dataArray = $dataArray + array('dataChumonNo1' => $value['tokuisaki_chumon_no1']);
-                    $dataArray = $dataArray + array('dataChumonNo2' => $value['tokuisaki_chumon_no2']);
-                    $dataArray = $dataArray + array('dataChumonNo3' => $value['tokuisaki_chumon_no3']);
-                    $dataArray = $dataArray + array('dataHinmokuCd' => $value['hinmoku_cd']);
-                    $dataArray = $dataArray + array('dataHinmokuName' => $value['hinmoku_name']);
-                    $dataArray = $dataArray + array('dataNoukiDate' => $value['nouki_date']);
-                    $dataArray = $dataArray + array('dataShukkaDate' => $value['shukka_date']);
-                    $dataArray = $dataArray + array('dataTaniCd' => $value['tani_cd']);
-                    $dataArray = $dataArray + array('dataTaniName' => $value['tani_name']);
-                    $dataArray = $dataArray + array('dataJuchuQty' => (double)$value['juchu_qty']);
-                    $dataArray = $dataArray + array('dataJuchuTanka' => (double)$value['juchu_tanka']);
-                    $dataArray = $dataArray + array('dataJuchuKin' => (double)$value['juchu_kin']);
-                    $dataArray = $dataArray + array('dataKaritankaKbn' => (int)$value['karitanka_kbn']);
-                    $dataArray = $dataArray + array('dataKaritankaKbnName' => $value['karitanka_kbn_name']);
-                    $dataArray = $dataArray + array('dataJuchuKbn' => $value['juchu_kbn']);
-                    $dataArray = $dataArray + array('dataJuchuKbnName' => $value['juchu_kbn_name']);
-                    $dataArray = $dataArray + array('dataHaisoubinCd' => $value['haisoubin_cd']);
-                    $dataArray = $dataArray + array('dataHaisoubinName' => $value['haisoubin_name']);
-                    $dataArray = $dataArray + array('dataNote1' => $value['notes1']);
-                    $dataArray = $dataArray + array('dataNote2' => $value['notes2']);
-                    $dataArray = $dataArray + array('dataNote3' => $value['notes3']);
-                    $dataArray = $dataArray + array('dataStartDate' => $value['yukoukikan_start_date']);
-                    $dataArray = $dataArray + array('dataEndDate' => $value['yukoukikan_end_date']);
-                    $dataArray = $dataArray + array('dataTourokuDt' => $value['touroku_dt']);
-                    $dataArray = $dataArray + array('dataKoushinDt' => $value['koushin_dt']);
+                    $dataArray = array(
+                        'dataId' => $value['id'],
+                        'dataJigyoubuCd' => $value['jigyoubu_cd'],
+                        'dataJigyoubuName' => $value['jigyoubu_name'],
+                        'dataJobCd' => $value['job_cd'],
+                        'dataJobName' => $value['job_name'],
+                        'dataJuchuNo' => $value['juchu_no'],
+                        'dataJuchuDate' => $value['juchu_date'],
+                        'dataTokuisakiCd' => $value['tokuisaki_cd'],
+                        'dataTokuisakiName' => $value['tokuisaki_name'],
+                        'dataEigyouCd' => $value['eigyou_tantousha_cd'],
+                        'dataEigyouName' => $value['eigyou_tantousha_name'],
+                        'dataAssistantCd' => $value['assistant_cd'],
+                        'dataAssistantName' => $value['assistant_name'],
+                        'dataNounyusakiCd' => $value['nounyusaki_cd'],
+                        'dataNounyusakiName' => $value['nounyusaki_name'],
+                        'dataChumonNo1' => $value['tokuisaki_chumon_no1'],
+                        'dataChumonNo2' => $value['tokuisaki_chumon_no2'],
+                        'dataChumonNo3' => $value['tokuisaki_chumon_no3'],
+                        'dataHinmokuCd' => $value['hinmoku_cd'],
+                        'dataHinmokuName' => $value['hinmoku_name'],
+                        'dataNoukiDate' => $value['nouki_date'],
+                        'dataShukkaDate' => $value['shukka_date'],
+                        'dataTaniCd' => $value['tani_cd'],
+                        'dataTaniName' => $value['tani_name'],
+                        'dataTehaiQty' => $value['tehai_qty'],
+                        'dataJuchuQty' => (double)$value['juchu_qty'],
+                        'dataJuchuTanka' => (double)$value['juchu_tanka'],
+                        'dataJuchuKin' => (double)$value['juchu_kin'],
+                        'dataKaritankaKbn' => (int)$value['karitanka_kbn'],
+                        'dataKaritankaKbnName' => $value['karitanka_kbn_name'],
+                        'dataJuchuKbn' => $value['juchu_kbn'],
+                        'dataJuchuKbnName' => $value['juchu_kbn_name'],
+                        'dataHaisoubinCd' => $value['haisoubin_cd'],
+                        'dataHaisoubinName' => $value['haisoubin_name'],
+                        'dataMatomeKbn' => $value['matome_kbn'],
+                        'dataSeizouShijiNo' => $value['seizou_shiji_no'],
+                        'dataStartDate' => $value['yukoukikan_start_date'],
+                        'dataEndDate' =>   $value['yukoukikan_end_date'],
+                        'dataTourokuDt' => $value['touroku_dt'],
+                        'dataKoushinDt' => $value['koushin_dt']
+                    );
                     // 1行ずつデータ配列をグリッドデータ用配列に格納
                     $data[] = $dataArray;
-                    // 配列番号を進める
-                    $index = $index + 1;
                 }
             }
         } catch (\Throwable $e) {

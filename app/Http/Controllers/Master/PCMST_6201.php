@@ -51,6 +51,22 @@ class PCMST_6201 extends Controller
                 $resultFlg = false;
             }
 
+            // メニュータイトル
+            $menuTitle = $request->dataMenuTitle;
+            // POSTデータチェックエラー
+            if (is_null($menuTitle) || $menuTitle === '') {
+                $resultMsg .= '「' . __('menu_title') . '」' . __('が正常に送信されていません。') . '\n';
+                $resultFlg = false;
+            }
+
+            // メニュー機能URL
+            $menuTitleUrl = $request->dataMenuTitleUrl;
+            // POSTデータチェックエラー
+            if (is_null($menuTitleUrl) || $menuTitleUrl === '') {
+                $resultMsg .= '「' . __('menu_title_url') . '」' . __('が正常に送信されていません。') . '\n';
+                $resultFlg = false;
+            }
+
             // 有効期間（自）
             $yukoukikanStartDate = $request->dataStartDate;
             // POSTデータチェックエラー
@@ -87,7 +103,7 @@ class PCMST_6201 extends Controller
                     // INSERT処理 //
                     ////////////////
                 default:
-                    // メニューGRCDは新規登録の際、既に存在するメニューグループコードの場合はエラー
+                    // メニューグループCDは新規登録の際、既に存在するメニューグループCDの場合はエラー
                     $result = $common->GetCdCount($tableName, 'menu_group_cd', $menuGroupCd);
                     if ($result > 0 && $SQLType === SQL_INSERT) {
                         $resultMsg .= __('既に登録されている') . '「' . __('menu_group_cd') . '」' . __('です。') . '<br>';
@@ -95,17 +111,27 @@ class PCMST_6201 extends Controller
                         $resultFlg = false;
                     }
 
+                    // メニュータイトルは新規登録の際、既に存在するメニュータイトルの場合はエラー
+                    $result = $common->GetCdCount($tableName, 'menu_title', $menuTitle);
+                    if ($result > 0 && $SQLType === SQL_INSERT) {
+                        $resultMsg .= __('既に登録されている') . '「' . __('menu_title') . '」' . __('です。') . '<br>';
+                        $resultVal[] = 'dataMenuTitle';
+                        $resultFlg = false;
+                    }
+
+                    // メニュー機能URLは新規登録の際、既に存在するメニュー機能URLの場合はエラー
+                    $result = $common->GetCdCount($tableName, 'menu_title_url', $menuTitleUrl);
+                    if ($result > 0 && $SQLType === SQL_INSERT) {
+                        $resultMsg .= __('既に登録されている') . '「' . __('menu_title_url') . '」' . __('です。') . '<br>';
+                        $resultVal[] = 'dataMenuTitleUrl';
+                        $resultFlg = false;
+                    }
+
                     // メニューグループSEQNO
-                    $menuGroupSeq = $request->dataMenuGroupSeq;
+                    $menuGroupSeqno = $request->dataMenuGroupSeqno;
 
                     // メニューSEQNO
-                    $menuSeq = $request->dataMenuSeq;
-
-                    // メニュータイトル
-                    $menuTitle = $request->dataMenuTitle;
-
-                    // メニュー機能URL
-                    $menuTitleUrl = $request->dataMenuTitleUrl;
+                    $menuSeqno = $request->dataMenuSeqno;
 
                     // 事業部CD
                     $jigyoubuCd = $request->dataJigyoubuCd;
@@ -130,8 +156,8 @@ class PCMST_6201 extends Controller
                     $SQLBind = array();
                     $SQLBind[] = array('jigyoubu_cd', $jigyoubuCd, TYPE_STR);
                     $SQLBind[] = array('menu_group_cd', $menuGroupCd, TYPE_STR);
-                    $SQLBind[] = array('menu_group_seq', $menuGroupSeq, TYPE_INT);
-                    $SQLBind[] = array('menu_seq', $menuSeq, TYPE_INT);
+                    $SQLBind[] = array('menu_group_seqno', $menuGroupSeqno, TYPE_INT);
+                    $SQLBind[] = array('menu_seqno', $menuSeqno, TYPE_INT);
                     $SQLBind[] = array('menu_title', $menuTitle, TYPE_STR);
                     $SQLBind[] = array('menu_title_url', $menuTitleUrl, TYPE_STR);
                     // データ処理開始

@@ -30,7 +30,7 @@ class PCMST_0101 extends Controller
         // マスタ共通処理クラス宣言
         $master = new class_Master($tableName, 'jigyoubu_cd');
         try
-        {   
+        {
             ///////////////////
             // POSTデータ受信 //
             ///////////////////
@@ -84,11 +84,11 @@ class PCMST_0101 extends Controller
                     $resultFlg = false;
                 }
                 // データ処理開始
-                
+
                 $master -> DeleteMasterData($jigyoubuCd, $yukoukikanStartDate, $loginId, $dataId);
                 break;
                 // DELETE処理終了 //
- 
+
                 ////////////////
                 // INSERT処理 //
                 ////////////////
@@ -96,35 +96,35 @@ class PCMST_0101 extends Controller
                 // 事業部CDは新規登録の際、既に存在する事業部コードの場合はエラー
                 $result = $common -> GetCdCount($tableName, 'jigyoubu_cd', $jigyoubuCd);
                 if($result > 0 && $SQLType === SQL_INSERT)
-                { 
+                {
                     $resultMsg .= __('既に登録されている').'「'.__('jigyoubu_cd').'」'.__('です。').'<br>';
                     $resultVal[] = 'dataJigyoubuCd';
                     $resultFlg = false;
                 }
 
-                
-            
+
+
                 // 事業部名
                 $jigyoubuName = $request -> dataJigyoubuName;
 
                 // 事業部親区分
-                $jigyoubuoyaKbn = (int)$request -> dataJigyoubuoyaKbn;
+                $jigyoubuOyaKbn = empty((int)$request -> dataJigyoubuOyaKbn) ? 0 : (int)$request -> dataJigyoubuOyaKbn;
 
                 // 事業部親CD
-                $jigyoubuoyaCd = $request -> dataJigyoubuoyaCd;
+                $jigyoubuOyaCd = $request -> dataJigyoubuOyaCd;
 
                 if(!$resultFlg) throw new Exception($resultMsg);
-       
+
                 // 有効期間終了の設定
                 $yukoukikanEndDate = date('Y/m/d', strtotime('2199-12-31'));
                 // バインドの設定
                 $SQLBind = array();
                 $SQLBind[] = array('jigyoubu_cd',       $jigyoubuCd,       TYPE_STR);
                 $SQLBind[] = array('jigyoubu_name',   $jigyoubuName,   TYPE_STR);
-                $SQLBind[] = array('jigyoubu_oya_kbn', $jigyoubuoyaKbn, TYPE_INT);
-                $SQLBind[] = array('jigyoubu_oya_cd',      $jigyoubuoyaCd,      TYPE_STR);
+                $SQLBind[] = array('jigyoubu_oya_kbn', $jigyoubuOyaKbn, TYPE_INT);
+                $SQLBind[] = array('jigyoubu_oya_cd',      $jigyoubuOyaCd,      TYPE_STR);
                 // データ処理開始
-                
+
                 $master -> InsertMasterData($SQLBind, $jigyoubuCd, $yukoukikanStartDate, $yukoukikanEndDate, $loginId, $SQLType);
                 $resultVal[] = $common -> GetMaxId($tableName);
                 break;
@@ -143,7 +143,7 @@ class PCMST_0101 extends Controller
         $resultData = array();
         $resultData[] = $resultFlg;
         $resultData[] = mb_convert_encoding($resultMsg, 'UTF-8', 'UTF-8');
-        $resultData[] = mb_convert_encoding($resultVal, 'UTF-8', 'UTF-8'); 
+        $resultData[] = mb_convert_encoding($resultVal, 'UTF-8', 'UTF-8');
         return $resultData;
     }
 }
