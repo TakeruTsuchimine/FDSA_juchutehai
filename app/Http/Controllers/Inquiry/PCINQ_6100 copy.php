@@ -6,18 +6,18 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Classes\class_Database;
 
-class PCINQ_1800 extends Controller
+class PCINQ_6100 extends Controller
 {
     public function index(Request $request)
     {
         // 処理成功フラグ
         $resultFlg = true;
         // 検索対象テーブル
-        $targetTable = 'shiiresaki_master';
+        $targetTable = 'menu_group_master';
         // 対象CD列
-        $targetRowCd = 'shiiresaki_cd';
+        $targetRowCd = 'menu_group_cd';
         // 対象名称列
-        $targetRowName = 'shiiresaki_ryaku';
+        $targetRowName = 'menu_group_name';
 
         // グリッドデータ用データ格納用変数宣言
         $data;
@@ -28,10 +28,7 @@ class PCINQ_1800 extends Controller
             //   SQL文作成   //
             ///////////////////
             // SQL選択項目
-            $SQLHeadText = "
-            select shiiresaki_cd
-                  ,shiiresaki_ryaku
-            from   shiiresaki_master ";
+            $SQLHeadText = " select ".$targetRowCd." , ".$targetRowName." from ".$targetTable;
             // SQL条件項目
             $SQLBodyText = "
             where  sakujo_dt is null
@@ -39,14 +36,20 @@ class PCINQ_1800 extends Controller
             and    :today <= case when yukoukikan_end_date is null
                                   then '2199-12-31'
                                   else yukoukikan_end_date end ";
-            $SQLTailText = "
-            order by shiiresaki_cd ";
+            $SQLTailText = " order by ".$targetRowCd;
             // SQLバインド値
             $SQLBind = array();
 
             ///////////////////
             // POSTデータ受信 //
             ///////////////////
+            // 除外対象CD
+            if (!is_null($request->dataTargetCd)) {
+                // SQL条件文追加
+                $SQLBodyText .= " and ".$targetRowCd." <> :target_cd ";
+                // バインドの設定
+                $SQLBind[] = array('target_cd', $request->dataTargetCd, TYPE_STR);
+            }
             // 検索CD
             if (!is_null($request->dataKensakuCd)) {
                 // SQL条件文追加
@@ -86,9 +89,10 @@ class PCINQ_1800 extends Controller
             // 結果データの格納
             foreach ($result as $value) {
                 // JSONオブジェクト用に配列に名前を付けてデータ格納
-                $dataArray = array();
-                $dataArray = $dataArray + array('dataSentakuCd'   => $value[$targetRowCd]);
-                $dataArray = $dataArray + array('dataSentakuName' => $value[$targetRowName]);
+                $dataArray = array(
+                    'dataSentakuCd'   => $value[$targetRowCd],
+                    'dataSentakuName' => $value[$targetRowName]
+                );
                 // 1行ずつデータ配列をグリッドデータ用配列に格納
                 $data[] = $dataArray;
             }

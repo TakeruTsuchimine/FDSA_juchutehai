@@ -141,6 +141,16 @@ Route::post('/inquiry/2601', 'App\Http\Controllers\Inquiry\PCINQ_2601@index');
 Route::post('/inquiry/2100', 'App\Http\Controllers\Inquiry\PCINQ_2100@index');
 Route::post('/inquiry/2000', 'App\Http\Controllers\Inquiry\PCINQ_2000@index');
 Route::post('/inquiry/1800', 'App\Http\Controllers\Inquiry\PCINQ_1800@index');
+Route::post('/inquiry/1900', 'App\Http\Controllers\Inquiry\PCINQ_1900@index');
+
+Route::post('/juchu/4100', 'App\Http\Controllers\Juchu\PCJUI_4100@index');
+Route::post('/juchu/4101', 'App\Http\Controllers\Juchu\PCJUI_4101@index');
+Route::post('/juchu/4110', 'App\Http\Controllers\Juchu\PCJUI_4110@index');
+Route::post('/juchu/4111', 'App\Http\Controllers\Juchu\PCJUI_4111@index');
+Route::post('/juchu/4120', 'App\Http\Controllers\Juchu\PCJUI_4120@index');
+Route::post('/juchu/4121', 'App\Http\Controllers\Juchu\PCJUI_4121@index');
+Route::post('/juchu/4130', 'App\Http\Controllers\Juchu\PCJUI_4130@index');
+Route::post('/juchu/4131', 'App\Http\Controllers\Juchu\PCJUI_4131@index');
 //ADD 土嶺△
 
 /*受注データ*/
