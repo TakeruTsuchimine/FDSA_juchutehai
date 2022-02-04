@@ -32,9 +32,11 @@ class PCJUI_4120 extends Controller
                 ,j.tokuisaki_chumon_no1
                 ,j.matome_kbn
                 ,j.hinmoku_cd
-                ,h.hinmoku_name1
+                ,h.hinmoku_name1 as hinmoku_name
                 ,jtm.gaichusaki_cd
                 ,s.shiiresaki_name1 as gaichusaki_name
+				,jtm.kaitou_tanka
+				,jtm.kaitou_nouki_date
                 ,m.sum_qty as tsuki_kei_qty
                 ,dm.sum_qty as kikann_kei_qty
                 ,m.sum_kin as tsuki_kei_kin
@@ -46,7 +48,8 @@ class PCJUI_4120 extends Controller
                 
                 ,j.juchu_kbn
                 ,kbj.bunrui_name juchu_kbn_name
-                
+                ,jt.shinki_repeat_kbn
+
                 ,to_char(j.touroku_dt, 'yyyy/mm/dd hh24:mi:ss') touroku_dt
                 ,to_char(j.koushin_dt, 'yyyy/mm/dd hh24:mi:ss') koushin_dt
                 ,to_char(j.yukoukikan_start_date, 'yyyy/mm/dd') yukoukikan_start_date
@@ -278,9 +281,9 @@ class PCJUI_4120 extends Controller
                     $dataArray = $dataArray + array('dataId' => $value['id']);
                     $dataArray = $dataArray + array('dataJuchuNo' => $value['juchu_no']);
                     $dataArray = $dataArray + array('dataJuchuDate' => $value['juchu_date']);
-                    // $dataArray = $dataArray + array('dataTokuisakiCd' => $value['tokuisaki_cd']);
-                    // $dataArray = $dataArray + array('dataTokuisakiName' => $value['tokuisaki_name']);
-                    // $dataArray = $dataArray + array('dataEigyouCd' => $value['eigyou_tantousha_cd']);
+                    $dataArray = $dataArray + array('dataShinkiRepeatKbn' => $value['shinki_repeat_kbn']);
+                    $dataArray = $dataArray + array('dataJuchuKbnName' => $value['juchu_kbn']);
+                    $dataArray = $dataArray + array('dataKaitouStatus' => $value['kaitou_status']);
                     // $dataArray = $dataArray + array('dataEigyouName' => $value['eigyou_tantousha_name']);
                     // $dataArray = $dataArray + array('dataAssistantCd' => $value['assistant_cd']);
                     // $dataArray = $dataArray + array('dataAssistantName' => $value['assistant_name']);
@@ -289,8 +292,8 @@ class PCJUI_4120 extends Controller
                     // $dataArray = $dataArray + array('dataChumonNo1' => $value['tokuisaki_chumon_no1']);
                     // $dataArray = $dataArray + array('dataChumonNo2' => $value['tokuisaki_chumon_no2']);
                     // $dataArray = $dataArray + array('dataChumonNo3' => $value['tokuisaki_chumon_no3']);
-                    // $dataArray = $dataArray + array('dataHinmokuCd' => $value['hinmoku_cd']);
-                    // $dataArray = $dataArray + array('dataHinmokuName' => $value['hinmoku_name']);
+                    $dataArray = $dataArray + array('dataHinmokuCd' => $value['hinmoku_cd']);
+                    $dataArray = $dataArray + array('dataHinmokuName' => $value['hinmoku_name']);
                     // $dataArray = $dataArray + array('dataNoukiDate' => $value['nouki_date']);
                     // $dataArray = $dataArray + array('dataShukkaDate' => $value['shukka_date']);
                     // $dataArray = $dataArray + array('dataTaniCd' => $value['tani_cd']);

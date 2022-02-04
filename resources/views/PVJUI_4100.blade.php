@@ -309,7 +309,7 @@
                 </label>
             </div>
             <!-- <div class="form-column"> -->
-                <table align="center" width="90%" cellpadding="5" rules="all">
+                <!-- <table align="center" width="90%" cellpadding="5" rules="all">
                     <thead>
                         <tr align="center">
                             <th>発注数</th>
@@ -326,9 +326,9 @@
                             <td> 4</td>
                         </tr>
                     </tbody>
-                </table>
+                </table> -->
             <!-- </div> -->
-            <!-- <div class="form-column">
+            <div class="form-column">
                 {{-- 「発注数量」 --}}
                 <label>
                     <span style="width:5.8em;">{{__('hachu_qty')}}</span>
@@ -355,7 +355,7 @@
                     <span style="width:5.8em;">{{__('hachu_nouki_date')}}</span>
                     <input id="dataHachuNoukiDate" name="dataHachuNoukiDate" type="hidden">
                 </label>
-            </div> -->
+            </div>
             {{-- 「製作振分」--}}
             <input id="dataSeisakuKbn" name="dataSeisakuKbn" type="hidden">
         </div>
@@ -598,16 +598,16 @@
 
 
 
-    // var numHachuQty = new wijmo.input.InputNumber('#dataHachuQty', {
-    //     isRequired: false, format: 'n0', min: 0, max: 9999999999999999
-    // });
-    // var numHachuTanka = new wijmo.input.InputNumber('#dataHachuTanka', {
-    //     isRequired: false, format: 'n0', min: 0, max: 9999999999999999
-    // });
-    // var numHachuKin = new wijmo.input.InputNumber('#dataHachuKin', {
-    //     isRequired: false, format: 'n0', min: 0, max: 9999999999999999
-    // });
-    // var dateHachuNouki = new wijmo.input.InputDate('#dataHachuNoukiDate', {isRequired: false});
+    var numHachuQty = new wijmo.input.InputNumber('#dataHachuQty', {
+        isRequired: false, format: 'n0', min: 0, max: 9999999999999999
+    });
+    var numHachuTanka = new wijmo.input.InputNumber('#dataHachuTanka', {
+        isRequired: false, format: 'n0', min: 0, max: 9999999999999999
+    });
+    var numHachuKin = new wijmo.input.InputNumber('#dataHachuKin', {
+        isRequired: false, format: 'n0', min: 0, max: 9999999999999999
+    });
+    var dateHachuNouki = new wijmo.input.InputDate('#dataHachuNoukiDate', {isRequired: false});
 
 
 
@@ -704,14 +704,19 @@
                 columns = [
                     { cells: [{ binding: 'dataJuchuDate', header: "{{ __('juchu_date') }}", width: 150 },
                               { binding: 'dataJuchuNo', header: "{{ __('juchu_no') }}" }]},
-                    { cells: [ {binding: 'dataJuchuKbnName', header: "{{ __('juchu_kbn') }}", width: 150 }]},
-                    { cells: [{ binding: 'dataStatus', header: "{{ __('status') }}", width: 150 }]},
+                    { cells: [{ binding: 'dataShinkiRepeatKbn', header: "{{ __('shinki_repeat_kbn') }}", width: 150 },
+                              { binding: 'dataJuchuKbnName', header: "{{ __('juchu_kbn') }}"}]},
+                    { cells: [{ binding: 'dataKaitouStatus', header: "{{ __('kaitou_status') }}", width: 150 }]},
                     { cells: [{ binding: 'dataHinmokuCode', header: "{{ __('hinmoku_cd') }}", width: 300 },
                               { binding: 'dataHinmokuName', header: "{{ __('hinmoku_name') }}" }]},
                     { cells: [{ binding: 'dataGaichusakiCD', header: "{{ __('gaichusaki_cd') }}", width: 200 },
                               { binding: 'dataGaichusakiName', header: "{{ __('gaichusaki_name') }}" }]},
                     { cells: [{ binding: 'dataKaitouDate', header: "{{ __('mitsumori_kaitou_kigen_date') }}", width: 150 },
                               { binding: 'dataKibouNoukiDate', header: "{{ __('kibou_nouki_date') }}",}]},
+
+                    { cells: [{ binding: 'dataKaitouTanka', header: "{{ __('kaitou_tanka') }}", width: 150 }]},
+                    { cells: [{ binding: 'dataKaitouNouki', header: "{{ __('kaitou_nouki') }}", width: 150 }]},
+
                     { cells: [{ binding: 'dataTehaiQty', header: "{{ __('tehai_qty') }}", width: 100 },
                               { binding: 'dataJuchuQty', header: "{{ __('juchu_qty') }}" }]},
                     { cells: [{ binding: 'dataTsukiKeiQty', header: "{{ __('tsuki_kei_qty') }}", width: 100 },
@@ -759,10 +764,10 @@
                 gridOption = {
                     {{-- レイアウト設定 --}}
                     layoutDefinition: columns,
-                    {{-- 選択スタイル（セル単位） --}}
-                    selectionMode: wijmo.grid.SelectionMode.Row,
+                    // {{-- 選択スタイル（セル単位） --}}
+                    // selectionMode: wijmo.grid.SelectionMode.Row,
                     {{-- セル編集（無効） --}}
-                    isReadOnly: true,
+                    isReadOnly: false,
                     {{-- デフォルト行スタイル（0行ごとに色付け） --}}
                     alternatingRowStep: 0,
                     {{-- グリッド上でのEnterキーイベント（無効） --}}
@@ -775,7 +780,7 @@
                         {{-- 任意の色でセルを色付け
                             ※rowPerItemでMultiRowの1レコード当たりの行数を取得
                             ※common_function.js参照 --}}
-                        LoadGridRows(s, 1);
+                        LoadGridRows(s, 2);
                     }
                 } 
                 break;
@@ -1213,9 +1218,29 @@
         {{-- ボタン制御更新 --}}
         SetEnableButton(data[1].length);
         {{-- グリッドデータ反映＆並び順と選択位置保持 ※common_function.js参照 --}}
-        SortGridData(gridMaster, data[1], 'dataJuchuNo', 1);
+        // SortGridData(gridMaster, data[1], 'dataJuchuNo', 1);
         // console.log(data);
-    }
+        switch(cmbStatusSearch.selectedIndex){
+            /**未手配 */
+            case 0:
+                SortGridData(gridMaster, data[1], 'dataJuchuNo', 1);
+                break;
+            /**手配済み */
+            case 1:
+                SortGridData(gridMaster, data[1], 'dataJuchuNo', 1);
+                break;
+            /**外注見積 */
+            case 2:
+                SortGridData(gridSub, data[1], 'dataJuchuNo', 1);
+                break;
+            /**外注納期調整 */
+            case 3:
+                SortGridData(gridMaster, data[1], 'dataJuchuNo', 1);
+                break;
+            default:
+                SortGridData(gridMaster, data[1], 'dataJuchuNo', 1);
+                break;
+        }    }
 
     {{-- 検索件数更新 --}}
     var fncJushinDataCnt = function(data, errorFlg)
@@ -1668,7 +1693,7 @@
         }
         else
         {
-            console.log(soushinData,'soushin')
+            // console.log(soushinData,'soushin')
             {{-- 「データ更新中」表示 --}}
             ShowPopupDlg("{{__('データ更新中')}}");
             {{-- 非同期データ更新開始 --}}
@@ -1770,7 +1795,7 @@
         }
         else
         {
-            console.log(soushinData,'soushin')
+            // console.log(soushinData,'soushin')
             {{-- 「データ更新中」表示 --}}
             ShowPopupDlg("{{__('データ更新中')}}");
             {{-- 非同期データ更新開始 --}}

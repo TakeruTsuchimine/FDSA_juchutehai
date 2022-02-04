@@ -86,7 +86,7 @@ class PCJUI_4101 extends Controller
                 default:
                     // 手配回数
 
-                    $tehaiKaisu = $juchu->GetTehaiCount($juchuNo);
+                    $tehaiKaisu = $this->GetTehaiCount($juchuNo);
                     // die("$tehaiKaisu");
 
                     // 新規リピート区分
@@ -129,5 +129,25 @@ class PCJUI_4101 extends Controller
         $resultData[] = mb_convert_encoding($resultVal, 'UTF-8', 'UTF-8');
         Log::debug(print_r($resultData, true));
         return $resultData;
+    }
+    // 手配回数のカウント
+    function GetTehaiCount($juchuNo)
+    {
+        $query = new class_Database();
+        // SQLテキストの設定
+        $SQLText  = " 
+        select count(*)
+        from juchu_tehaiIrai_data
+        where  sakujo_dt is null
+            and juchu_no = :juchu_no
+        ";
+        // クエリの設定
+        $query->StartConnect();
+        $query->SetQuery($SQLText, SQL_SELECT);
+        // バインド値のセット
+        $query->SetBindValue(":juchu_no", $juchuNo, TYPE_STR);
+        // クエリの実行
+        $result = $query->ExecuteSelect();
+        return $result[0][0];
     }
 }

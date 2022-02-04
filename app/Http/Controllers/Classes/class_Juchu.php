@@ -426,24 +426,4 @@ class class_Juchu
             $query->CloseQuery();
         }
     }
-    // 手配回数のカウント
-    function GetTehaiCount($juchuNo)
-    {
-        $query = new class_Database();
-        // SQLテキストの設定
-        $SQLText  = " 
-        select count(*)
-        from juchu_tehaiIrai_data
-        where  sakujo_dt is null
-            and juchu_no = :juchu_no
-        ";
-        // クエリの設定
-        $query->StartConnect();
-        $query->SetQuery($SQLText, SQL_SELECT);
-        // バインド値のセット
-        $query->SetBindValue(":juchu_no", $juchuNo, TYPE_STR);
-        // クエリの実行
-        $result = $query->ExecuteSelect();
-        return $result[0][0];
-    }
 }
